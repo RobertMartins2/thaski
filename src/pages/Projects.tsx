@@ -33,24 +33,24 @@ const Projects = () => {
     const sampleProjects: Project[] = [
       {
         id: '1',
-        name: 'Real Estate Project',
-        description: 'Main project workspace for real estate management',
+        name: 'Projeto Imobiliário',
+        description: 'Workspace principal para gestão imobiliária',
         taskCount: 12,
         createdAt: '2024-01-15',
         color: 'bg-blue-500'
       },
       {
         id: '2', 
-        name: 'E-commerce Platform',
-        description: 'Online store development and maintenance',
+        name: 'Plataforma E-commerce',
+        description: 'Desenvolvimento e manutenção de loja online',
         taskCount: 8,
         createdAt: '2024-01-20',
         color: 'bg-green-500'
       },
       {
         id: '3',
-        name: 'Mobile App Design',
-        description: 'iOS and Android application design',
+        name: 'Design de App Mobile',
+        description: 'Design de aplicação iOS e Android',
         taskCount: 15,
         createdAt: '2024-02-01',
         color: 'bg-purple-500'
@@ -60,19 +60,19 @@ const Projects = () => {
   }, []);
 
   const colorOptions = [
-    { name: 'Blue', value: 'bg-blue-500' },
-    { name: 'Green', value: 'bg-green-500' },
-    { name: 'Purple', value: 'bg-purple-500' },
-    { name: 'Red', value: 'bg-red-500' },
-    { name: 'Orange', value: 'bg-orange-500' },
-    { name: 'Pink', value: 'bg-pink-500' },
-    { name: 'Indigo', value: 'bg-indigo-500' },
-    { name: 'Teal', value: 'bg-teal-500' },
+    { name: 'Azul', value: 'bg-blue-500' },
+    { name: 'Verde', value: 'bg-green-500' },
+    { name: 'Roxo', value: 'bg-purple-500' },
+    { name: 'Vermelho', value: 'bg-red-500' },
+    { name: 'Laranja', value: 'bg-orange-500' },
+    { name: 'Rosa', value: 'bg-pink-500' },
+    { name: 'Índigo', value: 'bg-indigo-500' },
+    { name: 'Verde-azulado', value: 'bg-teal-500' },
   ];
 
   const handleCreateProject = () => {
     if (!newProjectName.trim()) {
-      toast.error("Project name is required");
+      toast.error("Nome do projeto é obrigatório");
       return;
     }
 
@@ -90,13 +90,13 @@ const Projects = () => {
     setNewProjectDescription('');
     setNewProjectColor('bg-blue-500');
     setIsCreateDialogOpen(false);
-    toast.success(`Project "${newProject.name}" created successfully!`);
+    toast.success(`Projeto "${newProject.name}" criado com sucesso!`);
   };
 
   const handleDeleteProject = (projectId: string, projectName: string) => {
-    if (confirm(`Are you sure you want to delete "${projectName}"? This action cannot be undone.`)) {
+    if (confirm(`Tem certeza de que deseja excluir "${projectName}"? Esta ação não pode ser desfeita.`)) {
       setProjects(projects.filter(p => p.id !== projectId));
-      toast.success(`Project "${projectName}" deleted successfully`);
+      toast.success(`Projeto "${projectName}" excluído com sucesso`);
     }
   };
 
@@ -105,13 +105,13 @@ const Projects = () => {
       <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
         <Kanban className="w-10 h-10 text-muted-foreground" />
       </div>
-      <h2 className="text-2xl font-bold text-foreground mb-2">No Projects Yet</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-2">Nenhum Projeto Ainda</h2>
       <p className="text-muted-foreground mb-6 max-w-md">
-        Create your first Kanban project to start organizing your tasks and workflows efficiently.
+        Crie seu primeiro projeto Kanban para começar a organizar suas tarefas e fluxos de trabalho de forma eficiente.
       </p>
       <Button onClick={() => setIsCreateDialogOpen(true)} size="lg" className="gradient-button">
         <Plus className="w-5 h-5 mr-2" />
-        Create First Project
+        Criar Primeiro Projeto
       </Button>
     </div>
   );
@@ -127,9 +127,9 @@ const Projects = () => {
               {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h1 className="text-3xl font-bold text-foreground">Projects</h1>
+                  <h1 className="text-3xl font-bold text-foreground">Projetos</h1>
                   <p className="text-muted-foreground mt-1">
-                    Manage your Kanban boards and project workflows
+                    Gerencie seus quadros Kanban e fluxos de trabalho dos projetos
                   </p>
                 </div>
                 
@@ -138,42 +138,42 @@ const Projects = () => {
                     <DialogTrigger asChild>
                       <Button className="gradient-button">
                         <Plus className="w-4 h-4 mr-2" />
-                        New Project
+                        Novo Projeto
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[500px]">
                       <DialogHeader>
-                        <DialogTitle>Create New Project</DialogTitle>
+                        <DialogTitle>Criar Novo Projeto</DialogTitle>
                         <DialogDescription>
-                          Set up a new Kanban board for your project
+                          Configure um novo quadro Kanban para seu projeto
                         </DialogDescription>
                       </DialogHeader>
                       
                       <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                          <Label htmlFor="name">Project Name</Label>
+                          <Label htmlFor="name">Nome do Projeto</Label>
                           <Input
                             id="name"
                             value={newProjectName}
                             onChange={(e) => setNewProjectName(e.target.value)}
-                            placeholder="Enter project name..."
+                            placeholder="Digite o nome do projeto..."
                           />
                         </div>
                         
                         <div className="space-y-2">
-                          <Label htmlFor="description">Description</Label>
+                          <Label htmlFor="description">Descrição</Label>
                           <Textarea
                             id="description"
                             value={newProjectDescription}
                             onChange={(e) => setNewProjectDescription(e.target.value)}
-                            placeholder="Brief description of your project..."
+                            placeholder="Breve descrição do seu projeto..."
                             className="resize-none"
                             rows={3}
                           />
                         </div>
                         
                         <div className="space-y-2">
-                          <Label>Project Color</Label>
+                          <Label>Cor do Projeto</Label>
                           <div className="flex flex-wrap gap-2">
                             {colorOptions.map((color) => (
                               <button
@@ -191,10 +191,10 @@ const Projects = () => {
                       
                       <DialogFooter>
                         <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                          Cancel
+                          Cancelar
                         </Button>
                         <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
-                          Create Project
+                          Criar Projeto
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -222,7 +222,7 @@ const Projects = () => {
                               variant="ghost" 
                               size="sm" 
                               className="h-8 w-8 p-0"
-                              onClick={() => toast.info("Edit functionality coming soon!")}
+                              onClick={() => toast.info("Funcionalidade de edição em breve!")}
                             >
                               <Edit2 className="w-4 h-4" />
                             </Button>
@@ -237,23 +237,23 @@ const Projects = () => {
                           </div>
                         </div>
                         <CardDescription className="text-muted-foreground">
-                          {project.description || "No description provided"}
+                          {project.description || "Nenhuma descrição fornecida"}
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex items-center justify-between mb-4">
                           <Badge variant="secondary" className="text-xs">
-                            {project.taskCount} tasks
+                            {project.taskCount} tarefas
                           </Badge>
                           <span className="text-xs text-muted-foreground">
-                            Created {new Date(project.createdAt).toLocaleDateString()}
+                            Criado em {new Date(project.createdAt).toLocaleDateString()}
                           </span>
                         </div>
                         
                         <NavLink to={`/project/${project.id}`}>
                           <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                             <FolderOpen className="w-4 h-4 mr-2" />
-                            Open Project
+                            Abrir Projeto
                           </Button>
                         </NavLink>
                       </CardContent>
@@ -269,7 +269,7 @@ const Projects = () => {
                       <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-muted/80 transition-colors">
                         <Plus className="w-6 h-6 text-muted-foreground" />
                       </div>
-                      <p className="text-muted-foreground font-medium">Add New Project</p>
+                      <p className="text-muted-foreground font-medium">Adicionar Novo Projeto</p>
                     </div>
                   </Card>
                 </div>
@@ -283,37 +283,37 @@ const Projects = () => {
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Create New Project</DialogTitle>
+            <DialogTitle>Criar Novo Projeto</DialogTitle>
             <DialogDescription>
-              Set up a new Kanban board for your project
+              Configure um novo quadro Kanban para seu projeto
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Project Name</Label>
+              <Label htmlFor="name">Nome do Projeto</Label>
               <Input
                 id="name"
                 value={newProjectName}
                 onChange={(e) => setNewProjectName(e.target.value)}
-                placeholder="Enter project name..."
+                placeholder="Digite o nome do projeto..."
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Descrição</Label>
               <Textarea
                 id="description"
                 value={newProjectDescription}
                 onChange={(e) => setNewProjectDescription(e.target.value)}
-                placeholder="Brief description of your project..."
+                placeholder="Breve descrição do seu projeto..."
                 className="resize-none"
                 rows={3}
               />
             </div>
             
             <div className="space-y-2">
-              <Label>Project Color</Label>
+              <Label>Cor do Projeto</Label>
               <div className="flex flex-wrap gap-2">
                 {colorOptions.map((color) => (
                   <button
@@ -331,10 +331,10 @@ const Projects = () => {
           
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
-              Create Project
+              Criar Projeto
             </Button>
           </DialogFooter>
         </DialogContent>

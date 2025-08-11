@@ -18,10 +18,10 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true);
 
   const projects: Project[] = [
-    { id: '1', name: 'Real Estate Project', description: 'Main project workspace' },
-    { id: '2', name: 'E-commerce Platform', description: 'Online store development' },
-    { id: '3', name: 'Mobile App Design', description: 'iOS/Android application' },
-    { id: '4', name: 'Marketing Campaign', description: 'Q1 2024 marketing activities' }
+    { id: '1', name: 'Projeto Imobiliário', description: 'Workspace principal do projeto' },
+    { id: '2', name: 'Plataforma E-commerce', description: 'Desenvolvimento de loja online' },
+    { id: '3', name: 'Design de App Mobile', description: 'Aplicação iOS/Android' },
+    { id: '4', name: 'Campanha de Marketing', description: 'Atividades de marketing Q1 2024' }
   ];
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const ProjectDetail = () => {
       if (project) {
         setCurrentProject(project);
       } else {
-        toast.error("Project not found");
+        toast.error("Projeto não encontrado");
       }
       setLoading(false);
     }, 500);
@@ -41,19 +41,19 @@ const ProjectDetail = () => {
 
   const handleProjectChange = (project: Project) => {
     setCurrentProject(project);
-    toast.success(`Switched to ${project.name}`);
+    toast.success(`Alternado para ${project.name}`);
   };
 
   const handleNewProject = () => {
-    toast.info("Create new project feature coming soon!");
+    toast.info("Funcionalidade de criar novo projeto em breve!");
   };
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading project...</p>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Carregando projeto...</p>
         </div>
       </div>
     );
@@ -63,8 +63,8 @@ const ProjectDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Project Not Found</h1>
-          <p className="text-muted-foreground">The requested project could not be found.</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Projeto Não Encontrado</h1>
+          <p className="text-muted-foreground">O projeto solicitado não foi encontrado.</p>
         </div>
       </div>
     );

@@ -47,7 +47,7 @@ export function ProjectSelector({
         sideOffset={8}
       >
         <DropdownMenuLabel className="text-foreground">
-          Select Project
+          Selecionar Projeto
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         
@@ -73,7 +73,7 @@ export function ProjectSelector({
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onNewProject} className="cursor-pointer hover:bg-muted/50">
           <Plus className="w-4 h-4 mr-2" />
-          <span>New Project</span>
+          <span>Novo Projeto</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

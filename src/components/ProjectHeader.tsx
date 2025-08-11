@@ -15,12 +15,12 @@ interface ProjectHeaderProps {
 }
 
 export function ProjectHeader({ 
-  currentProject = { id: '1', name: 'Real Estate Project', description: 'Main project workspace' },
+  currentProject = { id: '1', name: 'Projeto Imobiliário', description: 'Workspace principal do projeto' },
   projects = [
-    { id: '1', name: 'Real Estate Project', description: 'Main project workspace' },
-    { id: '2', name: 'E-commerce Platform', description: 'Online store development' },
-    { id: '3', name: 'Mobile App Design', description: 'iOS/Android application' },
-    { id: '4', name: 'Marketing Campaign', description: 'Q1 2024 marketing activities' }
+    { id: '1', name: 'Projeto Imobiliário', description: 'Workspace principal do projeto' },
+    { id: '2', name: 'Plataforma E-commerce', description: 'Desenvolvimento de loja online' },
+    { id: '3', name: 'Design de App Mobile', description: 'Aplicação iOS/Android' },
+    { id: '4', name: 'Campanha de Marketing', description: 'Atividades de marketing Q1 2024' }
   ],
   onProjectChange = () => {},
   onNewProject = () => {}

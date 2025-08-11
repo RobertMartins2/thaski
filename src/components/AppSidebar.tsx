@@ -19,20 +19,20 @@ import {
 } from "@/components/ui/sidebar";
 
 const projects = [
-  { id: '1', name: 'Real Estate Project', color: 'bg-blue-500' },
-  { id: '2', name: 'E-commerce Platform', color: 'bg-green-500' },
-  { id: '3', name: 'Mobile App Design', color: 'bg-purple-500' },
-  { id: '4', name: 'Marketing Campaign', color: 'bg-orange-500' },
+  { id: '1', name: 'Projeto Imobiliário', color: 'bg-blue-500' },
+  { id: '2', name: 'Plataforma E-commerce', color: 'bg-green-500' },
+  { id: '3', name: 'Design de App Mobile', color: 'bg-purple-500' },
+  { id: '4', name: 'Campanha de Marketing', color: 'bg-orange-500' },
 ];
 
 const navigationItems = [
-  { title: "Home", url: "/", icon: Home },
-  { title: "Projects", url: "/projects", icon: FolderOpen, badge: "11", expandable: true },
-  { title: "Meetings", url: "/meetings", icon: Users },
-  { title: "Team", url: "/team", icon: Users, badge: "2" },
-  { title: "Schedule", url: "/schedule", icon: Calendar },
+  { title: "Início", url: "/", icon: Home },
+  { title: "Projetos", url: "/projects", icon: FolderOpen, badge: "11", expandable: true },
+  { title: "Reuniões", url: "/meetings", icon: Users },
+  { title: "Equipe", url: "/team", icon: Users, badge: "2" },
+  { title: "Agenda", url: "/schedule", icon: Calendar },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Calendar", url: "/calendar", icon: CalendarDays },
+  { title: "Calendário", url: "/calendar", icon: CalendarDays },
 ];
 
 export function AppSidebar() {
@@ -57,7 +57,7 @@ export function AppSidebar() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900 leading-tight">
-                Stay on Top of<br />Your Work 👋
+                Mantenha-se no Controle<br />do seu Trabalho 👋
               </h1>
             </div>
           </SidebarHeader>
@@ -68,7 +68,7 @@ export function AppSidebar() {
           <SidebarMenu className="space-y-2">
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.url;
-              const isProjectActive = item.title === "Projects" && location.pathname.startsWith('/project');
+              const isProjectActive = item.title === "Projetos" && location.pathname.startsWith('/project');
               const shouldHighlight = isActive || isProjectActive;
               
               return (
@@ -160,7 +160,7 @@ export function AppSidebar() {
             className="w-full justify-start px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg"
           >
             <LogOut className="w-5 h-5 mr-3" />
-            {!collapsed && <span className="text-sm">Logout</span>}
+            {!collapsed && <span className="text-sm">Sair</span>}
           </Button>
         </SidebarFooter>
       </SidebarContent>

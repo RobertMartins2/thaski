@@ -13,14 +13,14 @@ interface ColumnSettingsDialogProps {
 }
 
 const colorOptions = [
-  { name: 'Gray', value: 'bg-slate-400', class: 'bg-slate-400' },
-  { name: 'Blue', value: 'bg-blue-500', class: 'bg-blue-500' },
-  { name: 'Green', value: 'bg-green-500', class: 'bg-green-500' },
-  { name: 'Yellow', value: 'bg-yellow-500', class: 'bg-yellow-500' },
-  { name: 'Red', value: 'bg-red-500', class: 'bg-red-500' },
-  { name: 'Purple', value: 'bg-purple-500', class: 'bg-purple-500' },
-  { name: 'Pink', value: 'bg-pink-500', class: 'bg-pink-500' },
-  { name: 'Indigo', value: 'bg-indigo-500', class: 'bg-indigo-500' },
+  { name: 'Cinza', value: 'bg-slate-400', class: 'bg-slate-400' },
+  { name: 'Azul', value: 'bg-blue-500', class: 'bg-blue-500' },
+  { name: 'Verde', value: 'bg-green-500', class: 'bg-green-500' },
+  { name: 'Amarelo', value: 'bg-yellow-500', class: 'bg-yellow-500' },
+  { name: 'Vermelho', value: 'bg-red-500', class: 'bg-red-500' },
+  { name: 'Roxo', value: 'bg-purple-500', class: 'bg-purple-500' },
+  { name: 'Rosa', value: 'bg-pink-500', class: 'bg-pink-500' },
+  { name: 'Índigo', value: 'bg-indigo-500', class: 'bg-indigo-500' },
 ];
 
 export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSettingsDialogProps) {
@@ -32,7 +32,7 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
   const handleAddColumn = () => {
     const newColumn: KanbanColumn = {
       id: `column-${Date.now()}`,
-      title: 'New Stage',
+      title: 'Novo Estágio',
       color: 'bg-slate-400',
       order: localColumns.length,
     };
@@ -94,8 +94,8 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] bg-surface border-border/30">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-foreground">Configure Board Columns</DialogTitle>
-          <p className="text-muted-foreground mt-2">Click the edit icon next to any column name to rename it, or change colors by clicking the color dots.</p>
+          <DialogTitle className="text-2xl font-semibold text-foreground">Configurar Colunas do Quadro</DialogTitle>
+          <p className="text-muted-foreground mt-2">Clique no ícone de editar ao lado de qualquer nome de coluna para renomeá-la, ou altere as cores clicando nos pontos coloridos.</p>
         </DialogHeader>
         
         <div className="space-y-6 mt-6">
@@ -131,24 +131,24 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
                         className="h-8 text-sm"
                         autoFocus
                       />
-                      <Button
-                        size="sm"
-                        onClick={() => handleSaveTitle(column.id)}
-                        className="h-8 px-3"
-                      >
-                        Save
+                        <Button
+                          size="sm"
+                          onClick={() => handleSaveTitle(column.id)}
+                          className="h-8 px-3"
+                        >
+                          Salvar
                       </Button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2 group">
                       <span className="font-medium text-foreground">{column.title}</span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditTitle(column.id, column.title)}
-                        className="h-6 w-6 p-0 opacity-60 group-hover:opacity-100 hover:bg-muted transition-opacity"
-                        title="Edit column name"
-                      >
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditTitle(column.id, column.title)}
+                          className="h-6 w-6 p-0 opacity-60 group-hover:opacity-100 hover:bg-muted transition-opacity"
+                          title="Editar nome da coluna"
+                        >
                         <Edit2 className="w-3 h-3" />
                       </Button>
                     </div>
@@ -191,23 +191,23 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
             className="w-full border-dashed border-2 border-border/60 hover:border-border hover:bg-muted/30 transition-all py-6"
           >
             <Plus className="w-5 h-5 mr-2" />
-            Add New Stage
+            Adicionar Novo Estágio
           </Button>
 
-          {/* Actions */}
+          {/* Ações */}
           <div className="flex gap-3 pt-4">
             <Button
               variant="outline"
               onClick={handleCancel}
               className="flex-1 h-12 font-semibold"
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               onClick={handleSave}
               className="flex-1 h-12 gradient-button"
             >
-              Save Changes
+              Salvar Alterações
             </Button>
           </div>
         </div>
