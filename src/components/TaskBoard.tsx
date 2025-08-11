@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Calendar, Grid3X3, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,8 +95,8 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
   const defaultColumns: KanbanColumnType[] = [
     { id: 'todo', title: 'A Fazer', color: 'bg-slate-400', order: 0 },
     { id: 'progress', title: 'Em Andamento', color: 'bg-yellow-500', order: 1 },
-    { id: 'done', title: 'Concluído', color: 'bg-green-500', order: 2 },
-    { id: 'overdue', title: 'Atrasado', color: 'bg-red-500', order: 3 }
+    { id: 'review', title: 'Em Revisão', color: 'bg-blue-500', order: 2 },
+    { id: 'done', title: 'Concluído', color: 'bg-green-500', order: 3 }
   ];
 
   const [viewMode, setViewMode] = useState<'board' | 'calendar'>('board');
@@ -108,6 +108,18 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [detailTask, setDetailTask] = useState<Task | null>(null);
   const [detailPanelOpen, setDetailPanelOpen] = useState(false);
+
+  // Carregar colunas customizadas do localStorage
+  useEffect(() => {
+    try {
+      const savedColumns = localStorage.getItem(`project-${projectId}-columns`);
+      if (savedColumns) {
+        setColumns(JSON.parse(savedColumns));
+      }
+    } catch (error) {
+      console.warn('Erro ao carregar colunas customizadas:', error);
+    }
+  }, [projectId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -134,6 +146,8 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
 
   const handleUpdateColumns = (newColumns: KanbanColumnType[]) => {
     setColumns(newColumns);
+    // Salvar no localStorage
+    localStorage.setItem(`project-${projectId}-columns`, JSON.stringify(newColumns));
   };
 
   const handleDragStart = (event: DragStartEvent) => {

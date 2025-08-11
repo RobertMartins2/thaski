@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { NavLink } from "react-router-dom";
+import { ProjectSetupDialog } from "@/components/ProjectSetupDialog";
 
 interface Project {
   id: string;
@@ -25,6 +26,8 @@ interface Project {
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [setupProjectId, setSetupProjectId] = useState<string | null>(null);
+  const [setupProjectName, setSetupProjectName] = useState<string>('');
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectCode, setNewProjectCode] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
@@ -114,7 +117,12 @@ const Projects = () => {
     setNewProjectDescription('');
     setNewProjectColor('bg-blue-500');
     setIsCreateDialogOpen(false);
-    toast.success(`Projeto "${newProject.name}" criado com sucesso!`);
+    
+    // Abrir o dialog de configuração dos estágios
+    setSetupProjectId(newProject.id);
+    setSetupProjectName(newProject.name);
+    
+    toast.success(`Projeto "${newProject.name}" criado! Configure os estágios do kanban.`);
   };
 
   const handleDeleteProject = (projectId: string, projectName: string) => {
@@ -289,15 +297,28 @@ const Projects = () => {
                           </span>
                         </div>
                         
-                        <NavLink to={`/project/${project.id}`}>
-                          <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                            <FolderOpen className="w-4 h-4 mr-2" />
-                            Abrir Projeto
-                          </Button>
-                        </NavLink>
-                      </CardContent>
-                    </Card>
-                  ))}
+                         <div className="grid grid-cols-1 gap-2">
+                           <NavLink to={`/project/${project.id}`}>
+                             <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                               <FolderOpen className="w-4 h-4 mr-2" />
+                               Abrir Projeto
+                             </Button>
+                           </NavLink>
+                           <Button 
+                             variant="outline"
+                             className="w-full hover:bg-muted/50"
+                             onClick={() => {
+                               setSetupProjectId(project.id);
+                               setSetupProjectName(project.name);
+                             }}
+                           >
+                             <Settings className="w-4 h-4 mr-2" />
+                             Reconfigurar Estágios
+                           </Button>
+                         </div>
+                       </CardContent>
+                     </Card>
+                   ))}
                   
                   {/* Add new project card */}
                   <Card 
@@ -392,9 +413,24 @@ const Projects = () => {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
-    </SidebarProvider>
-  );
-};
+        </Dialog>
+
+        {/* Project Setup Dialog */}
+        {setupProjectId && (
+          <ProjectSetupDialog
+            projectId={setupProjectId}
+            projectName={setupProjectName}
+            open={!!setupProjectId}
+            onOpenChange={(open) => {
+              if (!open) {
+                setSetupProjectId(null);
+                setSetupProjectName('');
+              }
+            }}
+          />
+        )}
+      </SidebarProvider>
+    );
+  };
 
 export default Projects;
