@@ -1,4 +1,5 @@
-import { Home, FolderOpen, Users, Calendar, BarChart3, CalendarDays, LogOut, Hexagon } from "lucide-react";
+import { useState } from "react";
+import { Home, FolderOpen, Users, Calendar, BarChart3, CalendarDays, LogOut, Hexagon, ChevronRight, ChevronDown } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -17,9 +18,16 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 
+const projects = [
+  { id: '1', name: 'Real Estate Project', color: 'bg-blue-500' },
+  { id: '2', name: 'E-commerce Platform', color: 'bg-green-500' },
+  { id: '3', name: 'Mobile App Design', color: 'bg-purple-500' },
+  { id: '4', name: 'Marketing Campaign', color: 'bg-orange-500' },
+];
+
 const navigationItems = [
   { title: "Home", url: "/", icon: Home },
-  { title: "Projects", url: "/projects", icon: FolderOpen, badge: "11" },
+  { title: "Projects", url: "/projects", icon: FolderOpen, badge: "11", expandable: true },
   { title: "Meetings", url: "/meetings", icon: Users },
   { title: "Team", url: "/team", icon: Users, badge: "2" },
   { title: "Schedule", url: "/schedule", icon: Calendar },
@@ -31,6 +39,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const collapsed = state === "collapsed";
+  const [expandedProjects, setExpandedProjects] = useState(false);
 
   return (
     <Sidebar 
@@ -59,33 +68,86 @@ export function AppSidebar() {
           <SidebarMenu className="space-y-2">
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.url;
+              const isProjectActive = item.title === "Projects" && location.pathname.startsWith('/project');
+              const shouldHighlight = isActive || isProjectActive;
+              
               return (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={`
-                      flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 group
-                      ${isActive 
-                        ? 'bg-orange-50 text-orange-600 font-medium' 
-                        : 'text-gray-600 hover:bg-gray-50'
-                      }
-                    `}
-                  >
-                    <NavLink to={item.url} className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-3">
-                        <item.icon className={`w-5 h-5 ${isActive ? 'text-orange-600' : 'text-gray-500'}`} />
+                <div key={item.title}>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      className={`
+                        flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 group
+                        ${shouldHighlight 
+                          ? 'bg-orange-50 text-orange-600 font-medium' 
+                          : 'text-gray-600 hover:bg-gray-50'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <NavLink to={item.url} className="flex items-center gap-3 flex-1">
+                          <item.icon className={`w-5 h-5 ${shouldHighlight ? 'text-orange-600' : 'text-gray-500'}`} />
+                          {!collapsed && (
+                            <span className="text-sm">{item.title}</span>
+                          )}
+                        </NavLink>
+                        
                         {!collapsed && (
-                          <span className="text-sm">{item.title}</span>
+                          <div className="flex items-center gap-2">
+                            {item.badge && (
+                              <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                                {item.badge}
+                              </span>
+                            )}
+                            {item.expandable && (
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setExpandedProjects(!expandedProjects);
+                                }}
+                                className="p-1 hover:bg-gray-100 rounded"
+                              >
+                                {expandedProjects ? (
+                                  <ChevronDown className="w-4 h-4 text-gray-500" />
+                                ) : (
+                                  <ChevronRight className="w-4 h-4 text-gray-500" />
+                                )}
+                              </button>
+                            )}
+                          </div>
                         )}
                       </div>
-                      {!collapsed && item.badge && (
-                        <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                          {item.badge}
-                        </span>
-                      )}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                  {/* Expanded Projects */}
+                  {item.expandable && expandedProjects && !collapsed && (
+                    <div className="ml-6 mt-1 space-y-1">
+                      {projects.map((project) => {
+                        const isProjectDetailActive = location.pathname === `/project/${project.id}`;
+                        return (
+                          <SidebarMenuItem key={project.id}>
+                            <SidebarMenuButton
+                              asChild
+                              className={`
+                                flex items-center px-4 py-2 rounded-lg transition-all duration-200 text-sm
+                                ${isProjectDetailActive 
+                                  ? 'bg-orange-50 text-orange-600 font-medium' 
+                                  : 'text-gray-600 hover:bg-gray-50'
+                                }
+                              `}
+                            >
+                              <NavLink to={`/project/${project.id}`} className="flex items-center gap-3 w-full">
+                                <div className={`w-3 h-3 rounded-full ${project.color}`} />
+                                <span className="truncate">{project.name}</span>
+                              </NavLink>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </SidebarMenu>
