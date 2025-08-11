@@ -7,6 +7,10 @@ import { Task } from "./TaskCard";
 import { AddTaskDialog } from "./AddTaskDialog";
 import { ColumnSettingsDialog } from "./ColumnSettingsDialog";
 import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners } from "@dnd-kit/core";
+import { useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
+import { TaskCard } from "./TaskCard";
+import { DroppableColumn } from "./DroppableColumn";
 
 // Mock data for demonstration
 const mockTasks: Task[] = [
@@ -73,6 +77,15 @@ export function TaskBoard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [columns, setColumns] = useState<KanbanColumnType[]>(defaultColumns);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 3,
+      },
+    })
+  );
 
   const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
     const newTask: Task = {
@@ -86,6 +99,36 @@ export function TaskBoard() {
     setColumns(newColumns);
   };
 
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    const task = tasks.find(task => task.id === active.id);
+    if (task) {
+      setActiveTask(task);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveTask(null);
+    
+    if (!over) return;
+    
+    const taskId = active.id as string;
+    const columnId = over.id as string;
+    
+    // Find the task and update its status
+    const task = tasks.find(task => task.id === taskId);
+    if (!task || task.status === columnId) return;
+    
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === taskId 
+          ? { ...task, status: columnId }
+          : task
+      )
+    );
+  };
+
   const filteredTasks = tasks.filter(task => 
     task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -97,102 +140,67 @@ export function TaskBoard() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Board/Calendar View */}
-      {viewMode === 'board' ? (
-        <>
-          {/* Column Headers with Tabs */}
-          <div className="flex items-center gap-6 pb-6 border-b border-border/40">
-            {columns
-              .sort((a, b) => a.order - b.order)
-              .map((column) => (
-                <div key={column.id} className="flex items-center gap-3">
-                  <div className={`status-indicator ${column.id === 'todo' ? 'bg-slate-400' : column.id === 'progress' ? 'bg-amber-400' : column.id === 'done' ? 'bg-green-500' : 'bg-red-500'}`} />
-                  <span className="font-semibold text-foreground">{column.title}</span>
-                  <span className="task-count">
-                    {getTasksForColumn(column.id).length}
-                  </span>
-                </div>
-              ))}
-            <AddTaskDialog 
-              onAddTask={handleAddTask}
-              defaultStatus="todo"
-              trigger={
-                <Button className="ml-auto gradient-button">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Task
-                </Button>
-              }
-            />
-          </div>
-
-          {/* Kanban Board Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-            {columns
-              .sort((a, b) => a.order - b.order)
-              .map((column) => (
-                <div key={column.id} className="kanban-column">
-                  <div className="column-header">
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="space-y-6">
+        {/* Board/Calendar View */}
+        {viewMode === 'board' ? (
+          <>
+            {/* Column Headers with Tabs */}
+            <div className="flex items-center gap-6 pb-6 border-b border-border/40">
+              {columns
+                .sort((a, b) => a.order - b.order)
+                .map((column) => (
+                  <div key={column.id} className="flex items-center gap-3">
                     <div className={`status-indicator ${column.id === 'todo' ? 'bg-slate-400' : column.id === 'progress' ? 'bg-amber-400' : column.id === 'done' ? 'bg-green-500' : 'bg-red-500'}`} />
-                    <span className="column-title">{column.title}</span>
-                    <span className="task-count ml-auto">
+                    <span className="font-semibold text-foreground">{column.title}</span>
+                    <span className="task-count">
                       {getTasksForColumn(column.id).length}
                     </span>
                   </div>
-                  
-                  <div className="space-y-4">
-                    {getTasksForColumn(column.id).map((task) => (
-                      <div key={task.id} className="task-card p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm text-muted-foreground font-medium">{task.code}</span>
-                        </div>
-                        <h3 className="font-semibold text-foreground mb-2">{task.title}</h3>
-                        <p className="text-sm text-muted-foreground mb-4">{task.description}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {task.tags.map((tag, index) => (
-                            <span 
-                              key={index} 
-                              className={`px-3 py-1 rounded-full text-xs font-medium
-                                ${tag.color === 'design' ? 'tag-design' : ''}
-                                ${tag.color === 'dev' ? 'tag-dev' : ''}
-                                ${tag.color === 'performance' ? 'tag-performance' : ''}
-                                ${tag.color === 'hiring' ? 'tag-hiring' : ''}
-                                ${tag.color === 'mobile' ? 'tag-dev' : ''}
-                                ${tag.color === 'dashboard' ? 'tag-performance' : ''}
-                                ${tag.color === 'guideline' ? 'tag-design' : ''}
-                                ${tag.color === 'landing' ? 'tag-hiring' : ''}
-                              `}
-                            >
-                              {tag.name}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    
-                    {/* Add Task Button */}
-                    <AddTaskDialog 
-                      onAddTask={handleAddTask}
-                      defaultStatus={column.id}
-                      trigger={
-                        <button className="add-task-button">
-                          <Plus className="w-4 h-4 mr-2" />
-                          Add new task
-                        </button>
-                      }
-                    />
-                  </div>
-                </div>
-              ))}
+                ))}
+              <AddTaskDialog 
+                onAddTask={handleAddTask}
+                defaultStatus="todo"
+                trigger={
+                  <Button className="ml-auto gradient-button">
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Task
+                  </Button>
+                }
+              />
+            </div>
+
+            {/* Kanban Board Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+              {columns
+                .sort((a, b) => a.order - b.order)
+                .map((column) => (
+                  <DroppableColumn
+                    key={column.id}
+                    column={column}
+                    tasks={getTasksForColumn(column.id)}
+                    onAddTask={handleAddTask}
+                  />
+                ))}
+            </div>
+          </>
+        ) : (
+          <div className="bg-surface rounded-3xl p-12 text-center border border-border/40">
+            <Calendar className="w-20 h-20 mx-auto text-muted-foreground mb-6" />
+            <h3 className="text-2xl font-bold text-foreground mb-3">Calendar View</h3>
+            <p className="text-muted-foreground">Calendar view will be implemented soon</p>
           </div>
-        </>
-      ) : (
-        <div className="bg-surface rounded-3xl p-12 text-center border border-border/40">
-          <Calendar className="w-20 h-20 mx-auto text-muted-foreground mb-6" />
-          <h3 className="text-2xl font-bold text-foreground mb-3">Calendar View</h3>
-          <p className="text-muted-foreground">Calendar view will be implemented soon</p>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+
+      <DragOverlay>
+        {activeTask ? <TaskCard task={activeTask} /> : null}
+      </DragOverlay>
+    </DndContext>
   );
 }
