@@ -1,6 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import { Plus } from "lucide-react";
-import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
+import { KanbanColumn as KanbanColumnType, Project } from "@/types/kanban";
 import { Task } from "./TaskCard";
 import { DraggableTask } from "./DraggableTask";
 import { AddTaskDialog } from "./AddTaskDialog";
@@ -12,9 +12,10 @@ interface DroppableColumnProps {
   onTaskClick?: (task: Task) => void;
   onTaskDetailClick?: (task: Task) => void;
   columns?: Array<{id: string, title: string}>;
+  currentProject?: Project; // Projeto atual para gerar códigos
 }
 
-export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskDetailClick, columns }: DroppableColumnProps) {
+export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskDetailClick, columns, currentProject }: DroppableColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: column.id,
   });
@@ -51,11 +52,12 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskD
         <AddTaskDialog 
           onAddTask={onAddTask}
           defaultStatus={column.id}
-          columns={columns || [{ id: column.id, title: column.title }]}
+          columns={columns}
+          currentProject={currentProject}
           trigger={
             <button className="add-task-button">
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar nova tarefa
+              <Plus className="w-4 h-4" />
+              <span>Adicionar</span>
             </button>
           }
         />

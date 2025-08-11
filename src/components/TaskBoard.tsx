@@ -6,21 +6,22 @@ import { KanbanColumn } from "./KanbanColumn";
 import { Task } from "./TaskCard";
 import { AddTaskDialog } from "./AddTaskDialog";
 import { ColumnSettingsDialog } from "./ColumnSettingsDialog";
-import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
+import { KanbanColumn as KanbanColumnType, Project } from "@/types/kanban";
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners } from "@dnd-kit/core";
 import { useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
 import { TaskCard } from "./TaskCard";
 import { DroppableColumn } from "./DroppableColumn";
 import { EditTaskDialog } from "./EditTaskDialog";
 import { TaskDetailPanel } from "./TaskDetailPanel";
+import { generateTaskCode, getProjectById } from "@/lib/project-utils";
 
-// Dados mock para demonstração
+// Dados mock atualizados com códigos baseados nas siglas dos projetos
 const mockTasks: Task[] = [
   {
     id: '1',
     title: 'Projeto OMOC',
     description: 'Alex Christ, Londres',
-    code: 'CFW-481',
+    code: 'IMB-481', // Baseado na sigla do projeto Imobiliário
     tags: [{ name: 'App Mobile', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Diretrizes', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
     status: 'todo'
   },
@@ -28,7 +29,7 @@ const mockTasks: Task[] = [
     id: '2', 
     title: 'Projeto Regros',
     description: 'Sygintus, Mextos',
-    code: 'CFW-482',
+    code: 'ECM-482', // Baseado na sigla do projeto E-commerce
     tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
     status: 'todo'
   },
@@ -36,7 +37,7 @@ const mockTasks: Task[] = [
     id: '3',
     title: 'Projeto Momon', 
     description: 'Momon Company',
-    code: 'CFW-483',
+    code: 'APP-483', // Baseado na sigla do projeto App Mobile
     tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'App Mobile', color: 'mobile' }],
     status: 'progress'
   },
@@ -44,29 +45,52 @@ const mockTasks: Task[] = [
     id: '4',
     title: 'Projeto Loody',
     description: 'Hya Ji, China',
-    code: 'CFW-484', 
+    code: 'MKT-484', // Baseado na sigla do projeto Marketing
     tags: [{ name: 'App Mobile', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Diretrizes', color: 'guideline' }],
     status: 'progress'
   },
   {
     id: '5',
-    title: 'Projeto EdRuv',
-    description: 'Hall Yonny, EUA',
-    code: 'CFW-485',
-    tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'App Mobile', color: 'mobile' }],
+    title: 'Task de Design',
+    description: 'Design System Updates',
+    code: 'APP-485',
+    tags: [{ name: 'Design', color: 'design' }],
+    status: 'review'
+  },
+  {
+    id: '6', 
+    title: 'Recrutamento Dev',
+    description: 'Hiring new developers',
+    code: 'MKT-486',
+    tags: [{ name: 'Contratação', color: 'hiring' }],
+    status: 'review'
+  },
+  {
+    id: '7',
+    title: 'Otimização Performance',
+    description: 'Optimize app performance',
+    code: 'ECM-487',
+    tags: [{ name: 'Performance', color: 'performance' }],
     status: 'done'
   },
   {
-    id: '6',
-    title: 'Projeto Jokly',
-    description: 'Hussein Dubai',
-    code: 'CFW-486',
-    tags: [{ name: 'Landing Pages', color: 'landing' }],
+    id: '8',
+    title: 'Desenvolvimento',
+    description: 'New feature development',
+    code: 'IMB-488',
+    tags: [{ name: 'Desenvolvimento', color: 'dev' }],
     status: 'done'
   }
 ];
 
-export function TaskBoard() {
+interface TaskBoardProps {
+  projectId?: string; // ID do projeto atual
+}
+
+export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
+  // Buscar o projeto atual
+  const currentProject = getProjectById(projectId);
+
   // Colunas padrão
   const defaultColumns: KanbanColumnType[] = [
     { id: 'todo', title: 'A Fazer', color: 'bg-slate-400', order: 0 },
@@ -94,9 +118,17 @@ export function TaskBoard() {
   );
 
   const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
+    let taskCode = newTaskData.code;
+    
+    // Se não foi fornecido um código ou se é o placeholder, gerar automaticamente
+    if (!taskCode || taskCode.startsWith('CFW-') || currentProject) {
+      taskCode = currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`;
+    }
+    
     const newTask: Task = {
       ...newTaskData,
       id: `task-${Date.now()}`,
+      code: taskCode,
     };
     setTasks([...tasks, newTask]);
   };
@@ -200,6 +232,7 @@ export function TaskBoard() {
                   onAddTask={handleAddTask}
                   defaultStatus="todo"
                   columns={columns.map(col => ({ id: col.id, title: col.title }))}
+                  currentProject={currentProject}
                   trigger={
                     <Button className="gradient-button">
                       <Plus className="w-4 h-4 mr-2" />
@@ -215,15 +248,16 @@ export function TaskBoard() {
               {columns
                 .sort((a, b) => a.order - b.order)
                 .map((column) => (
-                  <DroppableColumn
-                    key={column.id}
-                    column={column}
-                    tasks={getTasksForColumn(column.id)}
-                    onAddTask={handleAddTask}
-                    onTaskClick={handleTaskClick}
-                    onTaskDetailClick={handleTaskDetailClick}
-                    columns={columns.map(col => ({ id: col.id, title: col.title }))}
-                  />
+                   <DroppableColumn
+                     key={column.id}
+                     column={column}
+                     tasks={getTasksForColumn(column.id)}
+                     onAddTask={handleAddTask}
+                     onTaskClick={handleTaskClick}
+                     onTaskDetailClick={handleTaskDetailClick}
+                     columns={columns.map(col => ({ id: col.id, title: col.title }))}
+                     currentProject={currentProject}
+                   />
                 ))}
             </div>
           </>

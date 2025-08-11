@@ -1,3 +1,11 @@
+export interface Project {
+  id: string;
+  name: string;
+  code: string; // Sigla configurável do projeto (ex: "CFW", "PRJ", etc)
+  color: string;
+  taskCount: number; // Contador de tasks para numeração sequencial
+}
+
 export interface KanbanColumn {
   id: string;
   title: string;
@@ -18,7 +26,7 @@ export interface Task {
   id: string;
   title: string;
   description: string;
-  code: string;
+  code: string; // Gerado automaticamente baseado na sigla e contador do projeto
   tags: Array<{
     name: string;
     color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing';

@@ -9,13 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Task } from "./TaskCard";
 import { CustomFieldsManager } from "./CustomFieldsManager";
-import { CustomField } from "@/types/kanban";
+import { CustomField, Project } from "@/types/kanban";
+import { generateTaskCode } from "@/lib/project-utils";
 
 interface AddTaskDialogProps {
   onAddTask: (task: Omit<Task, 'id'>) => void;
   defaultStatus?: string;
   trigger?: React.ReactNode;
   columns?: Array<{id: string, title: string}>;
+  currentProject?: Project; // Projeto atual para gerar códigos
 }
 
 const tagOptions = [
@@ -40,7 +42,7 @@ const tagColorMap = {
   landing: 'bg-purple-100 text-purple-700'
 };
 
-export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, columns = [] }: AddTaskDialogProps) {
+export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, columns = [], currentProject }: AddTaskDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -48,6 +50,14 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
   const [status, setStatus] = useState<string>(defaultStatus);
   const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' }>>([]);
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
+
+  // Gerar código automaticamente quando o diálogo abre
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (isOpen && currentProject && !code) {
+      setCode(generateTaskCode(currentProject));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +67,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
     const newTask: Omit<Task, 'id'> = {
       title: title.trim(),
       description: description.trim(),
-      code: code.trim() || `CFW-${Date.now()}`,
+      code: code.trim() || (currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`),
       tags: selectedTags,
       status,
       customFields: customFields.length > 0 ? customFields : undefined,
@@ -97,7 +107,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {trigger || defaultTrigger}
       </DialogTrigger>
@@ -141,7 +151,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
                 id="code"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="ex: CFW-123"
+                placeholder={currentProject ? `ex: ${currentProject.code}-123` : "ex: TASK-123"}
                 className="h-12 text-base"
               />
             </div>

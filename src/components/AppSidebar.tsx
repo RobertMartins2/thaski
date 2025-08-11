@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Project } from "@/types/kanban";
 import { Home, FolderOpen, Settings, Zap, LogOut, Hexagon, ChevronRight, ChevronDown } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -18,11 +19,11 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 
-const projects = [
-  { id: '1', name: 'Projeto Imobiliário', color: 'bg-blue-500' },
-  { id: '2', name: 'Plataforma E-commerce', color: 'bg-green-500' },
-  { id: '3', name: 'Design de App Mobile', color: 'bg-purple-500' },
-  { id: '4', name: 'Campanha de Marketing', color: 'bg-orange-500' },
+const projects: Project[] = [
+  { id: '1', name: 'Projeto Imobiliário', code: 'IMB', color: 'bg-blue-500', taskCount: 15 },
+  { id: '2', name: 'Plataforma E-commerce', code: 'ECM', color: 'bg-green-500', taskCount: 8 },
+  { id: '3', name: 'Design de App Mobile', code: 'APP', color: 'bg-purple-500', taskCount: 23 },
+  { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 12 },
 ];
 
 const navigationItems = [
