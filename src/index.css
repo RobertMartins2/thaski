@@ -2,39 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* CRM Task Management Design System - Modern Kanban Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Main background and surfaces */
+    --background: 210 20% 98%;
+    --foreground: 213 27% 14%;
+    --surface: 0 0% 100%;
+    
+    /* Card system */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
+    --card-foreground: 213 27% 14%;
+    --card-hover: 210 40% 99%;
+    
+    /* Primary brand colors - Modern blue/purple gradient system */
+    --primary: 213 94% 68%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 213 94% 64%;
+    --primary-gradient: linear-gradient(135deg, hsl(213 94% 68%) 0%, hsl(255 85% 70%) 100%);
+    
+    /* Secondary palette */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 213 27% 24%;
+    --secondary-hover: 210 40% 94%;
+    
+    /* Muted colors for subtle elements */
+    --muted: 210 30% 95%;
+    --muted-foreground: 215 16% 47%;
+    --muted-hover: 210 30% 92%;
+    
+    /* Accent colors */
+    --accent: 255 85% 70%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 255 85% 66%;
+    
+    /* Status colors for task states */
+    --status-todo: 200 100% 70%;
+    --status-progress: 45 100% 65%;
+    --status-done: 142 76% 58%;
+    
+    /* Tag colors */
+    --tag-design: 280 100% 70%;
+    --tag-hiring: 15 100% 65%;
+    --tag-dev: 200 100% 70%;
+    --tag-performance: 142 76% 58%;
+    
+    /* Destructive */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    
+    /* Borders and inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 213 94% 68%;
 
     --radius: 0.5rem;
 
@@ -100,6 +121,61 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Kanban card animations and shadows */
+  .task-card {
+    @apply bg-card border border-border rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-move;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+  
+  .task-card:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    @apply bg-card-hover;
+  }
+  
+  /* Column styling */
+  .kanban-column {
+    @apply bg-muted/30 rounded-xl p-4 min-h-[500px];
+  }
+  
+  /* Tag variants */
+  .tag-design {
+    @apply bg-[hsl(var(--tag-design))] text-white;
+  }
+  
+  .tag-hiring {
+    @apply bg-[hsl(var(--tag-hiring))] text-white;
+  }
+  
+  .tag-dev {
+    @apply bg-[hsl(var(--tag-dev))] text-white;
+  }
+  
+  .tag-performance {
+    @apply bg-[hsl(var(--tag-performance))] text-white;
+  }
+  
+  /* Gradient button */
+  .gradient-button {
+    background: var(--primary-gradient);
+    @apply text-white border-0 hover:opacity-90 transition-opacity;
+  }
+  
+  /* Status indicators */
+  .status-todo {
+    @apply border-l-4 border-[hsl(var(--status-todo))];
+  }
+  
+  .status-progress {
+    @apply border-l-4 border-[hsl(var(--status-progress))];
+  }
+  
+  .status-done {
+    @apply border-l-4 border-[hsl(var(--status-done))];
   }
 }
