@@ -95,6 +95,7 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
       <DialogContent className="sm:max-w-[700px] bg-surface border-border/30">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-foreground">Configure Board Columns</DialogTitle>
+          <p className="text-muted-foreground mt-2">Click the edit icon next to any column name to rename it, or change colors by clicking the color dots.</p>
         </DialogHeader>
         
         <div className="space-y-6 mt-6">
@@ -103,7 +104,7 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
             {localColumns.map((column, index) => (
               <div
                 key={column.id}
-                className="flex items-center gap-4 p-4 bg-muted/20 rounded-xl border border-border/30"
+                className="flex items-center gap-4 p-4 bg-muted/20 rounded-xl border border-border/30 group hover:bg-muted/30 transition-colors"
               >
                 {/* Drag Handle */}
                 <div className="cursor-grab text-muted-foreground hover:text-foreground transition-colors">
@@ -139,13 +140,14 @@ export function ColumnSettingsDialog({ columns, onUpdateColumns }: ColumnSetting
                       </Button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 group">
                       <span className="font-medium text-foreground">{column.title}</span>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEditTitle(column.id, column.title)}
-                        className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 hover:bg-muted"
+                        className="h-6 w-6 p-0 opacity-60 group-hover:opacity-100 hover:bg-muted transition-opacity"
+                        title="Edit column name"
                       >
                         <Edit2 className="w-3 h-3" />
                       </Button>
