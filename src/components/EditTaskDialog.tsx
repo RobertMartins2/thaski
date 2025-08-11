@@ -26,12 +26,12 @@ interface EditTaskDialogProps {
 
 const tagOptions = [
   { name: 'Design', color: 'design' as const },
-  { name: 'Dev', color: 'dev' as const },
-  { name: 'Hiring', color: 'hiring' as const },
+  { name: 'Desenvolvimento', color: 'dev' as const },
+  { name: 'Contratação', color: 'hiring' as const },
   { name: 'Performance', color: 'performance' as const },
-  { name: 'Mobile App', color: 'mobile' as const },
+  { name: 'App Mobile', color: 'mobile' as const },
   { name: 'Dashboard', color: 'dashboard' as const },
-  { name: 'Guideline', color: 'guideline' as const },
+  { name: 'Diretrizes', color: 'guideline' as const },
   { name: 'Landing Pages', color: 'landing' as const },
 ];
 
@@ -85,7 +85,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
   };
 
   const handleDelete = () => {
-    if (onDeleteTask && confirm('Are you sure you want to delete this task?')) {
+    if (onDeleteTask && confirm("Tem certeza de que deseja excluir esta tarefa? Esta ação não pode ser desfeita.")) {
       onDeleteTask(task.id);
       onOpenChange(false);
     }
@@ -99,18 +99,18 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-surface border-border/30">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-foreground">Edit Task</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold text-foreground">Editar Tarefa</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm font-semibold text-foreground">Task Title</Label>
+            <Label htmlFor="title" className="text-sm font-semibold text-foreground">Título da Tarefa</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter task title..."
+              placeholder="Digite o título da tarefa..."
               className="h-12 text-base"
               required
             />
@@ -118,12 +118,12 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-semibold text-foreground">Description</Label>
+            <Label htmlFor="description" className="text-sm font-semibold text-foreground">Descrição</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter task description..."
+              placeholder="Digite a descrição da tarefa..."
               className="min-h-[100px] text-base resize-none"
               required
             />
@@ -132,12 +132,12 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
           {/* Code and Status Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="code" className="text-sm font-semibold text-foreground">Task Code</Label>
+              <Label htmlFor="code" className="text-sm font-semibold text-foreground">Código da Tarefa</Label>
               <Input
                 id="code"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="e.g., CFW-123"
+                placeholder="ex: CFW-123"
                 className="h-12 text-base"
               />
             </div>
@@ -157,10 +157,10 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
                     ))
                   ) : (
                     <>
-                      <SelectItem value="todo">To Do</SelectItem>
-                      <SelectItem value="progress">In Progress</SelectItem>
-                      <SelectItem value="done">Completed</SelectItem>
-                      <SelectItem value="overdue">Overdue</SelectItem>
+                      <SelectItem value="todo">A Fazer</SelectItem>
+                      <SelectItem value="progress">Em Andamento</SelectItem>
+                      <SelectItem value="done">Concluído</SelectItem>
+                      <SelectItem value="overdue">Atrasado</SelectItem>
                     </>
                   )}
                 </SelectContent>
@@ -170,7 +170,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
 
           {/* Due Date */}
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-foreground">Due Date</Label>
+            <Label className="text-sm font-semibold text-foreground">Data de Vencimento</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -181,7 +181,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                  {dueDate ? format(dueDate, "PPP") : <span>Selecione uma data</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -200,7 +200,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
           <div className="space-y-3">
             <Label className="text-sm font-semibold text-foreground">Tags</Label>
             
-            {/* Selected Tags */}
+            {/* Tags Selecionadas */}
             {selectedTags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {selectedTags.map((tag, index) => (
@@ -244,11 +244,11 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
               <Button
                 type="button"
                 variant="destructive"
-                onClick={handleDelete}
-                className="h-12 font-semibold"
-              >
-                Delete
-              </Button>
+              onClick={handleDelete}
+              className="h-12 font-semibold"
+            >
+              Excluir
+            </Button>
             )}
             <Button
               type="button"
@@ -256,7 +256,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
               onClick={() => onOpenChange(false)}
               className="flex-1 h-12 font-semibold"
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               type="submit"
@@ -264,7 +264,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
               disabled={!title.trim() || !description.trim()}
             >
               <Edit className="w-4 h-4 mr-2" />
-              Save Changes
+              Salvar Alterações
             </Button>
           </div>
         </form>

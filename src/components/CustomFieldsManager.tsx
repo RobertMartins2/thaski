@@ -66,23 +66,23 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
           <Input
             value={field.value as string || ''}
             onChange={(e) => handleUpdateField(field.id, { value: e.target.value })}
-            placeholder="Enter text..."
-            className="h-9 text-sm"
-          />
-        );
+              placeholder="Digite texto..."
+              className="h-9 text-sm"
+            />
+          );
       case 'number':
         return (
           <Input
             type="number"
             value={field.value as number || ''}
             onChange={(e) => handleUpdateField(field.id, { value: e.target.value ? Number(e.target.value) : null })}
-            placeholder="Enter number..."
+            placeholder="Digite um número..."
             className="h-9 text-sm"
           />
         );
       case 'select':
         if (!field.options || field.options.length === 0) {
-          return <span className="text-sm text-muted-foreground italic">No options configured</span>;
+          return <span className="text-sm text-muted-foreground italic">Nenhuma opção configurada</span>;
         }
         return (
           <Select 
@@ -90,10 +90,10 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
             onValueChange={(value) => handleUpdateField(field.id, { value })}
           >
             <SelectTrigger className="h-9 text-sm">
-              <SelectValue placeholder="Select option..." />
+              <SelectValue placeholder="Selecione uma opção..." />
             </SelectTrigger>
             <SelectContent className="bg-surface border-border/30 z-50">
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="">Nenhuma</SelectItem>
               {field.options.map((option) => (
                 <SelectItem key={option} value={option}>
                   {option}
@@ -110,7 +110,7 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label className="text-sm font-semibold text-foreground">Custom Fields</Label>
+        <Label className="text-sm font-semibold text-foreground">Campos Personalizados</Label>
         {!isCreating && (
           <Button
             variant="outline"
@@ -119,7 +119,7 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
             className="h-8 text-xs"
           >
             <Plus className="w-3 h-3 mr-1" />
-            Add Field
+            Adicionar Campo
           </Button>
         )}
       </div>
@@ -129,26 +129,26 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
         <div className="p-4 bg-muted/20 rounded-lg border border-border/30 space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="field-name" className="text-xs font-medium">Field Name</Label>
+              <Label htmlFor="field-name" className="text-xs font-medium">Nome do Campo</Label>
               <Input
                 id="field-name"
                 value={newFieldName}
                 onChange={(e) => setNewFieldName(e.target.value)}
-                placeholder="Enter field name..."
+                placeholder="Digite o nome do campo..."
                 className="h-8 text-sm"
                 autoFocus
               />
             </div>
             <div>
-              <Label htmlFor="field-type" className="text-xs font-medium">Type</Label>
+              <Label htmlFor="field-type" className="text-xs font-medium">Tipo</Label>
               <Select value={newFieldType} onValueChange={(value: 'text' | 'number' | 'select') => setNewFieldType(value)}>
                 <SelectTrigger className="h-8 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-surface border-border/30 z-50">
-                  <SelectItem value="text">Text</SelectItem>
-                  <SelectItem value="number">Number</SelectItem>
-                  <SelectItem value="select">Select</SelectItem>
+                  <SelectItem value="text">Texto</SelectItem>
+                  <SelectItem value="number">Número</SelectItem>
+                  <SelectItem value="select">Seleção</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -156,12 +156,12 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
 
           {newFieldType === 'select' && (
             <div>
-              <Label htmlFor="field-options" className="text-xs font-medium">Options (comma separated)</Label>
+              <Label htmlFor="field-options" className="text-xs font-medium">Opções (separadas por vírgula)</Label>
               <Input
                 id="field-options"
                 value={newFieldOptions}
                 onChange={(e) => setNewFieldOptions(e.target.value)}
-                placeholder="Option 1, Option 2, Option 3..."
+                placeholder="Opção 1, Opção 2, Opção 3..."
                 className="h-8 text-sm"
               />
             </div>
@@ -169,10 +169,10 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
 
           <div className="flex gap-2">
             <Button size="sm" onClick={handleCreateField} disabled={!newFieldName.trim()}>
-              Create Field
+              Criar Campo
             </Button>
             <Button variant="outline" size="sm" onClick={() => setIsCreating(false)}>
-              Cancel
+              Cancelar
             </Button>
           </div>
         </div>
@@ -199,9 +199,9 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
                     />
                     <span className="text-xs text-muted-foreground">
                       {field.visible ? (
-                        <><Eye className="w-3 h-3 inline mr-1" />Show in card</>
+                        <><Eye className="w-3 h-3 inline mr-1" />Mostrar no card</>
                       ) : (
-                        <><EyeOff className="w-3 h-3 inline mr-1" />Edit only</>
+                        <><EyeOff className="w-3 h-3 inline mr-1" />Apenas edição</>
                       )}
                     </span>
                   </div>
@@ -217,13 +217,13 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
               </div>
               
               <div>
-                <Label className="text-xs font-medium text-muted-foreground">Value</Label>
+                <Label className="text-xs font-medium text-muted-foreground">Valor</Label>
                 {renderFieldValue(field)}
               </div>
               
               {field.type === 'select' && field.options && field.options.length > 0 && (
                 <div className="text-xs text-muted-foreground">
-                  Options: {field.options.join(', ')}
+                  Opções: {field.options.join(', ')}
                 </div>
               )}
             </div>
@@ -233,8 +233,8 @@ export function CustomFieldsManager({ customFields, onUpdateFields }: CustomFiel
 
       {localFields.length === 0 && !isCreating && (
         <div className="text-center py-8 text-muted-foreground">
-          <p className="text-sm">No custom fields yet.</p>
-          <p className="text-xs mt-1">Click "Add Field" to create your first custom field.</p>
+          <p className="text-sm">Nenhum campo personalizado ainda.</p>
+          <p className="text-xs mt-1">Clique em "Adicionar Campo" para criar seu primeiro campo personalizado.</p>
         </div>
       )}
     </div>

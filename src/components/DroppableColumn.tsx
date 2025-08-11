@@ -55,7 +55,7 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskD
           trigger={
             <button className="add-task-button">
               <Plus className="w-4 h-4 mr-2" />
-              Add new task
+              Adicionar nova tarefa
             </button>
           }
         />

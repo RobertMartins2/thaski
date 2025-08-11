@@ -20,12 +20,12 @@ interface AddTaskDialogProps {
 
 const tagOptions = [
   { name: 'Design', color: 'design' as const },
-  { name: 'Dev', color: 'dev' as const },
-  { name: 'Hiring', color: 'hiring' as const },
+  { name: 'Desenvolvimento', color: 'dev' as const },
+  { name: 'Contratação', color: 'hiring' as const },
   { name: 'Performance', color: 'performance' as const },
-  { name: 'Mobile App', color: 'mobile' as const },
+  { name: 'App Mobile', color: 'mobile' as const },
   { name: 'Dashboard', color: 'dashboard' as const },
-  { name: 'Guideline', color: 'guideline' as const },
+  { name: 'Diretrizes', color: 'guideline' as const },
   { name: 'Landing Pages', color: 'landing' as const },
 ];
 
@@ -92,7 +92,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
   const defaultTrigger = (
     <Button className="gradient-button h-12">
       <Plus className="w-5 h-5 mr-2" />
-      New Task
+      Nova Tarefa
     </Button>
   );
 
@@ -103,18 +103,18 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-surface border-border/30">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-foreground">Create New Task</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold text-foreground">Criar Nova Tarefa</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm font-semibold text-foreground">Task Title</Label>
+            <Label htmlFor="title" className="text-sm font-semibold text-foreground">Título da Tarefa</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter task title..."
+              placeholder="Digite o título da tarefa..."
               className="h-12 text-base"
               required
             />
@@ -122,12 +122,12 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-semibold text-foreground">Description</Label>
+            <Label htmlFor="description" className="text-sm font-semibold text-foreground">Descrição</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter task description..."
+              placeholder="Digite a descrição da tarefa..."
               className="min-h-[100px] text-base resize-none"
               required
             />
@@ -136,12 +136,12 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
           {/* Code and Status Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="code" className="text-sm font-semibold text-foreground">Task Code</Label>
+              <Label htmlFor="code" className="text-sm font-semibold text-foreground">Código da Tarefa</Label>
               <Input
                 id="code"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="e.g., CFW-123"
+                placeholder="ex: CFW-123"
                 className="h-12 text-base"
               />
             </div>
@@ -161,9 +161,9 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
                     ))
                   ) : (
                     <>
-                      <SelectItem value="todo">To-do</SelectItem>
-                      <SelectItem value="progress">In Progress</SelectItem>
-                      <SelectItem value="done">Done</SelectItem>
+                      <SelectItem value="todo">A Fazer</SelectItem>
+                      <SelectItem value="progress">Em Andamento</SelectItem>
+                      <SelectItem value="done">Concluído</SelectItem>
                     </>
                   )}
                 </SelectContent>
@@ -221,7 +221,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               onClick={() => setOpen(false)}
               className="flex-1 h-12 font-semibold"
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               type="submit"
@@ -229,7 +229,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               disabled={!title.trim() || !description.trim()}
             >
               <Plus className="w-4 h-4 mr-2" />
-              Create Task
+              Criar Tarefa
             </Button>
           </div>
         </form>

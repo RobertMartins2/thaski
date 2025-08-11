@@ -14,51 +14,51 @@ import { DroppableColumn } from "./DroppableColumn";
 import { EditTaskDialog } from "./EditTaskDialog";
 import { TaskDetailPanel } from "./TaskDetailPanel";
 
-// Mock data for demonstration
+// Dados mock para demonstração
 const mockTasks: Task[] = [
   {
     id: '1',
-    title: 'OMOC Project',
-    description: 'Alex Christ, London',
+    title: 'Projeto OMOC',
+    description: 'Alex Christ, Londres',
     code: 'CFW-481',
-    tags: [{ name: 'Mobile App', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Guideline', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
+    tags: [{ name: 'App Mobile', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Diretrizes', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
     status: 'todo'
   },
   {
     id: '2', 
-    title: 'Regros Project',
+    title: 'Projeto Regros',
     description: 'Sygintus, Mextos',
     code: 'CFW-482',
-    tags: [{ name: 'Guideline', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
+    tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
     status: 'todo'
   },
   {
     id: '3',
-    title: 'Momon Project', 
+    title: 'Projeto Momon', 
     description: 'Momon Company',
     code: 'CFW-483',
-    tags: [{ name: 'Guideline', color: 'guideline' }, { name: 'Mobile App', color: 'mobile' }],
+    tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'App Mobile', color: 'mobile' }],
     status: 'progress'
   },
   {
     id: '4',
-    title: 'Loody Project',
+    title: 'Projeto Loody',
     description: 'Hya Ji, China',
     code: 'CFW-484', 
-    tags: [{ name: 'Mobile App', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Guideline', color: 'guideline' }],
+    tags: [{ name: 'App Mobile', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Diretrizes', color: 'guideline' }],
     status: 'progress'
   },
   {
     id: '5',
-    title: 'EdRuv Project',
-    description: 'Hall Yonny, US',
+    title: 'Projeto EdRuv',
+    description: 'Hall Yonny, EUA',
     code: 'CFW-485',
-    tags: [{ name: 'Guideline', color: 'guideline' }, { name: 'Mobile App', color: 'mobile' }],
+    tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'App Mobile', color: 'mobile' }],
     status: 'done'
   },
   {
     id: '6',
-    title: 'Jokly Project',
+    title: 'Projeto Jokly',
     description: 'Hussein Dubai',
     code: 'CFW-486',
     tags: [{ name: 'Landing Pages', color: 'landing' }],
@@ -67,12 +67,12 @@ const mockTasks: Task[] = [
 ];
 
 export function TaskBoard() {
-  // Default columns
+  // Colunas padrão
   const defaultColumns: KanbanColumnType[] = [
-    { id: 'todo', title: 'To Do', color: 'bg-slate-400', order: 0 },
-    { id: 'progress', title: 'In Progress', color: 'bg-yellow-500', order: 1 },
-    { id: 'done', title: 'Completed', color: 'bg-green-500', order: 2 },
-    { id: 'overdue', title: 'Overdue', color: 'bg-red-500', order: 3 }
+    { id: 'todo', title: 'A Fazer', color: 'bg-slate-400', order: 0 },
+    { id: 'progress', title: 'Em Andamento', color: 'bg-yellow-500', order: 1 },
+    { id: 'done', title: 'Concluído', color: 'bg-green-500', order: 2 },
+    { id: 'overdue', title: 'Atrasado', color: 'bg-red-500', order: 3 }
   ];
 
   const [viewMode, setViewMode] = useState<'board' | 'calendar'>('board');
@@ -203,7 +203,7 @@ export function TaskBoard() {
                   trigger={
                     <Button className="gradient-button">
                       <Plus className="w-4 h-4 mr-2" />
-                      New Task
+                      Nova Tarefa
                     </Button>
                   }
                 />
@@ -230,8 +230,8 @@ export function TaskBoard() {
         ) : (
           <div className="bg-surface rounded-3xl p-12 text-center border border-border/40">
             <Calendar className="w-20 h-20 mx-auto text-muted-foreground mb-6" />
-            <h3 className="text-2xl font-bold text-foreground mb-3">Calendar View</h3>
-            <p className="text-muted-foreground">Calendar view will be implemented soon</p>
+            <h3 className="text-2xl font-bold text-foreground mb-3">Visualização de Calendário</h3>
+            <p className="text-muted-foreground">A visualização de calendário será implementada em breve</p>
           </div>
         )}
       </div>

@@ -39,22 +39,22 @@ const priorityColors = {
 const sampleNotes = [
   {
     id: '1',
-    author: 'John Doe',
+    author: 'João Silva',
     avatar: '/placeholder-avatar.png',
-    content: 'Updated the design specifications and shared with the development team.',
+    content: 'Atualizei as especificações de design e compartilhei com a equipe de desenvolvimento.',
     timestamp: '2024-01-15T10:30:00Z',
   },
   {
     id: '2',
     author: 'Sarah Wilson',
     avatar: '/placeholder-avatar.png',
-    content: 'Reviewed the latest mockups. Looking great! Just need to adjust the mobile responsiveness.',
+    content: 'Revisei os mockups mais recentes. Está ótimo! Só preciso ajustar a responsividade mobile.',
     timestamp: '2024-01-14T15:45:00Z',
   }
 ];
 
 const sampleAttachments = [
-  { id: '1', name: 'requirements.pdf', size: '2.4 MB', type: 'pdf' },
+  { id: '1', name: 'requisitos.pdf', size: '2.4 MB', type: 'pdf' },
   { id: '2', name: 'mockup_v2.figma', size: '1.8 MB', type: 'figma' },
   { id: '3', name: 'screenshot_1.png', size: '845 KB', type: 'image' }
 ];
@@ -72,8 +72,8 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
   const handleAddNote = () => {
     if (!newNote.trim()) return;
     
-    // In a real app, this would be sent to the backend
-    console.log('Adding note:', newNote);
+    // Em um aplicativo real, isso seria enviado para o backend
+    console.log('Adicionando nota:', newNote);
     setNewNote('');
   };
 
@@ -124,7 +124,7 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                 <div className="space-y-4">
                   <div>
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Priority
+                      Prioridade
                     </label>
                     <Select value="high" onValueChange={() => {}}>
                       <SelectTrigger className="h-9">
@@ -134,19 +134,19 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                         <SelectItem value="high">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-red-500 rounded-full" />
-                            High
+                            Alta
                           </div>
                         </SelectItem>
                         <SelectItem value="medium">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-yellow-500 rounded-full" />
-                            Medium
+                            Média
                           </div>
                         </SelectItem>
                         <SelectItem value="low">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full" />
-                            Low
+                            Baixa
                           </div>
                         </SelectItem>
                       </SelectContent>
@@ -155,11 +155,11 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                   
                   <div>
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Due date
+                      Data de vencimento
                     </label>
                     <div className="flex items-center gap-2 text-sm text-foreground">
                       <Calendar className="w-4 h-4 text-muted-foreground" />
-                      Jan 03, 2024
+                      03 Jan, 2024
                     </div>
                   </div>
                 </div>
@@ -167,21 +167,21 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                 <div className="space-y-4">
                   <div>
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Deal summary
+                      Resumo do negócio
                     </label>
                     <div className="text-sm font-semibold text-foreground">$ 8000</div>
                   </div>
                   
                   <div>
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Task owner
+                      Responsável
                     </label>
                     <div className="flex items-center gap-2">
                       <Avatar className="w-6 h-6">
                         <AvatarImage src="/placeholder-avatar.png" />
                         <AvatarFallback className="text-xs bg-primary text-primary-foreground">JD</AvatarFallback>
                       </Avatar>
-                      <span className="text-sm text-foreground">John Doe</span>
+                      <span className="text-sm text-foreground">João Silva</span>
                     </div>
                   </div>
                 </div>
@@ -190,26 +190,26 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
               {/* Description */}
               <div>
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
-                  Subject
+                  Assunto
                 </label>
                 <div className="text-sm text-foreground leading-relaxed">
                   {localTask.description}
                 </div>
               </div>
 
-              {/* Status Details */}
+              {/* Detalhes do Status */}
               <div className="grid grid-cols-4 gap-4 p-4 bg-muted/20 rounded-lg">
                 <div>
                   <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Account
+                    Conta
                   </div>
-                  <div className="text-sm text-foreground">Client ABC</div>
+                  <div className="text-sm text-foreground">Cliente ABC</div>
                 </div>
                 <div>
                   <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Deal
+                    Negócio
                   </div>
-                  <div className="text-sm text-foreground">Project Deal</div>
+                  <div className="text-sm text-foreground">Negócio do Projeto</div>
                 </div>
                 <div>
                   <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
@@ -217,14 +217,14 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-green-500 rounded-full" />
-                    <span className="text-sm text-foreground">In-progress</span>
+                    <span className="text-sm text-foreground">Em andamento</span>
                   </div>
                 </div>
                 <div>
                   <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Reminder
+                    Lembrete
                   </div>
-                  <div className="text-sm text-foreground">Jan 20, Pop-up</div>
+                  <div className="text-sm text-foreground">20 Jan, Pop-up</div>
                 </div>
               </div>
 
@@ -250,14 +250,14 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
               {localTask.customFields && localTask.customFields.length > 0 && (
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
-                    Custom Fields
+                    Campos Personalizados
                   </label>
                   <div className="space-y-3">
                     {localTask.customFields.map((field) => (
                       <div key={field.id} className="flex items-center justify-between py-2">
                         <span className="text-sm font-medium text-muted-foreground">{field.name}</span>
                         <span className="text-sm text-foreground">
-                          {field.value ? String(field.value) : 'Not set'}
+                          {field.value ? String(field.value) : 'Não definido'}
                         </span>
                       </div>
                     ))}
@@ -267,15 +267,15 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
 
               <Separator />
 
-              {/* Notes Section */}
+              {/* Seção de Notas */}
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Notes
+                    Notas
                   </label>
                   <Button variant="ghost" size="sm" className="text-xs text-primary hover:text-primary">
                     <Plus className="w-3 h-3 mr-1" />
-                    Add new
+                    Adicionar nova
                   </Button>
                 </div>
                 
@@ -300,22 +300,22 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                     </div>
                   ))}
                   
-                  {/* Add Note */}
+                  {/* Adicionar Nota */}
                   <div className="flex gap-3">
                     <Avatar className="w-8 h-8">
-                      <AvatarFallback className="text-xs bg-primary text-primary-foreground">You</AvatarFallback>
+                      <AvatarFallback className="text-xs bg-primary text-primary-foreground">Você</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 space-y-2">
                       <Textarea
                         value={newNote}
                         onChange={(e) => setNewNote(e.target.value)}
-                        placeholder="Add a note..."
+                        placeholder="Adicione uma nota..."
                         className="min-h-[60px] text-sm resize-none"
                       />
                       {newNote.trim() && (
                         <div className="flex gap-2">
-                          <Button size="sm" onClick={handleAddNote}>Add Note</Button>
-                          <Button variant="ghost" size="sm" onClick={() => setNewNote('')}>Cancel</Button>
+                          <Button size="sm" onClick={handleAddNote}>Adicionar Nota</Button>
+                          <Button variant="ghost" size="sm" onClick={() => setNewNote('')}>Cancelar</Button>
                         </div>
                       )}
                     </div>
@@ -325,15 +325,15 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
 
               <Separator />
 
-              {/* Documents Section */}
+              {/* Seção de Documentos */}
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Documents center
+                    Central de documentos
                   </label>
                   <Button variant="ghost" size="sm" className="text-xs text-primary hover:text-primary">
                     <Plus className="w-3 h-3 mr-1" />
-                    Add new attachments
+                    Adicionar novos anexos
                   </Button>
                 </div>
                 
@@ -355,20 +355,20 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
             </div>
           </div>
 
-          {/* Footer Actions */}
+          {/* Ações do Rodapé */}
           <div className="border-t border-border/30 p-4 bg-muted/20">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Clock className="w-3 h-3" />
-                Last activity: 27 Dec 2022 at 9:45am
+                Última atividade: 27 Dez 2022 às 9:45
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">
                   <Edit2 className="w-4 h-4 mr-1" />
-                  Edit
+                  Editar
                 </Button>
                 <Button size="sm" className="bg-primary text-primary-foreground">
-                  ✓ Close task
+                  ✓ Concluir tarefa
                 </Button>
               </div>
             </div>
