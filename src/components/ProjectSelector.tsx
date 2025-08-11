@@ -10,11 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface Project {
-  id: string;
-  name: string;
-  description?: string;
-}
+import { Project } from "@/types/kanban";
 
 interface ProjectSelectorProps {
   currentProject: Project;
@@ -63,9 +59,9 @@ export function ProjectSelector({
           >
             <div className="flex flex-col">
               <span className="font-medium">{project.name}</span>
-              {project.description && (
-                <span className="text-xs text-muted-foreground">{project.description}</span>
-              )}
+              <span className="text-xs text-muted-foreground">
+                {project.code} • {project.taskCount} tarefas
+              </span>
             </div>
           </DropdownMenuItem>
         ))}

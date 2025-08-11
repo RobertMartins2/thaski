@@ -118,12 +118,8 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
   );
 
   const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
-    let taskCode = newTaskData.code;
-    
-    // Se não foi fornecido um código ou se é o placeholder, gerar automaticamente
-    if (!taskCode || taskCode.startsWith('CFW-') || currentProject) {
-      taskCode = currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`;
-    }
+    // Sempre gerar o código automaticamente baseado no projeto atual
+    const taskCode = currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`;
     
     const newTask: Task = {
       ...newTaskData,
@@ -131,6 +127,9 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
       code: taskCode,
     };
     setTasks([...tasks, newTask]);
+    
+    // TODO: Aqui precisaríamos incrementar o taskCount do projeto na fonte de dados
+    // Por agora, a geração do código usa o taskCount atual do projeto
   };
 
   const handleUpdateColumns = (newColumns: KanbanColumnType[]) => {

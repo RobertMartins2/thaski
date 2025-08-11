@@ -5,27 +5,24 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { TaskBoard } from "@/components/TaskBoard";
 import { ProjectHeader } from "@/components/ProjectHeader";
 import { toast } from "sonner";
+import { Project } from "@/types/kanban";
 
 import { Menu } from "lucide-react";
-
-interface Project {
-  id: string;
-  name: string;
-  description?: string;
-}
 
 const Index = () => {
   const [currentProject, setCurrentProject] = useState<Project>({
     id: '1', 
-    name: 'Projeto Imobiliário', 
-    description: 'Workspace principal do projeto'
+    name: 'Projeto Imobiliário',
+    code: 'IMB',
+    color: 'bg-blue-500',
+    taskCount: 488
   });
 
   const projects: Project[] = [
-    { id: '1', name: 'Projeto Imobiliário', description: 'Workspace principal do projeto' },
-    { id: '2', name: 'Plataforma E-commerce', description: 'Desenvolvimento de loja online' },
-    { id: '3', name: 'Design de App Mobile', description: 'Aplicação iOS/Android' },
-    { id: '4', name: 'Campanha de Marketing', description: 'Atividades de marketing Q1 2024' }
+    { id: '1', name: 'Projeto Imobiliário', code: 'IMB', color: 'bg-blue-500', taskCount: 488 },
+    { id: '2', name: 'Plataforma E-commerce', code: 'ECM', color: 'bg-green-500', taskCount: 487 },
+    { id: '3', name: 'Design de App Mobile', code: 'APP', color: 'bg-purple-500', taskCount: 485 },
+    { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 486 }
   ];
 
   const handleProjectChange = (project: Project) => {

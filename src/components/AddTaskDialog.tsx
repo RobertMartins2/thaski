@@ -150,10 +150,13 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               <Input
                 id="code"
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                readOnly
                 placeholder={currentProject ? `ex: ${currentProject.code}-123` : "ex: TASK-123"}
-                className="h-12 text-base"
+                className="h-12 text-base bg-muted/50 text-muted-foreground font-mono"
               />
+              <p className="text-xs text-muted-foreground">
+                Código gerado automaticamente baseado no projeto
+              </p>
             </div>
 
             <div className="space-y-2">

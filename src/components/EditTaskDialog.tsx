@@ -136,10 +136,13 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
               <Input
                 id="code"
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                readOnly
                 placeholder="ex: CFW-123"
-                className="h-12 text-base"
+                className="h-12 text-base bg-muted/50 text-muted-foreground font-mono"
               />
+              <p className="text-xs text-muted-foreground">
+                Código automático não pode ser editado
+              </p>
             </div>
 
             <div className="space-y-2">

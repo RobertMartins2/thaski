@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 interface Project {
   id: string;
   name: string;
+  code: string; // Sigla de 3 letras configurável do projeto
   description: string;
   taskCount: number;
   createdAt: string;
@@ -25,6 +26,7 @@ const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
+  const [newProjectCode, setNewProjectCode] = useState('');
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectColor, setNewProjectColor] = useState('bg-blue-500');
 
@@ -34,6 +36,7 @@ const Projects = () => {
       {
         id: '1',
         name: 'Projeto Imobiliário',
+        code: 'IMB',
         description: 'Workspace principal para gestão imobiliária',
         taskCount: 12,
         createdAt: '2024-01-15',
@@ -42,6 +45,7 @@ const Projects = () => {
       {
         id: '2', 
         name: 'Plataforma E-commerce',
+        code: 'ECM',
         description: 'Desenvolvimento e manutenção de loja online',
         taskCount: 8,
         createdAt: '2024-01-20',
@@ -50,6 +54,7 @@ const Projects = () => {
       {
         id: '3',
         name: 'Design de App Mobile',
+        code: 'APP',
         description: 'Design de aplicação iOS e Android',
         taskCount: 15,
         createdAt: '2024-02-01',
@@ -75,10 +80,28 @@ const Projects = () => {
       toast.error("Nome do projeto é obrigatório");
       return;
     }
+    
+    if (!newProjectCode.trim()) {
+      toast.error("Código do projeto é obrigatório");
+      return;
+    }
+
+    const codeRegex = /^[A-Z]{3}$/;
+    if (!codeRegex.test(newProjectCode.trim())) {
+      toast.error("Código deve ter exatamente 3 letras maiúsculas");
+      return;
+    }
+
+    // Verificar se o código já existe
+    if (projects.some(p => p.code === newProjectCode.trim().toUpperCase())) {
+      toast.error("Este código já está sendo usado por outro projeto");
+      return;
+    }
 
     const newProject: Project = {
       id: `project-${Date.now()}`,
       name: newProjectName.trim(),
+      code: newProjectCode.trim().toUpperCase(),
       description: newProjectDescription.trim(),
       taskCount: 0,
       createdAt: new Date().toISOString().split('T')[0],
@@ -87,6 +110,7 @@ const Projects = () => {
 
     setProjects([...projects, newProject]);
     setNewProjectName('');
+    setNewProjectCode('');
     setNewProjectDescription('');
     setNewProjectColor('bg-blue-500');
     setIsCreateDialogOpen(false);
@@ -161,6 +185,21 @@ const Projects = () => {
                         </div>
                         
                         <div className="space-y-2">
+                          <Label htmlFor="code">Código do Projeto</Label>
+                          <Input
+                            id="code"
+                            value={newProjectCode}
+                            onChange={(e) => setNewProjectCode(e.target.value.toUpperCase())}
+                            placeholder="ex: PKI"
+                            maxLength={3}
+                            className="font-mono text-center"
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            Código de 3 letras maiúsculas para identificar as tarefas (ex: PKI-1, PKI-2)
+                          </p>
+                        </div>
+                        
+                        <div className="space-y-2">
                           <Label htmlFor="description">Descrição</Label>
                           <Textarea
                             id="description"
@@ -193,7 +232,7 @@ const Projects = () => {
                         <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                           Cancelar
                         </Button>
-                        <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
+                        <Button onClick={handleCreateProject} disabled={!newProjectName.trim() || !newProjectCode.trim()}>
                           Criar Projeto
                         </Button>
                       </DialogFooter>
@@ -301,6 +340,21 @@ const Projects = () => {
             </div>
             
             <div className="space-y-2">
+              <Label htmlFor="code">Código do Projeto</Label>
+              <Input
+                id="code"
+                value={newProjectCode}
+                onChange={(e) => setNewProjectCode(e.target.value.toUpperCase())}
+                placeholder="ex: PKI"
+                maxLength={3}
+                className="font-mono text-center"
+              />
+              <p className="text-xs text-muted-foreground">
+                Código de 3 letras maiúsculas para identificar as tarefas (ex: PKI-1, PKI-2)
+              </p>
+            </div>
+            
+            <div className="space-y-2">
               <Label htmlFor="description">Descrição</Label>
               <Textarea
                 id="description"
@@ -333,7 +387,7 @@ const Projects = () => {
             <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
               Cancelar
             </Button>
-            <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
+            <Button onClick={handleCreateProject} disabled={!newProjectName.trim() || !newProjectCode.trim()}>
               Criar Projeto
             </Button>
           </DialogFooter>
