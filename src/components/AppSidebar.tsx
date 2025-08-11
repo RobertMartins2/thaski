@@ -34,7 +34,6 @@ export function AppSidebar() {
 
   return (
     <Sidebar 
-      className={`${collapsed ? 'w-20' : 'w-80'} transition-all duration-300 bg-white border-r border-gray-100`}
       collapsible="icon"
     >
       <SidebarContent className="p-6 flex flex-col h-full">
