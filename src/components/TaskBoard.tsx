@@ -114,10 +114,16 @@ export function TaskBoard() {
                   </span>
                 </div>
               ))}
-            <Button className="ml-auto gradient-button">
-              <Plus className="w-4 h-4 mr-2" />
-              New Task
-            </Button>
+            <AddTaskDialog 
+              onAddTask={handleAddTask}
+              defaultStatus="todo"
+              trigger={
+                <Button className="ml-auto gradient-button">
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Task
+                </Button>
+              }
+            />
           </div>
 
           {/* Kanban Board Grid */}
