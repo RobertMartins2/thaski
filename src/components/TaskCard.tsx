@@ -8,7 +8,7 @@ export interface Task {
   code: string;
   tags: Array<{
     name: string;
-    color: 'design' | 'hiring' | 'dev' | 'performance';
+    color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing';
   }>;
   status: string;
 }
@@ -21,7 +21,11 @@ const tagColorMap = {
   design: 'tag-design',
   hiring: 'tag-hiring', 
   dev: 'tag-dev',
-  performance: 'tag-performance'
+  performance: 'tag-performance',
+  mobile: 'bg-blue-100 text-blue-700',
+  dashboard: 'bg-cyan-100 text-cyan-700',
+  guideline: 'bg-green-100 text-green-700',
+  landing: 'bg-purple-100 text-purple-700'
 };
 
 export function TaskCard({ task }: TaskCardProps) {

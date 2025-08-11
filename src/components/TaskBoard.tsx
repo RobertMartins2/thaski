@@ -12,42 +12,50 @@ import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
 const mockTasks: Task[] = [
   {
     id: '1',
-    title: 'Design new dashboard layout',
-    description: 'Create wireframes and mockups for the new admin dashboard interface',
+    title: 'OMOC Project',
+    description: 'Alex Christ, London',
     code: 'CFW-481',
-    tags: [{ name: 'Design', color: 'design' }, { name: 'UI/UX', color: 'design' }],
+    tags: [{ name: 'Mobile App', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Guideline', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
     status: 'todo'
   },
   {
     id: '2', 
-    title: 'Implement user authentication',
-    description: 'Add login/logout functionality with JWT token management',
+    title: 'Regros Project',
+    description: 'Sygintus, Mextos',
     code: 'CFW-482',
-    tags: [{ name: 'Dev', color: 'dev' }, { name: 'Backend', color: 'dev' }],
+    tags: [{ name: 'Guideline', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
     status: 'todo'
   },
   {
     id: '3',
-    title: 'Optimize database queries', 
-    description: 'Improve performance of slow running queries in user dashboard',
+    title: 'Momon Project', 
+    description: 'Momon Company',
     code: 'CFW-483',
-    tags: [{ name: 'Performance', color: 'performance' }, { name: 'Backend', color: 'dev' }],
+    tags: [{ name: 'Guideline', color: 'guideline' }, { name: 'Mobile App', color: 'mobile' }],
     status: 'progress'
   },
   {
     id: '4',
-    title: 'Interview frontend candidates',
-    description: 'Conduct technical interviews for React developer positions',
+    title: 'Loody Project',
+    description: 'Hya Ji, China',
     code: 'CFW-484', 
-    tags: [{ name: 'Hiring', color: 'hiring' }],
+    tags: [{ name: 'Mobile App', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Guideline', color: 'guideline' }],
     status: 'progress'
   },
   {
     id: '5',
-    title: 'Deploy staging environment',
-    description: 'Set up and configure staging server for testing new features',
+    title: 'EdRuv Project',
+    description: 'Hall Yonny, US',
     code: 'CFW-485',
-    tags: [{ name: 'Dev', color: 'dev' }, { name: 'DevOps', color: 'dev' }],
+    tags: [{ name: 'Guideline', color: 'guideline' }, { name: 'Mobile App', color: 'mobile' }],
+    status: 'done'
+  },
+  {
+    id: '6',
+    title: 'Jokly Project',
+    description: 'Hussein Dubai',
+    code: 'CFW-486',
+    tags: [{ name: 'Landing Pages', color: 'landing' }],
     status: 'done'
   }
 ];
@@ -55,9 +63,10 @@ const mockTasks: Task[] = [
 export function TaskBoard() {
   // Default columns
   const defaultColumns: KanbanColumnType[] = [
-    { id: 'todo', title: 'To-do', color: 'bg-slate-400', order: 0 },
+    { id: 'todo', title: 'To Do', color: 'bg-slate-400', order: 0 },
     { id: 'progress', title: 'In Progress', color: 'bg-yellow-500', order: 1 },
-    { id: 'done', title: 'Done', color: 'bg-green-500', order: 2 }
+    { id: 'done', title: 'Completed', color: 'bg-green-500', order: 2 },
+    { id: 'overdue', title: 'Overdue', color: 'bg-red-500', order: 3 }
   ];
 
   const [viewMode, setViewMode] = useState<'board' | 'calendar'>('board');
@@ -88,94 +97,89 @@ export function TaskBoard() {
   };
 
   return (
-    <div className="p-8 lg:p-12 space-y-10 bg-background min-h-screen">
-      {/* Header */}
-      <div className="space-y-8">
-        <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold text-foreground mb-3 tracking-tight">Task Management</h1>
-          <p className="text-muted-foreground text-lg leading-relaxed">Organize and track your team's progress with our modern task board</p>
-        </div>
-        
-        {/* Controls */}
-        <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
-          <div className="flex flex-col sm:flex-row gap-4 flex-1">
-            {/* Search */}
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <Input
-                type="text"
-                placeholder="Search tasks..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input pl-12 h-12 text-base"
-              />
-            </div>
-            
-            {/* Filter and Settings */}
-            <div className="flex gap-3">
-              <Button variant="outline" className="filter-button h-12 px-6 font-medium">
-                <Filter className="w-5 h-5 mr-3" />
-                Filter
-              </Button>
-              
-              <ColumnSettingsDialog 
-                columns={columns}
-                onUpdateColumns={handleUpdateColumns}
-              />
-            </div>
-          </div>
-          
-          <div className="flex gap-4">
-            {/* View toggle */}
-            <div className="flex bg-muted/50 backdrop-blur-sm rounded-2xl p-1.5 border border-border/30">
-              <Button
-                variant={viewMode === 'board' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('board')}
-                className="rounded-xl px-5 py-2.5 font-semibold text-sm"
-              >
-                <Grid3X3 className="w-4 h-4 mr-2" />
-                Board
-              </Button>
-              <Button
-                variant={viewMode === 'calendar' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('calendar')}
-                className="rounded-xl px-5 py-2.5 font-semibold text-sm"
-              >
-                <Calendar className="w-4 h-4 mr-2" />
-                Calendar
-              </Button>
-            </div>
-            
-            {/* New task button */}
-            <AddTaskDialog 
-              onAddTask={handleAddTask} 
-              columns={columns.map(col => ({ id: col.id, title: col.title }))}
-            />
-          </div>
-        </div>
-      </div>
-
+    <div className="bg-gray-50 min-h-screen">
       {/* Board/Calendar View */}
       {viewMode === 'board' ? (
-        <div className={`grid gap-8 lg:gap-10`} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>
-          {columns
-            .sort((a, b) => a.order - b.order)
-            .map((column) => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                tasks={getTasksForColumn(column.id)}
-                onAddTask={handleAddTask}
-              />
-            ))}
+        <div className="p-6">
+          {/* Column Headers with Tabs */}
+          <div className="flex gap-6 mb-6 border-b border-gray-200">
+            {columns
+              .sort((a, b) => a.order - b.order)
+              .map((column) => (
+                <div key={column.id} className="flex items-center gap-3 pb-3">
+                  <div className={`w-3 h-3 rounded-full ${column.color}`} />
+                  <span className="font-medium text-gray-900">{column.title}</span>
+                  <span className="bg-gray-100 text-gray-600 text-sm px-2 py-1 rounded-full">
+                    {getTasksForColumn(column.id).length}
+                  </span>
+                </div>
+              ))}
+            <Button 
+              className="ml-auto bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Task
+            </Button>
+          </div>
+
+          {/* Kanban Board */}
+          <div className={`grid gap-6`} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>
+            {columns
+              .sort((a, b) => a.order - b.order)
+              .map((column) => (
+                <div key={column.id} className="space-y-4">
+                  {/* Column Content */}
+                  <div className="space-y-4">
+                    {getTasksForColumn(column.id).map((task) => (
+                      <div key={task.id} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-500">{task.code}</span>
+                        </div>
+                        <h3 className="font-medium text-gray-900 mb-2">{task.title}</h3>
+                        <p className="text-sm text-gray-600 mb-4">{task.description}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {task.tags.map((tag, index) => (
+                            <span 
+                              key={index} 
+                              className={`px-2 py-1 rounded-full text-xs font-medium
+                                ${tag.color === 'design' ? 'bg-purple-100 text-purple-700' : ''}
+                                ${tag.color === 'dev' ? 'bg-blue-100 text-blue-700' : ''}
+                                ${tag.color === 'performance' ? 'bg-orange-100 text-orange-700' : ''}
+                                ${tag.color === 'hiring' ? 'bg-pink-100 text-pink-700' : ''}
+                                ${tag.color === 'mobile' ? 'bg-blue-100 text-blue-700' : ''}
+                                ${tag.color === 'dashboard' ? 'bg-cyan-100 text-cyan-700' : ''}
+                                ${tag.color === 'guideline' ? 'bg-green-100 text-green-700' : ''}
+                                ${tag.color === 'landing' ? 'bg-purple-100 text-purple-700' : ''}
+                              `}
+                            >
+                              {tag.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Add Task Button */}
+                    <AddTaskDialog 
+                      onAddTask={handleAddTask}
+                      defaultStatus={column.id}
+                      trigger={
+                        <button className="w-full p-4 border-2 border-dashed border-gray-200 rounded-lg text-gray-500 hover:border-gray-300 hover:text-gray-600 transition-colors text-left">
+                          <Plus className="w-4 h-4 inline mr-2" />
+                          Add new task
+                        </button>
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       ) : (
-        <div className="bg-surface/60 backdrop-blur-sm rounded-3xl p-12 border border-border/30 text-center">
-          <Calendar className="w-20 h-20 mx-auto text-muted-foreground/60 mb-6" />
-          <h3 className="text-2xl font-semibold text-foreground mb-3">Calendar View</h3>
-          <p className="text-muted-foreground text-lg">Calendar view will be implemented soon</p>
+        <div className="bg-white rounded-lg p-12 text-center">
+          <Calendar className="w-20 h-20 mx-auto text-gray-400 mb-6" />
+          <h3 className="text-2xl font-semibold text-gray-900 mb-3">Calendar View</h3>
+          <p className="text-gray-600">Calendar view will be implemented soon</p>
         </div>
       )}
     </div>
