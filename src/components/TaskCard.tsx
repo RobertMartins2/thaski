@@ -26,29 +26,29 @@ const tagColorMap = {
 
 export function TaskCard({ task }: TaskCardProps) {
   return (
-    <Card className="task-card group">
-      <CardContent className="p-5 space-y-4">
+    <Card className="task-card group cursor-pointer">
+      <CardContent className="p-6 space-y-5">
         {/* Task code */}
-        <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <div className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wide">
           {task.code}
         </div>
         
         {/* Task title */}
-        <h3 className="font-semibold text-foreground text-base leading-snug mt-1">
+        <h3 className="font-semibold text-foreground text-base leading-tight -mt-1">
           {task.title}
         </h3>
         
         {/* Task description */}
-        <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
           {task.description}
         </p>
         
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2 pt-1">
           {task.tags.map((tag, index) => (
             <Badge
               key={index}
-              className={`${tagColorMap[tag.color]} text-xs px-2 py-0.5 font-medium`}
+              className={`${tagColorMap[tag.color]} text-xs px-3 py-1.5 font-medium rounded-lg`}
               variant="secondary"
             >
               {tag.name}

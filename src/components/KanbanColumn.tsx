@@ -22,22 +22,20 @@ const statusColors = {
 
 export function KanbanColumn({ title, tasks, status }: KanbanColumnProps) {
   return (
-    <div className={`kanban-column ${statusStyles[status]}`}>
+    <div className={`kanban-column status-${status}`}>
       {/* Column header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className={`w-2 h-2 rounded-full ${statusColors[status]}`} />
-          <h2 className="font-semibold text-foreground text-lg">
-            {title}
-          </h2>
-          <span className="text-xs bg-muted text-muted-foreground px-3 py-1 rounded-full font-medium">
-            {tasks.length}
-          </span>
-        </div>
+      <div className="column-header">
+        <div className={`status-indicator`} />
+        <h2 className="column-title">
+          {title}
+        </h2>
+        <span className="task-count">
+          {tasks.length}
+        </span>
       </div>
       
       {/* Tasks list */}
-      <div className="space-y-4 mb-6">
+      <div className="space-y-5 mb-8">
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
@@ -46,10 +44,10 @@ export function KanbanColumn({ title, tasks, status }: KanbanColumnProps) {
       {/* Add new task button */}
       <Button 
         variant="ghost" 
-        className="w-full justify-start text-muted-foreground hover:text-foreground border-2 border-dashed border-border hover:border-muted-foreground/50 rounded-xl py-6 font-medium"
+        className="add-task-button"
       >
-        <Plus className="w-5 h-5 mr-3" />
-        Add new task
+        <Plus className="w-5 h-5 mr-3 text-muted-foreground" />
+        <span>Add new task</span>
       </Button>
     </div>
   );
