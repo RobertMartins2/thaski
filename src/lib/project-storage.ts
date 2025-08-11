@@ -2,13 +2,8 @@ import { Project } from "@/types/kanban";
 
 const PROJECTS_STORAGE_KEY = 'kanban-projects';
 
-// Projetos padrão inicial
-const defaultProjects: Project[] = [
-  { id: '1', name: 'Projeto Imobiliário', code: 'IMB', color: 'bg-blue-500', taskCount: 488 },
-  { id: '2', name: 'Plataforma E-commerce', code: 'ECM', color: 'bg-green-500', taskCount: 487 },
-  { id: '3', name: 'Design de App Mobile', code: 'APP', color: 'bg-purple-500', taskCount: 485 },
-  { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 486 }
-];
+// Lista inicial vazia - projetos serão criados pelo usuário
+const defaultProjects: Project[] = [];
 
 export function getProjects(): Project[] {
   try {

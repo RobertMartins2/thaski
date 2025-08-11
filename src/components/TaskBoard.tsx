@@ -16,73 +16,8 @@ import { TaskDetailPanel } from "./TaskDetailPanel";
 import { generateTaskCode } from "@/lib/project-utils";
 import { getProjectById } from "@/lib/project-storage";
 
-// Dados mock atualizados com códigos baseados nas siglas dos projetos
-const mockTasks: Task[] = [
-  {
-    id: '1',
-    title: 'Projeto OMOC',
-    description: 'Alex Christ, Londres',
-    code: 'IMB-481', // Baseado na sigla do projeto Imobiliário
-    tags: [{ name: 'App Mobile', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Diretrizes', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
-    status: 'todo'
-  },
-  {
-    id: '2', 
-    title: 'Projeto Regros',
-    description: 'Sygintus, Mextos',
-    code: 'ECM-482', // Baseado na sigla do projeto E-commerce
-    tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'Landing Pages', color: 'landing' }],
-    status: 'todo'
-  },
-  {
-    id: '3',
-    title: 'Projeto Momon', 
-    description: 'Momon Company',
-    code: 'APP-483', // Baseado na sigla do projeto App Mobile
-    tags: [{ name: 'Diretrizes', color: 'guideline' }, { name: 'App Mobile', color: 'mobile' }],
-    status: 'progress'
-  },
-  {
-    id: '4',
-    title: 'Projeto Loody',
-    description: 'Hya Ji, China',
-    code: 'MKT-484', // Baseado na sigla do projeto Marketing
-    tags: [{ name: 'App Mobile', color: 'mobile' }, { name: 'Dashboard', color: 'dashboard' }, { name: 'Diretrizes', color: 'guideline' }],
-    status: 'progress'
-  },
-  {
-    id: '5',
-    title: 'Task de Design',
-    description: 'Design System Updates',
-    code: 'APP-485',
-    tags: [{ name: 'Design', color: 'design' }],
-    status: 'review'
-  },
-  {
-    id: '6', 
-    title: 'Recrutamento Dev',
-    description: 'Hiring new developers',
-    code: 'MKT-486',
-    tags: [{ name: 'Contratação', color: 'hiring' }],
-    status: 'review'
-  },
-  {
-    id: '7',
-    title: 'Otimização Performance',
-    description: 'Optimize app performance',
-    code: 'ECM-487',
-    tags: [{ name: 'Performance', color: 'performance' }],
-    status: 'done'
-  },
-  {
-    id: '8',
-    title: 'Desenvolvimento',
-    description: 'New feature development',
-    code: 'IMB-488',
-    tags: [{ name: 'Desenvolvimento', color: 'dev' }],
-    status: 'done'
-  }
-];
+// Tasks iniciais vazias - dados reais virão do Supabase
+const initialTasks: Task[] = [];
 
 interface TaskBoardProps {
   projectId?: string; // ID do projeto atual
@@ -102,7 +37,7 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
 
   const [viewMode, setViewMode] = useState<'board' | 'calendar'>('board');
   const [searchQuery, setSearchQuery] = useState('');
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [columns, setColumns] = useState<KanbanColumnType[]>(defaultColumns);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);

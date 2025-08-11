@@ -12,14 +12,8 @@ import { Menu } from "lucide-react";
 
 const Index = () => {
   const projects = getProjects();
-  const [currentProject, setCurrentProject] = useState<Project>(
-    projects[0] || {
-      id: '1', 
-      name: 'Projeto Imobiliário',
-      code: 'IMB',
-      color: 'bg-blue-500',
-      taskCount: 488
-    }
+  const [currentProject, setCurrentProject] = useState<Project | null>(
+    projects[0] || null
   );
 
   const handleProjectChange = (project: Project) => {
