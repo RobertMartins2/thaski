@@ -23,7 +23,7 @@ interface TaskBoardProps {
   projectId?: string; // ID do projeto atual
 }
 
-export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
+export function TaskBoard({ projectId }: TaskBoardProps) {
   // Buscar o projeto atual
   const currentProject = getProjectById(projectId);
 
@@ -66,8 +66,8 @@ export function TaskBoard({ projectId = '1' }: TaskBoardProps) {
   );
 
   const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
-    // Sempre gerar o código automaticamente baseado no projeto atual
-    const taskCode = currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`;
+    // Gerar código automaticamente baseado no projeto atual ou usar padrão
+    const taskCode = currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`;  
     
     const newTask: Task = {
       ...newTaskData,

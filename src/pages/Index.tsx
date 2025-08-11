@@ -41,9 +41,22 @@ const Index = () => {
           </div>
           
           {/* Task Board Content */}
-          <div className="flex-1 overflow-auto px-6 py-6">
-            <TaskBoard projectId={currentProject?.id} />
-          </div>
+          {currentProject ? (
+            <div className="flex-1 overflow-auto px-6 py-6">
+              <TaskBoard projectId={currentProject.id} />
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center p-6">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-foreground mb-4">
+                  Nenhum projeto selecionado
+                </h2>
+                <p className="text-muted-foreground">
+                  Crie um novo projeto para começar a organizar suas tarefas
+                </p>
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </SidebarProvider>
