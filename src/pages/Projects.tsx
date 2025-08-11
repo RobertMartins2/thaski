@@ -12,16 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { NavLink } from "react-router-dom";
 import { ProjectSetupDialog } from "@/components/ProjectSetupDialog";
-
-interface Project {
-  id: string;
-  name: string;
-  code: string; // Sigla de 3 letras configurável do projeto
-  description: string;
-  taskCount: number;
-  createdAt: string;
-  color: string;
-}
+import { getProjects, addProject, deleteProject } from "@/lib/project-storage";
+import { Project } from "@/types/kanban";
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -33,38 +25,9 @@ const Projects = () => {
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectColor, setNewProjectColor] = useState('bg-blue-500');
 
-  // Load sample projects on mount
+  // Carregar projetos do localStorage
   useEffect(() => {
-    const sampleProjects: Project[] = [
-      {
-        id: '1',
-        name: 'Projeto Imobiliário',
-        code: 'IMB',
-        description: 'Workspace principal para gestão imobiliária',
-        taskCount: 12,
-        createdAt: '2024-01-15',
-        color: 'bg-blue-500'
-      },
-      {
-        id: '2', 
-        name: 'Plataforma E-commerce',
-        code: 'ECM',
-        description: 'Desenvolvimento e manutenção de loja online',
-        taskCount: 8,
-        createdAt: '2024-01-20',
-        color: 'bg-green-500'
-      },
-      {
-        id: '3',
-        name: 'Design de App Mobile',
-        code: 'APP',
-        description: 'Design de aplicação iOS e Android',
-        taskCount: 15,
-        createdAt: '2024-02-01',
-        color: 'bg-purple-500'
-      }
-    ];
-    setProjects(sampleProjects);
+    setProjects(getProjects());
   }, []);
 
   const colorOptions = [
@@ -105,13 +68,14 @@ const Projects = () => {
       id: `project-${Date.now()}`,
       name: newProjectName.trim(),
       code: newProjectCode.trim().toUpperCase(),
-      description: newProjectDescription.trim(),
-      taskCount: 0,
-      createdAt: new Date().toISOString().split('T')[0],
-      color: newProjectColor
+      color: newProjectColor,
+      taskCount: 0
     };
 
-    setProjects([...projects, newProject]);
+    // Adicionar ao storage e atualizar estado local
+    addProject(newProject);
+    setProjects(getProjects());
+    
     setNewProjectName('');
     setNewProjectCode('');
     setNewProjectDescription('');
@@ -127,7 +91,8 @@ const Projects = () => {
 
   const handleDeleteProject = (projectId: string, projectName: string) => {
     if (confirm(`Tem certeza de que deseja excluir "${projectName}"? Esta ação não pode ser desfeita.`)) {
-      setProjects(projects.filter(p => p.id !== projectId));
+      deleteProject(projectId);
+      setProjects(getProjects());
       toast.success(`Projeto "${projectName}" excluído com sucesso`);
     }
   };
@@ -283,19 +248,16 @@ const Projects = () => {
                             </Button>
                           </div>
                         </div>
-                        <CardDescription className="text-muted-foreground">
-                          {project.description || "Nenhuma descrição fornecida"}
-                        </CardDescription>
+                         <CardDescription className="text-muted-foreground">
+                           {project.code} • Kanban Project
+                         </CardDescription>
                       </CardHeader>
                       <CardContent className="pt-0">
-                        <div className="flex items-center justify-between mb-4">
-                          <Badge variant="secondary" className="text-xs">
-                            {project.taskCount} tarefas
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">
-                            Criado em {new Date(project.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
+                         <div className="flex items-center justify-between mb-4">
+                           <Badge variant="secondary" className="text-xs">
+                             {project.taskCount} tarefas
+                           </Badge>
+                         </div>
                         
                          <div className="grid grid-cols-1 gap-2">
                            <NavLink to={`/project/${project.id}`}>

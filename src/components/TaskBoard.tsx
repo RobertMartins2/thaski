@@ -13,7 +13,8 @@ import { TaskCard } from "./TaskCard";
 import { DroppableColumn } from "./DroppableColumn";
 import { EditTaskDialog } from "./EditTaskDialog";
 import { TaskDetailPanel } from "./TaskDetailPanel";
-import { generateTaskCode, getProjectById } from "@/lib/project-utils";
+import { generateTaskCode } from "@/lib/project-utils";
+import { getProjectById } from "@/lib/project-storage";
 
 // Dados mock atualizados com códigos baseados nas siglas dos projetos
 const mockTasks: Task[] = [

@@ -6,24 +6,21 @@ import { TaskBoard } from "@/components/TaskBoard";
 import { ProjectHeader } from "@/components/ProjectHeader";
 import { toast } from "sonner";
 import { Project } from "@/types/kanban";
+import { getProjects } from "@/lib/project-storage";
 
 import { Menu } from "lucide-react";
 
 const Index = () => {
-  const [currentProject, setCurrentProject] = useState<Project>({
-    id: '1', 
-    name: 'Projeto Imobiliário',
-    code: 'IMB',
-    color: 'bg-blue-500',
-    taskCount: 488
-  });
-
-  const projects: Project[] = [
-    { id: '1', name: 'Projeto Imobiliário', code: 'IMB', color: 'bg-blue-500', taskCount: 488 },
-    { id: '2', name: 'Plataforma E-commerce', code: 'ECM', color: 'bg-green-500', taskCount: 487 },
-    { id: '3', name: 'Design de App Mobile', code: 'APP', color: 'bg-purple-500', taskCount: 485 },
-    { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 486 }
-  ];
+  const projects = getProjects();
+  const [currentProject, setCurrentProject] = useState<Project>(
+    projects[0] || {
+      id: '1', 
+      name: 'Projeto Imobiliário',
+      code: 'IMB',
+      color: 'bg-blue-500',
+      taskCount: 488
+    }
+  );
 
   const handleProjectChange = (project: Project) => {
     setCurrentProject(project);
@@ -51,7 +48,7 @@ const Index = () => {
           
           {/* Task Board Content */}
           <div className="flex-1 overflow-auto px-6 py-6">
-            <TaskBoard />
+            <TaskBoard projectId={currentProject?.id} />
           </div>
         </main>
       </div>

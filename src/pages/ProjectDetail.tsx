@@ -6,23 +6,19 @@ import { ProjectHeader } from "@/components/ProjectHeader";
 import { TaskBoard } from "@/components/TaskBoard";
 import { toast } from "sonner";
 import { Project } from "@/types/kanban";
+import { getProjects, getProjectById } from "@/lib/project-storage";
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const projects: Project[] = [
-    { id: '1', name: 'Projeto Imobiliário', code: 'IMB', color: 'bg-blue-500', taskCount: 488 },
-    { id: '2', name: 'Plataforma E-commerce', code: 'ECM', color: 'bg-green-500', taskCount: 487 },
-    { id: '3', name: 'Design de App Mobile', code: 'APP', color: 'bg-purple-500', taskCount: 485 },
-    { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 486 }
-  ];
+  const projects = getProjects();
 
   useEffect(() => {
     // Simulate loading and find project
     const timer = setTimeout(() => {
-      const project = projects.find(p => p.id === projectId);
+      const project = getProjectById(projectId || '');
       if (project) {
         setCurrentProject(project);
       } else {
@@ -82,7 +78,7 @@ const ProjectDetail = () => {
           
           {/* Task Board Content */}
           <div className="flex-1 overflow-auto px-6 py-6">
-            <TaskBoard />
+            <TaskBoard projectId={projectId} />
           </div>
         </main>
       </div>

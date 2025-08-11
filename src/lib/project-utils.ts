@@ -22,7 +22,9 @@ export const mockProjects: Project[] = [
   { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 486 },
 ];
 
-// Função para buscar projeto por ID
+// Função para buscar projeto por ID (delegada para project-storage)
 export function getProjectById(projectId: string): Project | undefined {
+  // Evitar dependência circular - esta função agora é apenas um wrapper
+  // A implementação real está em project-storage.ts
   return mockProjects.find(project => project.id === projectId);
 }
