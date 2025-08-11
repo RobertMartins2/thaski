@@ -9,30 +9,26 @@ const Index = () => {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Header with sidebar trigger */}
-          <header className="h-16 bg-white border-b border-gray-200 flex items-center px-6">
-            <SidebarTrigger className="lg:hidden mr-4 hover:bg-gray-100 rounded-lg p-2 transition-colors">
-              <Menu className="h-5 w-5" />
-            </SidebarTrigger>
-            
-            <div className="flex items-center justify-between w-full">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground tracking-tight">Dashboard</h2>
-                <p className="text-muted-foreground font-medium mt-1">Welcome back, let's get productive!</p>
-              </div>
+        <main className="flex-1 overflow-auto bg-gray-50">
+          {/* Header */}
+          <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="lg:hidden hover:bg-gray-100 rounded-lg p-2 transition-colors">
+                <Menu className="h-5 w-5" />
+              </SidebarTrigger>
               
-              <div className="flex items-center gap-4">
-                {/* Optional quick actions could go here */}
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+                <p className="text-sm text-gray-600">Welcome back, let's get productive!</p>
               </div>
             </div>
           </header>
           
-          {/* Main content */}
-          <main className="flex-1 overflow-auto">
+          {/* Task Board Content */}
+          <div className="p-6">
             <TaskBoard />
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </SidebarProvider>
   );
