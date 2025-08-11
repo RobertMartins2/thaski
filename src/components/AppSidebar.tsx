@@ -42,18 +42,18 @@ export function AppSidebar() {
     >
       <SidebarContent className="bg-surface border-r border-border">
         {/* Logo area */}
-        <div className="p-6 border-b border-border">
+        <div className="p-8 border-b border-border">
           {!collapsed ? (
-            <h1 className="text-xl font-bold text-foreground">TaskFlow CRM</h1>
+            <h1 className="text-xl font-semibold text-foreground">TaskFlow CRM</h1>
           ) : (
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <CheckSquare className="w-4 h-4 text-primary-foreground" />
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+              <CheckSquare className="w-5 h-5 text-primary-foreground" />
             </div>
           )}
         </div>
 
-        <SidebarGroup className="px-3 py-4">
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+        <SidebarGroup className="px-4 py-6">
+          <SidebarGroupLabel className={collapsed ? "sr-only" : "text-muted-foreground font-medium text-sm"}>
             Navigation
           </SidebarGroupLabel>
           
@@ -67,7 +67,7 @@ export function AppSidebar() {
                       end 
                       className={({ isActive }) => `
                         ${getNavCls({ isActive })}
-                        flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
+                        flex items-center gap-4 px-4 py-3 rounded-xl transition-colors font-medium
                       `}
                     >
                       <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -81,14 +81,14 @@ export function AppSidebar() {
         </SidebarGroup>
 
         {/* Notification area - bottom */}
-        <div className="mt-auto p-3">
+        <div className="mt-auto p-4">
           {!collapsed && (
-            <div className="bg-muted rounded-lg p-3 border border-border">
-              <div className="flex items-start gap-2">
-                <Bell className="w-4 h-4 text-muted-foreground mt-0.5" />
+            <div className="bg-muted rounded-xl p-4 border border-border">
+              <div className="flex items-start gap-3">
+                <Bell className="w-5 h-5 text-muted-foreground mt-0.5" />
                 <div className="text-sm">
-                  <p className="font-medium text-foreground">New Update</p>
-                  <p className="text-muted-foreground text-xs">
+                  <p className="font-semibold text-foreground">New Update</p>
+                  <p className="text-muted-foreground text-xs leading-relaxed mt-1">
                     Send personalized mails
                   </p>
                 </div>

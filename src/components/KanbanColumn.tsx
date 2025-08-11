@@ -24,20 +24,20 @@ export function KanbanColumn({ title, tasks, status }: KanbanColumnProps) {
   return (
     <div className={`kanban-column ${statusStyles[status]}`}>
       {/* Column header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className={`w-3 h-3 rounded-full ${statusColors[status]}`} />
-          <h2 className="font-semibold text-foreground">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className={`w-2 h-2 rounded-full ${statusColors[status]}`} />
+          <h2 className="font-semibold text-foreground text-lg">
             {title}
           </h2>
-          <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+          <span className="text-xs bg-muted text-muted-foreground px-3 py-1 rounded-full font-medium">
             {tasks.length}
           </span>
         </div>
       </div>
       
       {/* Tasks list */}
-      <div className="space-y-3 mb-4">
+      <div className="space-y-4 mb-6">
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
@@ -46,10 +46,10 @@ export function KanbanColumn({ title, tasks, status }: KanbanColumnProps) {
       {/* Add new task button */}
       <Button 
         variant="ghost" 
-        className="w-full justify-start text-muted-foreground hover:text-foreground border-2 border-dashed border-border hover:border-muted-foreground/50"
+        className="w-full justify-start text-muted-foreground hover:text-foreground border-2 border-dashed border-border hover:border-muted-foreground/50 rounded-xl py-6 font-medium"
       >
-        <Plus className="w-4 h-4 mr-2" />
-        Add new
+        <Plus className="w-5 h-5 mr-3" />
+        Add new task
       </Button>
     </div>
   );

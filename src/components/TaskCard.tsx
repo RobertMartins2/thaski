@@ -27,19 +27,19 @@ const tagColorMap = {
 export function TaskCard({ task }: TaskCardProps) {
   return (
     <Card className="task-card group">
-      <CardContent className="p-4 space-y-3">
+      <CardContent className="p-5 space-y-4">
         {/* Task code */}
-        <div className="text-xs font-mono text-muted-foreground">
+        <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {task.code}
         </div>
         
         {/* Task title */}
-        <h3 className="font-semibold text-foreground text-sm leading-tight">
+        <h3 className="font-semibold text-foreground text-base leading-snug mt-1">
           {task.title}
         </h3>
         
         {/* Task description */}
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed mt-2">
           {task.description}
         </p>
         

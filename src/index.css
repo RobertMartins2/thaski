@@ -2,60 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CRM Task Management Design System - Modern Kanban Interface */
+/* Clean CRM Design System - Modern & Minimal */
 
 @layer base {
   :root {
-    /* Main background and surfaces */
-    --background: 210 20% 98%;
-    --foreground: 213 27% 14%;
+    /* Clean neutral background system */
+    --background: 0 0% 99%;
+    --foreground: 220 13% 18%;
     --surface: 0 0% 100%;
     
-    /* Card system */
+    /* Clean card system with subtle shadows */
     --card: 0 0% 100%;
-    --card-foreground: 213 27% 14%;
-    --card-hover: 210 40% 99%;
+    --card-foreground: 220 13% 18%;
+    --card-hover: 220 14% 96%;
     
-    /* Primary brand colors - Modern blue/purple gradient system */
-    --primary: 213 94% 68%;
+    /* Modern primary - Clean blue system */
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 213 94% 64%;
-    --primary-gradient: linear-gradient(135deg, hsl(213 94% 68%) 0%, hsl(255 85% 70%) 100%);
+    --primary-hover: 221 83% 48%;
+    --primary-gradient: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 58%) 100%);
     
-    /* Secondary palette */
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 213 27% 24%;
-    --secondary-hover: 210 40% 94%;
+    /* Clean secondary palette */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 9% 46%;
+    --secondary-hover: 220 14% 94%;
     
-    /* Muted colors for subtle elements */
-    --muted: 210 30% 95%;
-    --muted-foreground: 215 16% 47%;
-    --muted-hover: 210 30% 92%;
+    /* Subtle muted colors */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --muted-hover: 220 14% 93%;
     
-    /* Accent colors */
-    --accent: 255 85% 70%;
+    /* Clean accent */
+    --accent: 262 83% 58%;
     --accent-foreground: 0 0% 100%;
-    --accent-hover: 255 85% 66%;
+    --accent-hover: 262 83% 53%;
     
-    /* Status colors for task states */
-    --status-todo: 200 100% 70%;
-    --status-progress: 45 100% 65%;
-    --status-done: 142 76% 58%;
+    /* Clean status colors - more subtle */
+    --status-todo: 210 40% 60%;
+    --status-progress: 38 92% 62%;
+    --status-done: 142 69% 58%;
     
-    /* Tag colors */
-    --tag-design: 280 100% 70%;
-    --tag-hiring: 15 100% 65%;
-    --tag-dev: 200 100% 70%;
-    --tag-performance: 142 76% 58%;
+    /* Refined tag colors */
+    --tag-design: 262 83% 58%;
+    --tag-hiring: 25 95% 62%;
+    --tag-dev: 221 83% 53%;
+    --tag-performance: 142 69% 58%;
     
-    /* Destructive */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    /* Clean destructive */
+    --destructive: 0 72% 61%;
+    --destructive-foreground: 0 0% 100%;
     
-    /* Borders and inputs */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 213 94% 68%;
+    /* Minimal borders */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
 
     --radius: 0.5rem;
 
@@ -121,61 +121,75 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-poppins antialiased;
+    font-weight: 400;
   }
 }
 
-/* Custom component styles */
+/* Clean Components - Minimal & Modern */
 @layer components {
-  /* Kanban card animations and shadows */
+  /* Clean task cards with subtle shadows */
   .task-card {
-    @apply bg-card border border-border rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-move;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    @apply bg-card border border-border rounded-xl p-5 cursor-move;
+    @apply transition-all duration-300 ease-out;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+    border: 1px solid hsl(var(--border));
   }
   
   .task-card:hover {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     @apply bg-card-hover;
+    box-shadow: 0 8px 25px -8px rgb(0 0 0 / 0.1);
+    transform: translateY(-1px);
   }
   
-  /* Column styling */
+  /* Clean column styling */
   .kanban-column {
-    @apply bg-muted/30 rounded-xl p-4 min-h-[500px];
+    @apply bg-muted/40 rounded-2xl p-6 min-h-[600px];
+    border: 1px solid hsl(var(--border));
   }
   
-  /* Tag variants */
+  /* Clean tag variants with better contrast */
   .tag-design {
-    @apply bg-[hsl(var(--tag-design))] text-white;
+    @apply bg-[hsl(var(--tag-design))] text-white font-medium;
+    @apply px-3 py-1.5 rounded-full text-xs;
   }
   
   .tag-hiring {
-    @apply bg-[hsl(var(--tag-hiring))] text-white;
+    @apply bg-[hsl(var(--tag-hiring))] text-white font-medium;
+    @apply px-3 py-1.5 rounded-full text-xs;
   }
   
   .tag-dev {
-    @apply bg-[hsl(var(--tag-dev))] text-white;
+    @apply bg-[hsl(var(--tag-dev))] text-white font-medium;
+    @apply px-3 py-1.5 rounded-full text-xs;
   }
   
   .tag-performance {
-    @apply bg-[hsl(var(--tag-performance))] text-white;
+    @apply bg-[hsl(var(--tag-performance))] text-white font-medium;
+    @apply px-3 py-1.5 rounded-full text-xs;
   }
   
-  /* Gradient button */
+  /* Clean gradient button */
   .gradient-button {
     background: var(--primary-gradient);
-    @apply text-white border-0 hover:opacity-90 transition-opacity;
+    @apply text-white border-0 font-medium rounded-xl px-6 py-3;
+    @apply transition-all duration-200 hover:scale-105 hover:shadow-lg;
+    box-shadow: 0 4px 15px -4px hsl(var(--primary) / 0.25);
   }
   
-  /* Status indicators */
+  /* Minimal status indicators */
   .status-todo {
     @apply border-l-4 border-[hsl(var(--status-todo))];
+    background: linear-gradient(135deg, hsl(var(--status-todo) / 0.05) 0%, transparent 100%);
   }
   
   .status-progress {
     @apply border-l-4 border-[hsl(var(--status-progress))];
+    background: linear-gradient(135deg, hsl(var(--status-progress) / 0.05) 0%, transparent 100%);
   }
   
   .status-done {
     @apply border-l-4 border-[hsl(var(--status-done))];
+    background: linear-gradient(135deg, hsl(var(--status-done) / 0.05) 0%, transparent 100%);
   }
 }

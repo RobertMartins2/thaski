@@ -60,10 +60,10 @@ export function TaskBoard() {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-border bg-surface">
+      <div className="flex items-center justify-between p-8 border-b border-border bg-surface">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Task Board</h1>
-          <p className="text-muted-foreground">Manage and track your team's progress</p>
+          <h1 className="text-3xl font-semibold text-foreground">Task Board</h1>
+          <p className="text-muted-foreground mt-1 font-medium">Manage and track your team's progress</p>
         </div>
         
         <div className="flex items-center gap-3">
@@ -116,8 +116,8 @@ export function TaskBoard() {
       
       {/* Board content */}
       {viewMode === 'board' ? (
-        <div className="flex-1 p-6 overflow-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+        <div className="flex-1 p-8 overflow-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
             <KanbanColumn
               title="To-do"
               tasks={todoTasks}
