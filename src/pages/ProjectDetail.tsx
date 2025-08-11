@@ -16,19 +16,26 @@ const ProjectDetail = () => {
   const projects = getProjects();
 
   useEffect(() => {
-    // Simulate loading and find project
-    const timer = setTimeout(() => {
-      const project = getProjectById(projectId || '');
+    loadProject();
+  }, [projectId]);
+
+  const loadProject = async () => {
+    setLoading(true);
+    try {
+      const { getProjectById } = await import('@/lib/project-storage');
+      const project = await getProjectById(projectId || '');
       if (project) {
         setCurrentProject(project);
       } else {
         toast.error("Projeto não encontrado");
       }
+    } catch (error) {
+      console.error('Erro ao carregar projeto:', error);
+      toast.error("Erro ao carregar projeto");
+    } finally {
       setLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [projectId]);
+    }
+  };
 
   const handleProjectChange = (project: Project) => {
     setCurrentProject(project);

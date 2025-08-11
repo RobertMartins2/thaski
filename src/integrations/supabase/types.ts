@@ -197,6 +197,44 @@ export type Database = {
         }
         Relationships: []
       }
+      kanban_columns: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          order_index: number
+          project_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          order_index?: number
+          project_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          order_index?: number
+          project_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kanban_columns_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_submissions: {
         Row: {
           cnpj: string | null
@@ -301,6 +339,89 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      projects: {
+        Row: {
+          code: string
+          color: string
+          created_at: string
+          id: string
+          name: string
+          task_count: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          code: string
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          task_count?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          code?: string
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          task_count?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          code: string
+          created_at: string
+          custom_fields: Json | null
+          description: string | null
+          id: string
+          project_id: string
+          status: string
+          tags: Json | null
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          custom_fields?: Json | null
+          description?: string | null
+          id?: string
+          project_id: string
+          status: string
+          tags?: Json | null
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          custom_fields?: Json | null
+          description?: string | null
+          id?: string
+          project_id?: string
+          status?: string
+          tags?: Json | null
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users_diagnostic: {
         Row: {

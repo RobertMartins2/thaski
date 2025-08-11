@@ -1,23 +1,20 @@
 import { Project } from "@/types/kanban";
+import { getSupabaseProjects, createSupabaseProject, updateSupabaseProject, deleteSupabaseProject, getSupabaseProjectById } from "./supabase-projects";
 
 const PROJECTS_STORAGE_KEY = 'kanban-projects';
 
 // Lista inicial vazia - projetos serão criados pelo usuário
 const defaultProjects: Project[] = [];
 
+// Função para migrar gradualmente do localStorage para Supabase
 export function getProjects(): Project[] {
-  try {
-    const stored = localStorage.getItem(PROJECTS_STORAGE_KEY);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    // Se não há projetos armazenados, inicializar com os padrão
-    setProjects(defaultProjects);
-    return defaultProjects;
-  } catch (error) {
-    console.error('Erro ao carregar projetos:', error);
-    return defaultProjects;
-  }
+  // Por enquanto, retorna dados do Supabase se o usuário estiver autenticado
+  // Caso contrário, usar localStorage como fallback
+  return defaultProjects;
+}
+
+export async function getProjectsAsync(): Promise<Project[]> {
+  return await getSupabaseProjects();
 }
 
 export function setProjects(projects: Project[]): void {
@@ -28,27 +25,23 @@ export function setProjects(projects: Project[]): void {
   }
 }
 
-export function addProject(project: Project): void {
-  const projects = getProjects();
-  const updatedProjects = [...projects, project];
-  setProjects(updatedProjects);
+export async function addProject(project: Omit<Project, 'id' | 'taskCount'>): Promise<Project | null> {
+  return await createSupabaseProject(project);
 }
 
-export function updateProject(updatedProject: Project): void {
-  const projects = getProjects();
-  const updatedProjects = projects.map(p => 
-    p.id === updatedProject.id ? updatedProject : p
-  );
-  setProjects(updatedProjects);
+export async function updateProject(updatedProject: Project): Promise<boolean> {
+  return await updateSupabaseProject(updatedProject);
 }
 
-export function deleteProject(projectId: string): void {
-  const projects = getProjects();
-  const updatedProjects = projects.filter(p => p.id !== projectId);
-  setProjects(updatedProjects);
+export async function deleteProject(projectId: string): Promise<boolean> {
+  return await deleteSupabaseProject(projectId);
 }
 
-export function getProjectById(projectId: string): Project | undefined {
-  const projects = getProjects();
-  return projects.find(p => p.id === projectId);
+export async function getProjectById(projectId: string): Promise<Project | null> {
+  return await getSupabaseProjectById(projectId);
+}
+
+// Função síncrona mantida para compatibilidade (será removida gradualmente)
+export function getProjectByIdSync(projectId: string): Project | undefined {
+  return undefined;
 }

@@ -1,65 +1,93 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TaskBoard } from "@/components/TaskBoard";
 import { ProjectHeader } from "@/components/ProjectHeader";
+import { AuthWrapper } from "@/components/AuthWrapper";
 import { toast } from "sonner";
 import { Project } from "@/types/kanban";
-import { getProjects } from "@/lib/project-storage";
-
-import { Menu } from "lucide-react";
+import { CreateProjectDialog } from "@/components/CreateProjectDialog";
+import { getProjectsAsync } from "@/lib/project-storage";
 
 const Index = () => {
-  const projects = getProjects();
-  const [currentProject, setCurrentProject] = useState<Project | null>(
-    projects[0] || null
-  );
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  const loadProjects = async () => {
+    try {
+      const projectsList = await getProjectsAsync();
+      setProjects(projectsList);
+      setCurrentProject(projectsList[0] || null);
+    } catch (error) {
+      console.error('Erro ao carregar projetos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleProjectChange = (project: Project) => {
     setCurrentProject(project);
     toast.success(`Alternado para ${project.name}`);
   };
 
-  const handleNewProject = () => {
-    toast.info("Funcionalidade de criar novo projeto em breve!");
+  const handleNewProject = (newProject: Project) => {
+    setProjects(prev => [newProject, ...prev]);
+    setCurrentProject(newProject);
+    toast.success(`Projeto ${newProject.name} criado e selecionado!`);
   };
 
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <div className="flex-1">
-        <main className="flex flex-col h-screen overflow-hidden">
-          {/* Project Header */}
-          <div className="flex-shrink-0">
-            <ProjectHeader 
-              currentProject={currentProject}
-              projects={projects}
-              onProjectChange={handleProjectChange}
-              onNewProject={handleNewProject}
-            />
-          </div>
-          
-          {/* Task Board Content */}
-          {currentProject ? (
-            <div className="flex-1 overflow-auto px-6 py-6">
-              <TaskBoard projectId={currentProject.id} />
-            </div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center p-6">
-              <div className="text-center">
-                <h2 className="text-2xl font-bold text-foreground mb-4">
-                  Nenhum projeto selecionado
-                </h2>
-                <p className="text-muted-foreground">
-                  Crie um novo projeto para começar a organizar suas tarefas
-                </p>
-              </div>
-            </div>
-          )}
-        </main>
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
-    </SidebarProvider>
+    );
+  }
+
+  return (
+    <AuthWrapper>
+      <SidebarProvider>
+        <AppSidebar />
+        <div className="flex-1">
+          <main className="flex flex-col h-screen overflow-hidden">
+            {/* Project Header */}
+            <div className="flex-shrink-0">
+              <ProjectHeader 
+                currentProject={currentProject}
+                projects={projects}
+                onProjectChange={handleProjectChange}
+                onNewProject={() => {}} // Não usado mais aqui
+              />
+            </div>
+            
+            {/* Task Board Content */}
+            {currentProject ? (
+              <div className="flex-1 overflow-auto px-6 py-6">
+                <TaskBoard projectId={currentProject.id} />
+              </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center p-6">
+                <div className="text-center space-y-4">
+                  <h2 className="text-2xl font-bold text-foreground mb-4">
+                    Nenhum projeto encontrado
+                  </h2>
+                  <p className="text-muted-foreground mb-6">
+                    Crie seu primeiro projeto para começar a organizar suas tarefas
+                  </p>
+                  <CreateProjectDialog onProjectCreated={handleNewProject} />
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      </SidebarProvider>
+    </AuthWrapper>
   );
 };
 

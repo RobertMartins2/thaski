@@ -13,8 +13,8 @@ import { TaskCard } from "./TaskCard";
 import { DroppableColumn } from "./DroppableColumn";
 import { EditTaskDialog } from "./EditTaskDialog";
 import { TaskDetailPanel } from "./TaskDetailPanel";
-import { generateTaskCode } from "@/lib/project-utils";
 import { getProjectById } from "@/lib/project-storage";
+import { getProjectTasks, getProjectKanbanColumns, createProjectTask, updateProjectTask, deleteProjectTask } from "@/lib/supabase-projects";
 
 // Tasks iniciais vazias - dados reais virão do Supabase
 const initialTasks: Task[] = [];
@@ -24,8 +24,8 @@ interface TaskBoardProps {
 }
 
 export function TaskBoard({ projectId }: TaskBoardProps) {
-  // Buscar o projeto atual
-  const currentProject = getProjectById(projectId);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Colunas padrão
   const defaultColumns: KanbanColumnType[] = [
@@ -45,12 +45,46 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
   const [detailTask, setDetailTask] = useState<Task | null>(null);
   const [detailPanelOpen, setDetailPanelOpen] = useState(false);
 
-  // Carregar colunas customizadas do localStorage
+  // Carregar dados do projeto
+  useEffect(() => {
+    if (projectId) {
+      loadProjectData();
+    }
+  }, [projectId]);
+
+  const loadProjectData = async () => {
+    if (!projectId) return;
+    
+    setLoading(true);
+    try {
+      // Carregar projeto
+      const project = await getProjectById(projectId);
+      setCurrentProject(project);
+
+      // Carregar colunas do projeto
+      const projectColumns = await getProjectKanbanColumns(projectId);
+      if (projectColumns.length > 0) {
+        setColumns(projectColumns);
+      }
+
+      // Carregar tasks do projeto
+      const projectTasks = await getProjectTasks(projectId);
+      setTasks(projectTasks);
+      
+    } catch (error) {
+      console.error('Erro ao carregar dados do projeto:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Carregar colunas customizadas do localStorage como fallback
   useEffect(() => {
     try {
       const savedColumns = localStorage.getItem(`project-${projectId}-columns`);
       if (savedColumns) {
-        setColumns(JSON.parse(savedColumns));
+        const parsedColumns = JSON.parse(savedColumns);
+        setColumns(parsedColumns);
       }
     } catch (error) {
       console.warn('Erro ao carregar colunas customizadas:', error);
@@ -65,25 +99,33 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
     })
   );
 
-  const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
-    // Gerar código automaticamente baseado no projeto atual ou usar padrão
-    const taskCode = currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`;  
+  const handleAddTask = async (newTaskData: Omit<Task, 'id'>) => {
+    if (!projectId) return;
     
-    const newTask: Task = {
-      ...newTaskData,
-      id: `task-${Date.now()}`,
-      code: taskCode,
-    };
-    setTasks([...tasks, newTask]);
-    
-    // TODO: Aqui precisaríamos incrementar o taskCount do projeto na fonte de dados
-    // Por agora, a geração do código usa o taskCount atual do projeto
+    try {
+      const createdTask = await createProjectTask(projectId, newTaskData);
+      if (createdTask) {
+        setTasks(prevTasks => [createdTask, ...prevTasks]);
+        
+        // Atualizar o contador do projeto
+        if (currentProject) {
+          setCurrentProject({
+            ...currentProject,
+            taskCount: currentProject.taskCount + 1
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao criar task:', error);
+    }
   };
 
   const handleUpdateColumns = (newColumns: KanbanColumnType[]) => {
     setColumns(newColumns);
-    // Salvar no localStorage
-    localStorage.setItem(`project-${projectId}-columns`, JSON.stringify(newColumns));
+    // Salvar no localStorage como fallback
+    if (projectId) {
+      localStorage.setItem(`project-${projectId}-columns`, JSON.stringify(newColumns));
+    }
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -94,7 +136,7 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
     }
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveTask(null);
     
@@ -107,13 +149,31 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
     const task = tasks.find(task => task.id === taskId);
     if (!task || task.status === columnId) return;
     
+    const updatedTask = { ...task, status: columnId };
+    
+    // Update local state immediately
     setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task.id === taskId 
-          ? { ...task, status: columnId }
-          : task
+      prevTasks.map(t => 
+        t.id === taskId 
+          ? updatedTask
+          : t
       )
     );
+
+    // Update in database
+    try {
+      await updateProjectTask(updatedTask);
+    } catch (error) {
+      console.error('Erro ao atualizar task:', error);
+      // Revert local state on error
+      setTasks(prevTasks => 
+        prevTasks.map(t => 
+          t.id === taskId 
+            ? task // revert to original
+            : t
+        )
+      );
+    }
   };
 
   const handleTaskClick = (task: Task) => {
@@ -126,16 +186,38 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
     setDetailPanelOpen(true);
   };
 
-  const handleEditTask = (updatedTask: Task) => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task.id === updatedTask.id ? updatedTask : task
-      )
-    );
+  const handleEditTask = async (updatedTask: Task) => {
+    try {
+      const success = await updateProjectTask(updatedTask);
+      if (success) {
+        setTasks(prevTasks => 
+          prevTasks.map(task => 
+            task.id === updatedTask.id ? updatedTask : task
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar task:', error);
+    }
   };
 
-  const handleDeleteTask = (taskId: string) => {
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      const success = await deleteProjectTask(taskId);
+      if (success) {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+        
+        // Decrementar contador do projeto
+        if (currentProject) {
+          setCurrentProject({
+            ...currentProject,
+            taskCount: Math.max(0, currentProject.taskCount - 1)
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao deletar task:', error);
+    }
   };
 
   const filteredTasks = tasks.filter(task => 
@@ -147,6 +229,14 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
   const getTasksForColumn = (columnId: string) => {
     return filteredTasks.filter(task => task.status === columnId);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <DndContext
