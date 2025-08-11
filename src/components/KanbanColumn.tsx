@@ -2,34 +2,22 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TaskCard, Task } from "./TaskCard";
 import { AddTaskDialog } from "./AddTaskDialog";
+import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
 
 interface KanbanColumnProps {
-  title: string;
+  column: KanbanColumnType;
   tasks: Task[];
-  status: 'todo' | 'progress' | 'done';
   onAddTask: (task: Omit<Task, 'id'>) => void;
 }
 
-const statusStyles = {
-  todo: 'status-todo',
-  progress: 'status-progress',
-  done: 'status-done'
-};
-
-const statusColors = {
-  todo: 'bg-status-todo',
-  progress: 'bg-status-progress', 
-  done: 'bg-status-done'
-};
-
-export function KanbanColumn({ title, tasks, status, onAddTask }: KanbanColumnProps) {
+export function KanbanColumn({ column, tasks, onAddTask }: KanbanColumnProps) {
   return (
-    <div className={`kanban-column status-${status}`}>
+    <div className="kanban-column">
       {/* Column header */}
       <div className="column-header">
-        <div className={`status-indicator`} />
+        <div className={`w-3 h-3 rounded-full flex-shrink-0 ${column.color}`} />
         <h2 className="column-title">
-          {title}
+          {column.title}
         </h2>
         <span className="task-count">
           {tasks.length}
@@ -46,7 +34,7 @@ export function KanbanColumn({ title, tasks, status, onAddTask }: KanbanColumnPr
       {/* Add new task button */}
       <AddTaskDialog 
         onAddTask={onAddTask}
-        defaultStatus={status}
+        defaultStatus={column.id}
         trigger={
           <Button 
             variant="ghost" 

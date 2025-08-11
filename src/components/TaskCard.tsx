@@ -10,7 +10,7 @@ export interface Task {
     name: string;
     color: 'design' | 'hiring' | 'dev' | 'performance';
   }>;
-  status: 'todo' | 'progress' | 'done';
+  status: string;
 }
 
 interface TaskCardProps {

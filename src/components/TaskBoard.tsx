@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { KanbanColumn } from "./KanbanColumn";
 import { Task } from "./TaskCard";
 import { AddTaskDialog } from "./AddTaskDialog";
+import { ColumnSettingsDialog } from "./ColumnSettingsDialog";
+import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
 
 // Mock data for demonstration
 const mockTasks: Task[] = [
@@ -51,9 +53,17 @@ const mockTasks: Task[] = [
 ];
 
 export function TaskBoard() {
+  // Default columns
+  const defaultColumns: KanbanColumnType[] = [
+    { id: 'todo', title: 'To-do', color: 'bg-slate-400', order: 0 },
+    { id: 'progress', title: 'In Progress', color: 'bg-yellow-500', order: 1 },
+    { id: 'done', title: 'Done', color: 'bg-green-500', order: 2 }
+  ];
+
   const [viewMode, setViewMode] = useState<'board' | 'calendar'>('board');
   const [searchQuery, setSearchQuery] = useState('');
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [columns, setColumns] = useState<KanbanColumnType[]>(defaultColumns);
 
   const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
     const newTask: Task = {
@@ -63,15 +73,19 @@ export function TaskBoard() {
     setTasks([...tasks, newTask]);
   };
 
+  const handleUpdateColumns = (newColumns: KanbanColumnType[]) => {
+    setColumns(newColumns);
+  };
+
   const filteredTasks = tasks.filter(task => 
     task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.code.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const todoTasks = filteredTasks.filter(task => task.status === 'todo');
-  const progressTasks = filteredTasks.filter(task => task.status === 'progress');
-  const doneTasks = filteredTasks.filter(task => task.status === 'done');
+  const getTasksForColumn = (columnId: string) => {
+    return filteredTasks.filter(task => task.status === columnId);
+  };
 
   return (
     <div className="p-8 lg:p-12 space-y-10 bg-background min-h-screen">
@@ -97,11 +111,18 @@ export function TaskBoard() {
               />
             </div>
             
-            {/* Filter */}
-            <Button variant="outline" className="filter-button h-12 px-6 font-medium">
-              <Filter className="w-5 h-5 mr-3" />
-              Filter
-            </Button>
+            {/* Filter and Settings */}
+            <div className="flex gap-3">
+              <Button variant="outline" className="filter-button h-12 px-6 font-medium">
+                <Filter className="w-5 h-5 mr-3" />
+                Filter
+              </Button>
+              
+              <ColumnSettingsDialog 
+                columns={columns}
+                onUpdateColumns={handleUpdateColumns}
+              />
+            </div>
           </div>
           
           <div className="flex gap-4">
@@ -128,32 +149,27 @@ export function TaskBoard() {
             </div>
             
             {/* New task button */}
-            <AddTaskDialog onAddTask={handleAddTask} />
+            <AddTaskDialog 
+              onAddTask={handleAddTask} 
+              columns={columns.map(col => ({ id: col.id, title: col.title }))}
+            />
           </div>
         </div>
       </div>
 
       {/* Board/Calendar View */}
       {viewMode === 'board' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
-          <KanbanColumn
-            title="To-do"
-            tasks={todoTasks}
-            status="todo"
-            onAddTask={handleAddTask}
-          />
-          <KanbanColumn
-            title="In Progress"
-            tasks={progressTasks}
-            status="progress"
-            onAddTask={handleAddTask}
-          />
-          <KanbanColumn
-            title="Done"
-            tasks={doneTasks}
-            status="done"
-            onAddTask={handleAddTask}
-          />
+        <div className={`grid gap-8 lg:gap-10`} style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(300px, 1fr))` }}>
+          {columns
+            .sort((a, b) => a.order - b.order)
+            .map((column) => (
+              <KanbanColumn
+                key={column.id}
+                column={column}
+                tasks={getTasksForColumn(column.id)}
+                onAddTask={handleAddTask}
+              />
+            ))}
         </div>
       ) : (
         <div className="bg-surface/60 backdrop-blur-sm rounded-3xl p-12 border border-border/30 text-center">

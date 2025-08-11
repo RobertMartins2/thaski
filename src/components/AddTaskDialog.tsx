@@ -11,8 +11,9 @@ import { Task } from "./TaskCard";
 
 interface AddTaskDialogProps {
   onAddTask: (task: Omit<Task, 'id'>) => void;
-  defaultStatus?: 'todo' | 'progress' | 'done';
+  defaultStatus?: string;
   trigger?: React.ReactNode;
+  columns?: Array<{id: string, title: string}>;
 }
 
 const tagOptions = [
@@ -33,12 +34,12 @@ const tagColorMap = {
   performance: 'tag-performance'
 };
 
-export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger }: AddTaskDialogProps) {
+export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, columns = [] }: AddTaskDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [code, setCode] = useState('');
-  const [status, setStatus] = useState<'todo' | 'progress' | 'done'>(defaultStatus);
+  const [status, setStatus] = useState<string>(defaultStatus);
   const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' }>>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -134,14 +135,24 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger }: Ad
 
             <div className="space-y-2">
               <Label htmlFor="status" className="text-sm font-semibold text-foreground">Status</Label>
-              <Select value={status} onValueChange={(value: 'todo' | 'progress' | 'done') => setStatus(value)}>
+              <Select value={status} onValueChange={(value: string) => setStatus(value)}>
                 <SelectTrigger className="h-12">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todo">To-do</SelectItem>
-                  <SelectItem value="progress">In Progress</SelectItem>
-                  <SelectItem value="done">Done</SelectItem>
+                <SelectContent className="bg-surface border-border/30 z-50">
+                  {columns.length > 0 ? (
+                    columns.map((column) => (
+                      <SelectItem key={column.id} value={column.id}>
+                        {column.title}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <>
+                      <SelectItem value="todo">To-do</SelectItem>
+                      <SelectItem value="progress">In Progress</SelectItem>
+                      <SelectItem value="done">Done</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>
