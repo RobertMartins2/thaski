@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Edit, X, CalendarIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,12 +7,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { Task } from "./TaskCard";
 
-interface AddTaskDialogProps {
-  onAddTask: (task: Omit<Task, 'id'>) => void;
-  defaultStatus?: string;
-  trigger?: React.ReactNode;
+interface EditTaskDialogProps {
+  task: Task;
+  onEditTask: (updatedTask: Task) => void;
+  onDeleteTask?: (taskId: string) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   columns?: Array<{id: string, title: string}>;
 }
 
@@ -38,36 +44,30 @@ const tagColorMap = {
   landing: 'bg-purple-100 text-purple-700'
 };
 
-export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, columns = [] }: AddTaskDialogProps) {
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [code, setCode] = useState('');
-  const [status, setStatus] = useState<string>(defaultStatus);
-  const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' }>>([]);
+export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenChange, columns = [] }: EditTaskDialogProps) {
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description);
+  const [code, setCode] = useState(task.code);
+  const [status, setStatus] = useState(task.status);
+  const [selectedTags, setSelectedTags] = useState(task.tags);
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!title.trim() || !description.trim()) return;
 
-    const newTask: Omit<Task, 'id'> = {
+    const updatedTask: Task = {
+      ...task,
       title: title.trim(),
       description: description.trim(),
-      code: code.trim() || `CFW-${Date.now()}`,
+      code: code.trim(),
       tags: selectedTags,
       status,
     };
 
-    onAddTask(newTask);
-    
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setCode('');
-    setStatus(defaultStatus);
-    setSelectedTags([]);
-    setOpen(false);
+    onEditTask(updatedTask);
+    onOpenChange(false);
   };
 
   const addTag = (tag: { name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' }) => {
@@ -80,21 +80,18 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
     setSelectedTags(selectedTags.filter(t => t.name !== tagName));
   };
 
-  const defaultTrigger = (
-    <Button className="gradient-button h-12">
-      <Plus className="w-5 h-5 mr-2" />
-      New Task
-    </Button>
-  );
+  const handleDelete = () => {
+    if (onDeleteTask && confirm('Are you sure you want to delete this task?')) {
+      onDeleteTask(task.id);
+      onOpenChange(false);
+    }
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || defaultTrigger}
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] bg-surface border-border/30">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-foreground">Create New Task</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold text-foreground">Edit Task</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">
@@ -152,14 +149,43 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
                     ))
                   ) : (
                     <>
-                      <SelectItem value="todo">To-do</SelectItem>
+                      <SelectItem value="todo">To Do</SelectItem>
                       <SelectItem value="progress">In Progress</SelectItem>
-                      <SelectItem value="done">Done</SelectItem>
+                      <SelectItem value="done">Completed</SelectItem>
+                      <SelectItem value="overdue">Overdue</SelectItem>
                     </>
                   )}
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* Due Date */}
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold text-foreground">Due Date</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full h-12 justify-start text-left font-normal",
+                    !dueDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={dueDate}
+                  onSelect={setDueDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Tags */}
@@ -200,10 +226,20 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
+            {onDeleteTask && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDelete}
+                className="h-12 font-semibold"
+              >
+                Delete
+              </Button>
+            )}
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => onOpenChange(false)}
               className="flex-1 h-12 font-semibold"
             >
               Cancel
@@ -213,8 +249,8 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               className="flex-1 h-12 gradient-button"
               disabled={!title.trim() || !description.trim()}
             >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Task
+              <Edit className="w-4 h-4 mr-2" />
+              Save Changes
             </Button>
           </div>
         </form>

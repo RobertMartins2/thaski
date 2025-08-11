@@ -12,7 +12,7 @@ export interface Task {
   code: string;
   tags: Array<{
     name: string;
-    color: 'design' | 'hiring' | 'dev' | 'performance';
+    color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing';
   }>;
   status: string; // Now dynamic instead of fixed enum
 }

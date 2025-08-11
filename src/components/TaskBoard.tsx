@@ -11,6 +11,7 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners }
 import { useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
 import { TaskCard } from "./TaskCard";
 import { DroppableColumn } from "./DroppableColumn";
+import { EditTaskDialog } from "./EditTaskDialog";
 
 // Mock data for demonstration
 const mockTasks: Task[] = [
@@ -78,6 +79,8 @@ export function TaskBoard() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [columns, setColumns] = useState<KanbanColumnType[]>(defaultColumns);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -129,6 +132,23 @@ export function TaskBoard() {
     );
   };
 
+  const handleTaskClick = (task: Task) => {
+    setEditingTask(task);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditTask = (updatedTask: Task) => {
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === updatedTask.id ? updatedTask : task
+      )
+    );
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+  };
+
   const filteredTasks = tasks.filter(task => 
     task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -166,6 +186,7 @@ export function TaskBoard() {
               <AddTaskDialog 
                 onAddTask={handleAddTask}
                 defaultStatus="todo"
+                columns={columns.map(col => ({ id: col.id, title: col.title }))}
                 trigger={
                   <Button className="ml-auto gradient-button">
                     <Plus className="w-4 h-4 mr-2" />
@@ -185,6 +206,8 @@ export function TaskBoard() {
                     column={column}
                     tasks={getTasksForColumn(column.id)}
                     onAddTask={handleAddTask}
+                    onTaskClick={handleTaskClick}
+                    columns={columns.map(col => ({ id: col.id, title: col.title }))}
                   />
                 ))}
             </div>
@@ -201,6 +224,17 @@ export function TaskBoard() {
       <DragOverlay>
         {activeTask ? <TaskCard task={activeTask} /> : null}
       </DragOverlay>
+
+      {editingTask && (
+        <EditTaskDialog
+          task={editingTask}
+          onEditTask={handleEditTask}
+          onDeleteTask={handleDeleteTask}
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          columns={columns.map(col => ({ id: col.id, title: col.title }))}
+        />
+      )}
     </DndContext>
   );
 }

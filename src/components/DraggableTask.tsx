@@ -3,9 +3,10 @@ import { TaskCard, Task } from "./TaskCard";
 
 interface DraggableTaskProps {
   task: Task;
+  onClick?: (task: Task) => void;
 }
 
-export function DraggableTask({ task }: DraggableTaskProps) {
+export function DraggableTask({ task, onClick }: DraggableTaskProps) {
   const {
     attributes,
     listeners,
@@ -28,7 +29,7 @@ export function DraggableTask({ task }: DraggableTaskProps) {
       {...listeners}
       {...attributes}
     >
-      <TaskCard task={task} />
+      <TaskCard task={task} onClick={onClick} />
     </div>
   );
 }

@@ -15,6 +15,7 @@ export interface Task {
 
 interface TaskCardProps {
   task: Task;
+  onClick?: (task: Task) => void;
 }
 
 const tagColorMap = {
@@ -28,9 +29,12 @@ const tagColorMap = {
   landing: 'bg-purple-100 text-purple-700'
 };
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onClick }: TaskCardProps) {
   return (
-    <Card className="task-card group cursor-pointer">
+    <Card 
+      className="task-card group cursor-pointer" 
+      onClick={() => onClick?.(task)}
+    >
       <CardContent className="p-6 space-y-5">
         {/* Task code */}
         <div className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wide">

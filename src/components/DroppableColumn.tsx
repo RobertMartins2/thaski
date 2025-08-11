@@ -9,9 +9,11 @@ interface DroppableColumnProps {
   column: KanbanColumnType;
   tasks: Task[];
   onAddTask: (task: Omit<Task, 'id'>) => void;
+  onTaskClick?: (task: Task) => void;
+  columns?: Array<{id: string, title: string}>;
 }
 
-export function DroppableColumn({ column, tasks, onAddTask }: DroppableColumnProps) {
+export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns }: DroppableColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: column.id,
   });
@@ -36,13 +38,14 @@ export function DroppableColumn({ column, tasks, onAddTask }: DroppableColumnPro
       
       <div className="space-y-4">
         {tasks.map((task) => (
-          <DraggableTask key={task.id} task={task} />
+          <DraggableTask key={task.id} task={task} onClick={onTaskClick} />
         ))}
         
         {/* Add Task Button */}
         <AddTaskDialog 
           onAddTask={onAddTask}
           defaultStatus={column.id}
+          columns={columns || [{ id: column.id, title: column.title }]}
           trigger={
             <button className="add-task-button">
               <Plus className="w-4 h-4 mr-2" />
