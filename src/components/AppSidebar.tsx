@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, FolderOpen, Users, Calendar, BarChart3, CalendarDays, LogOut, Hexagon, ChevronRight, ChevronDown } from "lucide-react";
+import { Home, FolderOpen, Settings, Zap, LogOut, Hexagon, ChevronRight, ChevronDown } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -26,13 +26,10 @@ const projects = [
 ];
 
 const navigationItems = [
-  { title: "Início", url: "/", icon: Home },
+  { title: "Home", url: "/", icon: Home },
   { title: "Projetos", url: "/projects", icon: FolderOpen, badge: "11", expandable: true },
-  { title: "Reuniões", url: "/meetings", icon: Users },
-  { title: "Equipe", url: "/team", icon: Users, badge: "2" },
-  { title: "Agenda", url: "/schedule", icon: Calendar },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Calendário", url: "/calendar", icon: CalendarDays },
+  { title: "Configurações", url: "/settings", icon: Settings },
+  { title: "Integrações", url: "/integrations", icon: Zap },
 ];
 
 export function AppSidebar() {
