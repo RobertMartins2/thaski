@@ -6,13 +6,13 @@ import { Menu } from "lucide-react";
 const Index = () => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="min-h-screen flex w-full">
         <AppSidebar />
         
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0">
           {/* Header with sidebar trigger */}
-          <header className="h-24 bg-surface/60 backdrop-blur-sm border-b border-border/30 flex items-center px-8 lg:px-12">
-            <SidebarTrigger className="lg:hidden mr-4 hover:bg-muted/50 rounded-xl p-2 transition-colors">
+          <header className="h-16 bg-white border-b border-gray-200 flex items-center px-6">
+            <SidebarTrigger className="lg:hidden mr-4 hover:bg-gray-100 rounded-lg p-2 transition-colors">
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
             
