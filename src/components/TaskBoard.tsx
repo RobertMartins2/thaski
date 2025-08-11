@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { KanbanColumn } from "./KanbanColumn";
 import { Task } from "./TaskCard";
+import { AddTaskDialog } from "./AddTaskDialog";
 
 // Mock data for demonstration
 const mockTasks: Task[] = [
@@ -52,10 +53,25 @@ const mockTasks: Task[] = [
 export function TaskBoard() {
   const [viewMode, setViewMode] = useState<'board' | 'calendar'>('board');
   const [searchQuery, setSearchQuery] = useState('');
+  const [tasks, setTasks] = useState<Task[]>(mockTasks);
 
-  const todoTasks = mockTasks.filter(task => task.status === 'todo');
-  const progressTasks = mockTasks.filter(task => task.status === 'progress');
-  const doneTasks = mockTasks.filter(task => task.status === 'done');
+  const handleAddTask = (newTaskData: Omit<Task, 'id'>) => {
+    const newTask: Task = {
+      ...newTaskData,
+      id: `task-${Date.now()}`,
+    };
+    setTasks([...tasks, newTask]);
+  };
+
+  const filteredTasks = tasks.filter(task => 
+    task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    task.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const todoTasks = filteredTasks.filter(task => task.status === 'todo');
+  const progressTasks = filteredTasks.filter(task => task.status === 'progress');
+  const doneTasks = filteredTasks.filter(task => task.status === 'done');
 
   return (
     <div className="p-8 lg:p-12 space-y-10 bg-background min-h-screen">
@@ -112,10 +128,7 @@ export function TaskBoard() {
             </div>
             
             {/* New task button */}
-            <Button className="gradient-button h-12">
-              <Plus className="w-5 h-5 mr-2" />
-              New Task
-            </Button>
+            <AddTaskDialog onAddTask={handleAddTask} />
           </div>
         </div>
       </div>
@@ -127,16 +140,19 @@ export function TaskBoard() {
             title="To-do"
             tasks={todoTasks}
             status="todo"
+            onAddTask={handleAddTask}
           />
           <KanbanColumn
             title="In Progress"
             tasks={progressTasks}
             status="progress"
+            onAddTask={handleAddTask}
           />
           <KanbanColumn
             title="Done"
             tasks={doneTasks}
             status="done"
+            onAddTask={handleAddTask}
           />
         </div>
       ) : (
