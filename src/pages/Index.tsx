@@ -7,29 +7,20 @@ import { ProjectHeader } from "@/components/ProjectHeader";
 import { AuthWrapper } from "@/components/AuthWrapper";
 import { toast } from "sonner";
 import { Project } from "@/types/kanban";
+import { useProjects } from "@/contexts/ProjectContext";
 import { CreateProjectDialog } from "@/components/CreateProjectDialog";
-import { getProjectsAsync } from "@/lib/project-storage";
 
 const Index = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const { projects, addProject: addProjectToContext } = useProjects();
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadProjects();
-  }, []);
-
-  const loadProjects = async () => {
-    try {
-      const projectsList = await getProjectsAsync();
-      setProjects(projectsList);
-      setCurrentProject(projectsList[0] || null);
-    } catch (error) {
-      console.error('Erro ao carregar projetos:', error);
-    } finally {
-      setLoading(false);
+    // Selecionar primeiro projeto disponível quando os projetos carregarem
+    if (projects.length > 0 && !currentProject) {
+      setCurrentProject(projects[0]);
     }
-  };
+  }, [projects, currentProject]);
 
   const handleProjectChange = (project: Project) => {
     setCurrentProject(project);
@@ -37,7 +28,7 @@ const Index = () => {
   };
 
   const handleNewProject = (newProject: Project) => {
-    setProjects(prev => [newProject, ...prev]);
+    addProjectToContext(newProject);
     setCurrentProject(newProject);
     toast.success(`Projeto ${newProject.name} criado e selecionado!`);
   };

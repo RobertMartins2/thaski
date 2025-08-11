@@ -3,6 +3,8 @@ import { Project } from "@/types/kanban";
 import { Home, FolderOpen, Settings, Zap, LogOut, Hexagon, ChevronRight, ChevronDown } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useProjects } from "@/contexts/ProjectContext";
+import { supabase } from "@/integrations/supabase/client";
 
 import {
   Sidebar,
@@ -19,25 +21,24 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 
-const projects: Project[] = [
-  { id: '1', name: 'Projeto Imobiliário', code: 'IMB', color: 'bg-blue-500', taskCount: 15 },
-  { id: '2', name: 'Plataforma E-commerce', code: 'ECM', color: 'bg-green-500', taskCount: 8 },
-  { id: '3', name: 'Design de App Mobile', code: 'APP', color: 'bg-purple-500', taskCount: 23 },
-  { id: '4', name: 'Campanha de Marketing', code: 'MKT', color: 'bg-orange-500', taskCount: 12 },
-];
-
-const navigationItems = [
-  { title: "Home", url: "/", icon: Home },
-  { title: "Projetos", url: "/projects", icon: FolderOpen, badge: "11", expandable: true },
-  { title: "Configurações", url: "/settings", icon: Settings },
-  { title: "Integrações", url: "/integrations", icon: Zap },
-];
-
 export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const collapsed = state === "collapsed";
   const [expandedProjects, setExpandedProjects] = useState(false);
+  
+  const { projects, projectsCount } = useProjects();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
+  const navigationItems = [
+    { title: "Home", url: "/", icon: Home },
+    { title: "Projetos", url: "/projects", icon: FolderOpen, badge: projectsCount.toString(), expandable: true },
+    { title: "Configurações", url: "/settings", icon: Settings },
+    { title: "Integrações", url: "/integrations", icon: Zap },
+  ];
 
   return (
     <Sidebar 
@@ -92,7 +93,7 @@ export function AppSidebar() {
                         
                         {!collapsed && (
                           <div className="flex items-center gap-2">
-                            {item.badge && (
+                            {item.badge && projectsCount > 0 && (
                               <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                                 {item.badge}
                               </span>
@@ -119,7 +120,7 @@ export function AppSidebar() {
                   </SidebarMenuItem>
                   
                   {/* Expanded Projects */}
-                  {item.expandable && expandedProjects && !collapsed && (
+                  {item.expandable && expandedProjects && !collapsed && projects.length > 0 && (
                     <div className="ml-6 mt-1 space-y-1">
                       {projects.map((project) => {
                         const isProjectDetailActive = location.pathname === `/project/${project.id}`;
@@ -156,6 +157,7 @@ export function AppSidebar() {
           <Button
             variant="ghost"
             className="w-full justify-start px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg"
+            onClick={handleSignOut}
           >
             <LogOut className="w-5 h-5 mr-3" />
             {!collapsed && <span className="text-sm">Sair</span>}
