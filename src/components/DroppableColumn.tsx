@@ -29,7 +29,7 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns
       className="kanban-column transition-colors"
     >
       <div className="column-header">
-        <div className={`status-indicator ${column.id === 'todo' ? 'bg-slate-400' : column.id === 'progress' ? 'bg-amber-400' : column.id === 'done' ? 'bg-green-500' : 'bg-red-500'}`} />
+        <div className={`status-indicator ${column.color}`} />
         <span className="column-title">{column.title}</span>
         <span className="task-count ml-auto">
           {tasks.length}

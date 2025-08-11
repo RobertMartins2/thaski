@@ -176,24 +176,30 @@ export function TaskBoard() {
                 .sort((a, b) => a.order - b.order)
                 .map((column) => (
                   <div key={column.id} className="flex items-center gap-3">
-                    <div className={`status-indicator ${column.id === 'todo' ? 'bg-slate-400' : column.id === 'progress' ? 'bg-amber-400' : column.id === 'done' ? 'bg-green-500' : 'bg-red-500'}`} />
+                    <div className={`status-indicator ${column.color}`} />
                     <span className="font-semibold text-foreground">{column.title}</span>
                     <span className="task-count">
                       {getTasksForColumn(column.id).length}
                     </span>
                   </div>
                 ))}
-              <AddTaskDialog 
-                onAddTask={handleAddTask}
-                defaultStatus="todo"
-                columns={columns.map(col => ({ id: col.id, title: col.title }))}
-                trigger={
-                  <Button className="ml-auto gradient-button">
-                    <Plus className="w-4 h-4 mr-2" />
-                    New Task
-                  </Button>
-                }
-              />
+              <div className="flex items-center gap-3 ml-auto">
+                <ColumnSettingsDialog 
+                  columns={columns}
+                  onUpdateColumns={handleUpdateColumns}
+                />
+                <AddTaskDialog 
+                  onAddTask={handleAddTask}
+                  defaultStatus="todo"
+                  columns={columns.map(col => ({ id: col.id, title: col.title }))}
+                  trigger={
+                    <Button className="gradient-button">
+                      <Plus className="w-4 h-4 mr-2" />
+                      New Task
+                    </Button>
+                  }
+                />
+              </div>
             </div>
 
             {/* Kanban Board Grid */}
