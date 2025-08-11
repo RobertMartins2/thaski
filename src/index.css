@@ -8,102 +8,102 @@
 /* Modern design tokens */
 @layer base {
   :root {
-    --background: 250 252 254;
-    --foreground: 15 23 42;
-    --surface: 255 255 255;
-    --card: 255 255 255;
-    --card-foreground: 15 23 42;
-    --card-hover: 249 250 251;
-    --popover: 255 255 255;
-    --popover-foreground: 15 23 42;
-    --primary: 79 70 229;
-    --primary-foreground: 255 255 255;
-    --primary-hover: 67 56 202;
-    --secondary: 248 250 252;
-    --secondary-foreground: 71 85 105;
-    --secondary-hover: 241 245 249;
-    --muted: 248 250 252;
-    --muted-foreground: 100 116 139;
-    --muted-hover: 241 245 249;
-    --accent: 245 247 250;
-    --accent-foreground: 15 23 42;
-    --accent-hover: 236 241 247;
-    --destructive: 220 38 38;
-    --destructive-foreground: 255 255 255;
-    --border: 228 233 242;
-    --input: 228 233 242;
-    --ring: 79 70 229;
+    --background: 218 224 237;
+    --foreground: 222 222 222;
+    --surface: 0 0 100;
+    --card: 0 0 100;
+    --card-foreground: 222 222 222;
+    --card-hover: 220 225 235;
+    --popover: 0 0 100;
+    --popover-foreground: 222 222 222;
+    --primary: 243 56 79;
+    --primary-foreground: 0 0 100;
+    --primary-hover: 245 45 75;
+    --secondary: 216 226 240;
+    --secondary-foreground: 213 213 228;
+    --secondary-hover: 210 220 235;
+    --muted: 216 226 240;
+    --muted-foreground: 213 213 228;
+    --muted-hover: 210 220 235;
+    --accent: 214 226 242;
+    --accent-foreground: 222 222 222;
+    --accent-hover: 208 222 238;
+    --destructive: 0 74 42;
+    --destructive-foreground: 0 0 100;
+    --border: 213 227 242;
+    --input: 213 227 242;
+    --ring: 243 56 79;
     --radius: 12px;
 
     /* Status colors - more subtle */
-    --status-todo: 148 163 184;
-    --status-progress: 245 158 11;
-    --status-done: 34 197 94;
+    --status-todo: 213 213 228;
+    --status-progress: 45 93 47;
+    --status-done: 142 51 36;
 
     /* Tag colors - refined palette */
-    --tag-design: 139 92 246;
-    --tag-hiring: 236 72 153;
-    --tag-dev: 59 130 246;
-    --tag-performance: 16 185 129;
+    --tag-design: 264 67 96;
+    --tag-hiring: 330 81 67;
+    --tag-dev: 213 56 96;
+    --tag-performance: 156 72 67;
 
     /* Sidebar */
-    --sidebar-background: 255 255 255;
-    --sidebar-foreground: 15 23 42;
-    --sidebar-primary: 79 70 229;
-    --sidebar-primary-foreground: 255 255 255;
-    --sidebar-accent: 245 247 250;
-    --sidebar-accent-foreground: 15 23 42;
-    --sidebar-border: 228 233 242;
-    --sidebar-ring: 79 70 229;
+    --sidebar-background: 0 0 100;
+    --sidebar-foreground: 222 222 222;
+    --sidebar-primary: 243 56 79;
+    --sidebar-primary-foreground: 0 0 100;
+    --sidebar-accent: 214 226 242;
+    --sidebar-accent-foreground: 222 222 222;
+    --sidebar-border: 213 227 242;
+    --sidebar-ring: 243 56 79;
   }
 
   .dark {
-    --background: 3 7 18;
-    --foreground: 248 250 252;
-    --surface: 15 23 42;
-    --card: 15 23 42;
-    --card-foreground: 248 250 252;
-    --card-hover: 30 41 59;
-    --popover: 15 23 42;
-    --popover-foreground: 248 250 252;
-    --primary: 99 102 241;
-    --primary-foreground: 255 255 255;
-    --primary-hover: 79 82 221;
-    --secondary: 30 41 59;
-    --secondary-foreground: 203 213 225;
-    --secondary-hover: 51 65 85;
-    --muted: 30 41 59;
-    --muted-foreground: 148 163 184;
-    --muted-hover: 51 65 85;
-    --accent: 30 41 59;
-    --accent-foreground: 248 250 252;
-    --accent-hover: 51 65 85;
-    --destructive: 239 68 68;
-    --destructive-foreground: 255 255 255;
-    --border: 51 65 85;
-    --input: 51 65 85;
-    --ring: 99 102 241;
+    --background: 222 84 4;
+    --foreground: 216 226 240;
+    --surface: 225 39 8;
+    --card: 225 39 8;
+    --card-foreground: 216 226 240;
+    --card-hover: 225 39 12;
+    --popover: 225 39 8;
+    --popover-foreground: 216 226 240;
+    --primary: 243 56 79;
+    --primary-foreground: 0 0 100;
+    --primary-hover: 245 45 75;
+    --secondary: 225 39 12;
+    --secondary-foreground: 213 223 238;
+    --secondary-hover: 225 39 16;
+    --muted: 225 39 12;
+    --muted-foreground: 213 213 228;
+    --muted-hover: 225 39 16;
+    --accent: 225 39 12;
+    --accent-foreground: 216 226 240;
+    --accent-hover: 225 39 16;
+    --destructive: 0 74 52;
+    --destructive-foreground: 0 0 100;
+    --border: 225 39 16;
+    --input: 225 39 16;
+    --ring: 243 56 79;
 
     /* Status colors dark */
-    --status-todo: 100 116 139;
-    --status-progress: 217 119 6;
-    --status-done: 22 163 74;
+    --status-todo: 213 213 228;
+    --status-progress: 45 93 47;
+    --status-done: 142 51 36;
 
     /* Tag colors dark */
-    --tag-design: 147 51 234;
-    --tag-hiring: 219 39 119;
-    --tag-dev: 37 99 235;
-    --tag-performance: 22 163 74;
+    --tag-design: 264 67 71;
+    --tag-hiring: 330 81 42;
+    --tag-dev: 213 56 71;
+    --tag-performance: 156 72 42;
 
     /* Sidebar dark */
-    --sidebar-background: 15 23 42;
-    --sidebar-foreground: 248 250 252;
-    --sidebar-primary: 99 102 241;
-    --sidebar-primary-foreground: 255 255 255;
-    --sidebar-accent: 30 41 59;
-    --sidebar-accent-foreground: 248 250 252;
-    --sidebar-border: 51 65 85;
-    --sidebar-ring: 99 102 241;
+    --sidebar-background: 225 39 8;
+    --sidebar-foreground: 216 226 240;
+    --sidebar-primary: 243 56 79;
+    --sidebar-primary-foreground: 0 0 100;
+    --sidebar-accent: 225 39 12;
+    --sidebar-accent-foreground: 216 226 240;
+    --sidebar-border: 225 39 16;
+    --sidebar-ring: 243 56 79;
   }
 }
 
