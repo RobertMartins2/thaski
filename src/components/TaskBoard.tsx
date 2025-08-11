@@ -12,6 +12,7 @@ import { useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
 import { TaskCard } from "./TaskCard";
 import { DroppableColumn } from "./DroppableColumn";
 import { EditTaskDialog } from "./EditTaskDialog";
+import { TaskDetailPanel } from "./TaskDetailPanel";
 
 // Mock data for demonstration
 const mockTasks: Task[] = [
@@ -81,6 +82,8 @@ export function TaskBoard() {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [detailTask, setDetailTask] = useState<Task | null>(null);
+  const [detailPanelOpen, setDetailPanelOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -135,6 +138,11 @@ export function TaskBoard() {
   const handleTaskClick = (task: Task) => {
     setEditingTask(task);
     setEditDialogOpen(true);
+  };
+
+  const handleTaskDetailClick = (task: Task) => {
+    setDetailTask(task);
+    setDetailPanelOpen(true);
   };
 
   const handleEditTask = (updatedTask: Task) => {
@@ -213,6 +221,7 @@ export function TaskBoard() {
                     tasks={getTasksForColumn(column.id)}
                     onAddTask={handleAddTask}
                     onTaskClick={handleTaskClick}
+                    onTaskDetailClick={handleTaskDetailClick}
                     columns={columns.map(col => ({ id: col.id, title: col.title }))}
                   />
                 ))}
@@ -238,6 +247,16 @@ export function TaskBoard() {
           onDeleteTask={handleDeleteTask}
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
+          columns={columns.map(col => ({ id: col.id, title: col.title }))}
+        />
+      )}
+
+      {detailTask && (
+        <TaskDetailPanel
+          task={detailTask}
+          open={detailPanelOpen}
+          onOpenChange={setDetailPanelOpen}
+          onEditTask={handleEditTask}
           columns={columns.map(col => ({ id: col.id, title: col.title }))}
         />
       )}

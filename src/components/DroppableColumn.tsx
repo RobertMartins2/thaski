@@ -10,10 +10,11 @@ interface DroppableColumnProps {
   tasks: Task[];
   onAddTask: (task: Omit<Task, 'id'>) => void;
   onTaskClick?: (task: Task) => void;
+  onTaskDetailClick?: (task: Task) => void;
   columns?: Array<{id: string, title: string}>;
 }
 
-export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns }: DroppableColumnProps) {
+export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskDetailClick, columns }: DroppableColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: column.id,
   });
@@ -38,7 +39,12 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns
       
       <div className="space-y-4">
         {tasks.map((task) => (
-          <DraggableTask key={task.id} task={task} onClick={onTaskClick} />
+          <DraggableTask 
+            key={task.id} 
+            task={task} 
+            onClick={onTaskClick} 
+            onDetailClick={onTaskDetailClick}
+          />
         ))}
         
         {/* Add Task Button */}

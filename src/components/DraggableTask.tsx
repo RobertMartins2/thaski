@@ -4,9 +4,10 @@ import { TaskCard, Task } from "./TaskCard";
 interface DraggableTaskProps {
   task: Task;
   onClick?: (task: Task) => void;
+  onDetailClick?: (task: Task) => void;
 }
 
-export function DraggableTask({ task, onClick }: DraggableTaskProps) {
+export function DraggableTask({ task, onClick, onDetailClick }: DraggableTaskProps) {
   const {
     attributes,
     listeners,
@@ -21,6 +22,15 @@ export function DraggableTask({ task, onClick }: DraggableTaskProps) {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
 
+  const handleClick = (task: Task) => {
+    // Por padrão, clique abre o painel de detalhes
+    if (onDetailClick) {
+      onDetailClick(task);
+    } else if (onClick) {
+      onClick(task);
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -29,7 +39,7 @@ export function DraggableTask({ task, onClick }: DraggableTaskProps) {
       {...listeners}
       {...attributes}
     >
-      <TaskCard task={task} onClick={onClick} />
+      <TaskCard task={task} onClick={handleClick} />
     </div>
   );
 }
