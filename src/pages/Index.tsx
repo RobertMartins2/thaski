@@ -9,23 +9,25 @@ import { Menu } from "lucide-react";
 const Index = () => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen w-full flex">
+      <div className="min-h-screen w-full flex bg-background">
         <AppSidebar />
         
-        <div className="flex-1 flex flex-col min-w-0 bg-background">
-          {/* Project Header with AI Generated Background */}
-          <ProjectHeader projectName="Real Estate Project" />
+        <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          {/* Project Header */}
+          <div className="flex-shrink-0">
+            <ProjectHeader projectName="Real Estate Project" />
+          </div>
           
           {/* Project Information */}
-          <div className="px-6 py-4 border-b border-border/40">
+          <div className="flex-shrink-0 px-6 py-6 border-b border-border/20">
             <ProjectInfo />
           </div>
           
           {/* Task Board Content */}
-          <main className="flex-1 overflow-auto p-6">
+          <div className="flex-1 overflow-auto px-6 py-6">
             <TaskBoard />
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </SidebarProvider>
   );

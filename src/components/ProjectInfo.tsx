@@ -26,51 +26,60 @@ export function ProjectInfo({
   ]
 }: ProjectInfoProps) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="bg-surface/80 backdrop-blur-sm rounded-3xl border border-border/40 p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Priority */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">Priority</label>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            <span className="text-sm text-gray-900">{priority}</span>
+          <label className="text-sm font-semibold text-muted-foreground mb-3 block tracking-tight">Priority</label>
+          <div className="flex items-center gap-3">
+            <div className="status-indicator bg-slate-400"></div>
+            <span className="text-sm font-medium text-foreground">{priority}</span>
           </div>
         </div>
 
         {/* Deadline */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">Deadline</label>
-          <span className="text-sm text-gray-900">{deadline}</span>
+          <label className="text-sm font-semibold text-muted-foreground mb-3 block tracking-tight">Deadline</label>
+          <span className="text-sm font-medium text-foreground">{deadline}</span>
         </div>
 
         {/* Assignees */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">Assignees</label>
-          <div className="flex items-center gap-1">
+          <label className="text-sm font-semibold text-muted-foreground mb-3 block tracking-tight">Assignees</label>
+          <div className="flex items-center gap-2">
             {assignees.map((assignee, index) => (
-              <Avatar key={index} className="w-7 h-7 border-2 border-white">
-                <AvatarFallback className="text-xs font-medium bg-blue-500 text-white">
+              <Avatar key={index} className="w-8 h-8 ring-2 ring-surface shadow-sm">
+                <AvatarFallback className="text-xs font-semibold bg-primary text-primary-foreground">
                   {assignee.initials}
                 </AvatarFallback>
               </Avatar>
             ))}
-            <button className="w-7 h-7 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center hover:bg-gray-200 transition-colors">
-              <Plus className="w-3 h-3 text-gray-600" />
+            <button className="w-8 h-8 rounded-full bg-muted/50 ring-2 ring-surface flex items-center justify-center hover:bg-muted transition-colors backdrop-blur-sm">
+              <Plus className="w-3 h-3 text-muted-foreground" />
             </button>
           </div>
         </div>
 
         {/* Tags */}
         <div>
-          <label className="text-sm font-medium text-gray-700 mb-2 block">Tags</label>
+          <label className="text-sm font-semibold text-muted-foreground mb-3 block tracking-tight">Tags</label>
           <div className="flex flex-wrap items-center gap-2">
             {tags.map((tag, index) => (
-              <Badge key={index} variant="secondary" className={`px-3 py-1 text-xs font-medium rounded-full ${tag.color}`}>
+              <Badge 
+                key={index} 
+                variant="secondary" 
+                className={`px-3 py-1 text-xs font-medium rounded-full border
+                  ${tag.name === 'Landing Pages' ? 'tag-hiring' : ''}
+                  ${tag.name === 'Mobile App' ? 'tag-dev' : ''}
+                  ${tag.name === 'Dashboard' ? 'tag-performance' : ''}
+                  ${tag.name === 'Guideline' ? 'tag-design' : ''}
+                `}
+              >
                 {tag.name}
               </Badge>
             ))}
-            <button className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-              <Plus className="w-3 h-3 text-gray-600" />
+            <button className="w-7 h-7 rounded-full bg-muted/50 flex items-center justify-center hover:bg-muted transition-colors backdrop-blur-sm">
+              <Plus className="w-3 h-3 text-muted-foreground" />
             </button>
           </div>
         </div>
