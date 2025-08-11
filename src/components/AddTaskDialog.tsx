@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Task } from "./TaskCard";
+import { CustomFieldsManager } from "./CustomFieldsManager";
+import { CustomField } from "@/types/kanban";
 
 interface AddTaskDialogProps {
   onAddTask: (task: Omit<Task, 'id'>) => void;
@@ -45,6 +47,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
   const [code, setCode] = useState('');
   const [status, setStatus] = useState<string>(defaultStatus);
   const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' }>>([]);
+  const [customFields, setCustomFields] = useState<CustomField[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +60,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
       code: code.trim() || `CFW-${Date.now()}`,
       tags: selectedTags,
       status,
+      customFields: customFields.length > 0 ? customFields : undefined,
     };
 
     onAddTask(newTask);
@@ -67,6 +71,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
     setCode('');
     setStatus(defaultStatus);
     setSelectedTags([]);
+    setCustomFields([]);
     setOpen(false);
   };
 
@@ -78,6 +83,10 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
   const removeTag = (tagName: string) => {
     setSelectedTags(selectedTags.filter(t => t.name !== tagName));
+  };
+
+  const handleUpdateCustomFields = (fields: CustomField[]) => {
+    setCustomFields(fields);
   };
 
   const defaultTrigger = (
@@ -92,7 +101,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
       <DialogTrigger asChild>
         {trigger || defaultTrigger}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] bg-surface border-border/30">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-surface border-border/30">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-foreground">Create New Task</DialogTitle>
         </DialogHeader>
@@ -197,6 +206,12 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               ))}
             </div>
           </div>
+
+          {/* Custom Fields */}
+          <CustomFieldsManager
+            customFields={customFields}
+            onUpdateFields={handleUpdateCustomFields}
+          />
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">

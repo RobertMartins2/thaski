@@ -11,6 +11,14 @@ export interface Task {
     color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing';
   }>;
   status: string;
+  customFields?: Array<{
+    id: string;
+    name: string;
+    type: 'text' | 'number' | 'select';
+    value: string | number | null;
+    options?: string[];
+    visible: boolean;
+  }>;
 }
 
 interface TaskCardProps {
@@ -63,6 +71,22 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
             </Badge>
           ))}
         </div>
+        
+        {/* Custom Fields (only visible ones) */}
+        {task.customFields && task.customFields.filter(field => field.visible && field.value !== null && field.value !== '').length > 0 && (
+          <div className="space-y-2 pt-2 border-t border-border/20">
+            {task.customFields
+              .filter(field => field.visible && field.value !== null && field.value !== '')
+              .map((field) => (
+                <div key={field.id} className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground font-medium">{field.name}:</span>
+                  <span className="text-foreground font-medium">
+                    {field.type === 'number' ? Number(field.value) : String(field.value)}
+                  </span>
+                </div>
+              ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

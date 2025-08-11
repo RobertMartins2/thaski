@@ -12,6 +12,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Task } from "./TaskCard";
+import { CustomFieldsManager } from "./CustomFieldsManager";
+import { CustomField } from "@/types/kanban";
 
 interface EditTaskDialogProps {
   task: Task;
@@ -51,6 +53,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
   const [status, setStatus] = useState(task.status);
   const [selectedTags, setSelectedTags] = useState(task.tags);
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
+  const [customFields, setCustomFields] = useState<CustomField[]>(task.customFields || []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +67,7 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
       code: code.trim(),
       tags: selectedTags,
       status,
+      customFields: customFields.length > 0 ? customFields : undefined,
     };
 
     onEditTask(updatedTask);
@@ -87,9 +91,13 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
     }
   };
 
+  const handleUpdateCustomFields = (fields: CustomField[]) => {
+    setCustomFields(fields);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] bg-surface border-border/30">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-surface border-border/30">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-foreground">Edit Task</DialogTitle>
         </DialogHeader>
@@ -223,6 +231,12 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
               ))}
             </div>
           </div>
+
+          {/* Custom Fields */}
+          <CustomFieldsManager
+            customFields={customFields}
+            onUpdateFields={handleUpdateCustomFields}
+          />
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
