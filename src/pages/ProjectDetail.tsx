@@ -84,7 +84,7 @@ const ProjectDetail = () => {
         
         {/* Task Board Content */}
         <div className="flex-1 overflow-hidden">
-          <div className="h-full px-4 lg:px-6 py-6 overflow-auto">
+          <div className="h-full py-6 overflow-auto">
             <TaskBoard projectId={id} />
           </div>
         </div>

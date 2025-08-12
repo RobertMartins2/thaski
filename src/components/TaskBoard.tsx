@@ -236,7 +236,7 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="space-y-6">
+      <div className="pl-6 pr-4 space-y-6">
         {/* Board/Calendar View */}
         {viewMode === 'board' ? (
           <>
