@@ -59,20 +59,13 @@ export default function Login() {
         </div>
       </div>
       
-      {/* Right side - Background */}
-      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-muted/20 to-muted/40 items-center justify-center relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10" />
-        <div className="relative text-center max-w-md px-8">
-          <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-8">
-            <div className="w-12 h-12 bg-primary/20 rounded-lg" />
-          </div>
-          <h3 className="text-2xl font-semibold text-foreground mb-4">
-            Gerencie seus projetos com facilidade
-          </h3>
-          <p className="text-muted-foreground">
-            Organize suas tarefas, acompanhe o progresso e colabore com sua equipe de forma eficiente.
-          </p>
-        </div>
+      {/* Right side - Background with image */}
+      <div className="hidden lg:flex flex-1 items-center justify-center relative">
+        <img 
+          src="/lovable-uploads/f8d44504-27ff-433a-98d2-4bb3c8c0b91b.png" 
+          alt="Task Card Interface" 
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );
