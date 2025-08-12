@@ -27,7 +27,7 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       onClick={() => onClick?.(task)}
       style={{
         borderRadius: '10px',
-        border: '4px solid #E4F0FF',
+        border: '2px solid #E4F0FF',
         background: 'linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.50) 100%)',
         boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.30)'
       }}
