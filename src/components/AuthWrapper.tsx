@@ -2,24 +2,25 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ProjectProvider } from "@/contexts/ProjectContext";
-import { cleanupAuthState, validateEmail, validatePassword } from "@/lib/security";
+import { cleanupAuthState } from "@/lib/security";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { SignUpForm } from "@/components/auth/SignUpForm";
+import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
+import { EmailConfirmationScreen } from "@/components/auth/EmailConfirmationScreen";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
 }
 
+type AuthView = 'login' | 'signup' | 'forgot-password' | 'email-confirmation';
+
 export function AuthWrapper({ children }: AuthWrapperProps) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [currentView, setCurrentView] = useState<AuthView>('login');
   const [devMode, setDevMode] = useState(false);
 
   // Check if we're in development/preview mode
@@ -54,69 +55,8 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    // Input validation
-    if (!validateEmail(email)) {
-      toast.error("Por favor, insira um email válido");
-      setLoading(false);
-      return;
-    }
-
-    if (isSignUp) {
-      const passwordValidation = validatePassword(password);
-      if (!passwordValidation.isValid) {
-        toast.error(passwordValidation.message);
-        setLoading(false);
-        return;
-      }
-    }
-
-    try {
-      if (isSignUp) {
-        // Clean up existing state before sign up
-        cleanupAuthState();
-        try {
-          await supabase.auth.signOut({ scope: 'global' });
-        } catch (err) {
-          // Continue even if this fails
-        }
-
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`
-          }
-        });
-        if (error) throw error;
-        toast.success("Conta criada! Verifique seu email para confirmação.");
-      } else {
-        // Clean up existing state before sign in
-        cleanupAuthState();
-        try {
-          await supabase.auth.signOut({ scope: 'global' });
-        } catch (err) {
-          // Continue even if this fails
-        }
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
-        if (data.user) {
-          toast.success("Login realizado com sucesso!");
-        }
-      }
-    } catch (error: any) {
-      console.error("Auth error:", error);
-      toast.error(error.message || "Erro na autenticação");
-    } finally {
-      setLoading(false);
-    }
+  const handleSwitchView = (view: AuthView) => {
+    setCurrentView(view);
   };
 
   const handleSignOut = async () => {
@@ -142,61 +82,78 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   }
 
   if (!user && !isDevelopment) {
+    const renderAuthContent = () => {
+      switch (currentView) {
+        case 'login':
+          return (
+            <LoginForm
+              onSwitchToSignUp={() => handleSwitchView('signup')}
+              onSwitchToForgotPassword={() => handleSwitchView('forgot-password')}
+            />
+          );
+        case 'signup':
+          return (
+            <SignUpForm
+              onSwitchToLogin={() => handleSwitchView('login')}
+              onSignUpSuccess={() => handleSwitchView('email-confirmation')}
+            />
+          );
+        case 'forgot-password':
+          return (
+            <ForgotPasswordForm
+              onBackToLogin={() => handleSwitchView('login')}
+            />
+          );
+        case 'email-confirmation':
+          return (
+            <EmailConfirmationScreen
+              onBackToLogin={() => handleSwitchView('login')}
+            />
+          );
+        default:
+          return null;
+      }
+    };
+
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle>PIKI Projetos</CardTitle>
-            <CardDescription>
-              {isSignUp ? "Criar nova conta" : "Faça login para continuar"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleAuth} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Carregando..." : isSignUp ? "Criar Conta" : "Entrar"}
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full"
-                onClick={() => setIsSignUp(!isSignUp)}
-              >
-                {isSignUp ? "Já tem uma conta? Fazer login" : "Criar nova conta"}
-              </Button>
-              {isDevelopment && (
+      <div className="min-h-screen flex">
+        {/* Left side - Auth form */}
+        <div className="flex-1 flex items-center justify-center p-8 bg-background">
+          <div className="w-full max-w-md">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-primary mb-2">PIKI Projetos</h2>
+            </div>
+            {renderAuthContent()}
+            {isDevelopment && currentView === 'login' && (
+              <div className="mt-8 pt-6 border-t border-muted">
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full mt-4"
+                  className="w-full h-12"
                   onClick={() => setDevMode(true)}
                 >
                   🚀 Modo Preview (Sem Login)
                 </Button>
-              )}
-            </form>
-          </CardContent>
-        </Card>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Right side - Background */}
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-muted/20 to-muted/40 items-center justify-center relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10" />
+          <div className="relative text-center max-w-md px-8">
+            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-8">
+              <div className="w-12 h-12 bg-primary/20 rounded-lg" />
+            </div>
+            <h3 className="text-2xl font-semibold text-foreground mb-4">
+              Gerencie seus projetos com facilidade
+            </h3>
+            <p className="text-muted-foreground">
+              Organize suas tarefas, acompanhe o progresso e colabore com sua equipe de forma eficiente.
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
