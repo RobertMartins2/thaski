@@ -277,7 +277,7 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
             <div 
               className="grid gap-2 lg:gap-3 auto-rows-fr"
               style={{ 
-                gridTemplateColumns: `repeat(${columns.length}, minmax(320px, 1fr))`,
+                gridTemplateColumns: `repeat(${columns.length}, minmax(380px, 1fr))`,
                 minHeight: '600px'
               }}
             >
