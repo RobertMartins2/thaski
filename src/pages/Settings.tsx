@@ -21,6 +21,7 @@ export default function Settings() {
   });
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     loadUserProfile();
@@ -35,6 +36,19 @@ export default function Settings() {
           email: user.email || "",
           phone: user.user_metadata?.phone || ""
         });
+
+        // Load avatar from storage
+        const { data: avatarFile } = await supabase.storage
+          .from('avatars')
+          .list(user.id, { limit: 1 });
+
+        if (avatarFile && avatarFile.length > 0) {
+          const { data } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(`${user.id}/${avatarFile[0].name}`);
+          
+          setCurrentAvatarUrl(data.publicUrl);
+        }
       }
     } catch (error) {
       console.error("Erro ao carregar perfil:", error);
@@ -57,9 +71,39 @@ export default function Settings() {
     }
   };
 
+  const uploadAvatar = async (userId: string, file: File) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `avatar.${fileExt}`;
+    const filePath = `${userId}/${fileName}`;
+
+    const { error } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, { upsert: true });
+
+    if (error) throw error;
+
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuário não encontrado");
+
+      // Upload avatar if changed
+      if (profileImage) {
+        const avatarUrl = await uploadAvatar(user.id, profileImage);
+        setCurrentAvatarUrl(avatarUrl);
+        setPreviewUrl(null);
+        setProfileImage(null);
+      }
+
+      // Update user metadata
       const { error } = await supabase.auth.updateUser({
         data: {
           full_name: userProfile.full_name,
@@ -110,9 +154,9 @@ export default function Settings() {
                 <div className="flex flex-col items-center space-y-4 mb-6">
                   <div className="relative">
                     <Avatar className="w-20 h-20">
-                      <AvatarImage src={previewUrl || undefined} />
+                      <AvatarImage src={previewUrl || currentAvatarUrl || undefined} />
                       <AvatarFallback className="bg-muted">
-                        <Upload className="w-8 h-8 text-muted-foreground" />
+                        {userProfile.full_name ? userProfile.full_name.charAt(0).toUpperCase() : <Upload className="w-8 h-8 text-muted-foreground" />}
                       </AvatarFallback>
                     </Avatar>
                     <input
