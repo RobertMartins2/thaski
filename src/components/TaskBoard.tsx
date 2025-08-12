@@ -283,7 +283,8 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
             </div>
 
             {/* Kanban Board Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 auto-rows-fr"
+                 style={{ minHeight: '600px' }}>
               {columns
                 .sort((a, b) => a.order - b.order)
                 .map((column) => (

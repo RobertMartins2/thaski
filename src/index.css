@@ -137,7 +137,8 @@
   }
   
   .kanban-column {
-    @apply rounded-3xl p-6 min-h-[500px] relative;
+    @apply rounded-3xl p-6 h-full bg-card border border-border/10 relative;
+    min-height: 500px;
   }
 
   .column-header {
