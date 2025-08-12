@@ -200,7 +200,7 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
       </div>
 
       {/* Editor Content */}
-      <div className="min-h-[120px] bg-background relative">
+      <div className="min-h-[120px] bg-surface relative">
         <EditorContent 
           editor={editor} 
           className="[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[120px] [&_.ProseMirror]:px-3 [&_.ProseMirror]:py-2 [&_.ProseMirror]:text-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0"
