@@ -147,7 +147,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm font-semibold text-foreground">Título da Tarefa</Label>
+            <Label htmlFor="title" className="text-sm font-semibold text-foreground bg-background px-2 py-1 rounded border border-border/30">Título da Tarefa</Label>
             <Input
               id="title"
               value={title}
@@ -160,7 +160,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-semibold text-foreground">Descrição</Label>
+            <Label htmlFor="description" className="text-sm font-semibold text-foreground bg-background px-2 py-1 rounded border border-border/30">Descrição</Label>
             <RichTextEditor
               content={description}
               onChange={setDescription}
@@ -172,7 +172,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
           {/* Status and Priority Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="status" className="text-sm font-semibold text-foreground">Status da Tarefa</Label>
+              <Label htmlFor="status" className="text-sm font-semibold text-foreground bg-background px-2 py-1 rounded border border-border/30">Status da Tarefa</Label>
               <Select value={status} onValueChange={(value: string) => setStatus(value)}>
                 <SelectTrigger className="h-12">
                   <SelectValue />
@@ -196,7 +196,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-semibold text-foreground">Prioridade</Label>
+              <Label className="text-sm font-semibold text-foreground bg-background px-2 py-1 rounded border border-border/30">Prioridade</Label>
               <Select value={priority} onValueChange={(value: 'low' | 'medium' | 'high') => setPriority(value)}>
                 <SelectTrigger className="h-12">
                   <SelectValue />
@@ -217,7 +217,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
           {/* Due Date */}
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-foreground">Data de Conclusão</Label>
+            <Label className="text-sm font-semibold text-foreground bg-background px-2 py-1 rounded border border-border/30">Data de Conclusão</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -245,7 +245,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
           {/* Tags */}
           <div className="space-y-3">
-            <Label className="text-sm font-semibold text-foreground">Tags da Tarefa</Label>
+            <Label className="text-sm font-semibold text-foreground bg-background px-2 py-1 rounded border border-border/30">Tags da Tarefa</Label>
             
             {/* Selected Tags */}
             {selectedTags.length > 0 && (
@@ -269,23 +269,10 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               </div>
             )}
             
-            {/* Available Tags */}
-            <div className="flex flex-wrap gap-2 mb-3">
-              {tagOptions.filter(tag => !selectedTags.some(t => t.name === tag.name)).map((tag, index) => (
-                <Badge
-                  key={index}
-                  className={`${tagColorMap[tag.color]} text-xs px-3 py-1.5 font-medium rounded-lg cursor-pointer hover:scale-105 transition-transform opacity-60 hover:opacity-100`}
-                  variant="secondary"
-                  onClick={() => addTag(tag)}
-                >
-                  + {tag.name}
-                </Badge>
-              ))}
-            </div>
 
             {/* Create Custom Tag */}
             <div className="border border-border/30 rounded-lg p-4 bg-muted/20">
-              <Label className="text-sm font-medium text-foreground mb-3 block">Criar Tag Personalizada</Label>
+              <Label className="text-sm font-medium text-foreground bg-background px-2 py-1 rounded border border-border/30 mb-3 block">Criar Tag Personalizada</Label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2">
                   <Input

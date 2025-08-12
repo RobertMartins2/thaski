@@ -4,6 +4,7 @@ import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
+import UnderlineExtension from '@tiptap/extension-underline'
 import { 
   Bold, 
   Italic, 
@@ -37,6 +38,7 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
   const editor = useEditor({
     extensions: [
       StarterKit,
+      UnderlineExtension,
       Link.configure({
         openOnClick: false,
       }),
@@ -52,7 +54,7 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[120px] px-3 py-2',
+        class: 'prose prose-sm sm:prose-base max-w-none focus:outline-none min-h-[120px] px-3 py-2',
       },
     },
   })
@@ -99,6 +101,14 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
           size="sm"
         >
           <Strikethrough className="h-4 w-4" />
+        </Toggle>
+
+        <Toggle
+          pressed={editor.isActive('underline')}
+          onPressedChange={() => editor.chain().focus().toggleUnderline?.().run()}
+          size="sm"
+        >
+          <Underline className="h-4 w-4" />
         </Toggle>
 
         <Separator orientation="vertical" className="h-6" />
