@@ -4,11 +4,12 @@ import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
-import UnderlineExtension from '@tiptap/extension-underline'
+import Underline from '@tiptap/extension-underline'
+import Placeholder from '@tiptap/extension-placeholder'
 import { 
   Bold, 
   Italic, 
-  Underline, 
+  Underline as UnderlineIcon, 
   Strikethrough,
   List, 
   ListOrdered,
@@ -38,7 +39,7 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
   const editor = useEditor({
     extensions: [
       StarterKit,
-      UnderlineExtension,
+      Underline,
       Link.configure({
         openOnClick: false,
       }),
@@ -47,6 +48,9 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
       }),
       TextStyle,
       Color,
+      Placeholder.configure({
+        placeholder: placeholder || 'Digite sua descrição...',
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -55,6 +59,7 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose-base max-w-none focus:outline-none min-h-[120px] px-3 py-2',
+        'data-placeholder': placeholder || 'Digite sua descrição...',
       },
     },
   })
@@ -105,10 +110,10 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
 
         <Toggle
           pressed={editor.isActive('underline')}
-          onPressedChange={() => editor.chain().focus().toggleUnderline?.().run()}
+          onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
           size="sm"
         >
-          <Underline className="h-4 w-4" />
+          <UnderlineIcon className="h-4 w-4" />
         </Toggle>
 
         <Separator orientation="vertical" className="h-6" />
@@ -199,7 +204,6 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
         <EditorContent 
           editor={editor} 
           className="prose prose-sm max-w-none"
-          placeholder={placeholder}
         />
       </div>
     </div>
