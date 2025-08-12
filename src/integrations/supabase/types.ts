@@ -379,7 +379,9 @@ export type Database = {
           created_at: string
           custom_fields: Json | null
           description: string | null
+          due_date: string | null
           id: string
+          priority: string
           project_id: string
           status: string
           tags: Json | null
@@ -392,7 +394,9 @@ export type Database = {
           created_at?: string
           custom_fields?: Json | null
           description?: string | null
+          due_date?: string | null
           id?: string
+          priority?: string
           project_id: string
           status: string
           tags?: Json | null
@@ -405,7 +409,9 @@ export type Database = {
           created_at?: string
           custom_fields?: Json | null
           description?: string | null
+          due_date?: string | null
           id?: string
+          priority?: string
           project_id?: string
           status?: string
           tags?: Json | null

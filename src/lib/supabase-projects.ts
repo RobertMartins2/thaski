@@ -216,8 +216,8 @@ export async function getProjectTasks(projectId: string): Promise<Task[]> {
     code: task.code,
     status: task.status,
     tags: Array.isArray(task.tags) ? task.tags as any[] : [],
-    dueDate: task.due_date ? new Date(task.due_date) : undefined,
-    priority: task.priority || 'medium'
+    dueDate: (task as any).due_date ? new Date((task as any).due_date) : undefined,
+    priority: (task as any).priority || 'medium'
   }));
 }
 
@@ -257,8 +257,8 @@ export async function createProjectTask(projectId: string, task: Omit<Task, 'id'
     code: data.code,
     status: data.status,
     tags: Array.isArray(data.tags) ? data.tags as any[] : [],
-    dueDate: data.due_date ? new Date(data.due_date) : undefined,
-    priority: data.priority || 'medium'
+    dueDate: (data as any).due_date ? new Date((data as any).due_date) : undefined,
+    priority: (data as any).priority || 'medium'
   };
 }
 
