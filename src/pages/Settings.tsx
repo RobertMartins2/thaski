@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Settings as SettingsIcon, User, Bell, Shield, Palette, Upload } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Upload } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { supabase } from "@/integrations/supabase/client";
@@ -166,84 +165,6 @@ export default function Settings() {
                 >
                   {loading ? "Salvando..." : "Salvar Alterações"}
                 </Button>
-              </CardContent>
-            </Card>
-
-            {/* Notifications */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-primary" />
-                  <CardTitle>Notificações</CardTitle>
-                </div>
-                <CardDescription>
-                  Configure como você deseja receber notificações
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-medium">Notificações por E-mail</div>
-                    <div className="text-sm text-muted-foreground">
-                      Receba atualizações sobre suas tarefas por e-mail
-                    </div>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-medium">Notificações Push</div>
-                    <div className="text-sm text-muted-foreground">
-                      Receba notificações instantâneas no navegador
-                    </div>
-                  </div>
-                  <Switch />
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-medium">Resumo Diário</div>
-                    <div className="text-sm text-muted-foreground">
-                      Receba um resumo das suas atividades todos os dias
-                    </div>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Appearance */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Palette className="w-5 h-5 text-primary" />
-                  <CardTitle>Aparência</CardTitle>
-                </div>
-                <CardDescription>
-                  Personalize a aparência da interface
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-medium">Modo Escuro</div>
-                    <div className="text-sm text-muted-foreground">
-                      Alternar entre tema claro e escuro
-                    </div>
-                  </div>
-                  <Switch />
-                </div>
-                <Separator />
-                <div className="space-y-2">
-                  <Label>Tema de Cores</Label>
-                  <div className="flex gap-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-primary cursor-pointer" />
-                    <div className="w-8 h-8 rounded-full bg-green-500 border-2 border-transparent cursor-pointer" />
-                    <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-transparent cursor-pointer" />
-                    <div className="w-8 h-8 rounded-full bg-red-500 border-2 border-transparent cursor-pointer" />
-                  </div>
-                </div>
               </CardContent>
             </Card>
 
