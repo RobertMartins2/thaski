@@ -53,7 +53,7 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns
           columns={columns}
           currentProject={currentProject}
           trigger={
-            <button className="add-task-button">
+            <button className="w-full flex items-center justify-center gap-2 py-2 px-3 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-all">
               <Plus className="w-4 h-4" />
               <span>Adicionar</span>
             </button>
