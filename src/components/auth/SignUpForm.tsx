@@ -94,6 +94,7 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
 
       if (error) throw error;
       
+      // Mostrar tela de confirmação por email
       onSignUpSuccess();
     } catch (error: any) {
       console.error("SignUp error:", error);

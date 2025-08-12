@@ -43,6 +43,8 @@ export function LoginForm({ onSwitchToSignUp, onSwitchToForgotPassword }: LoginF
       if (error) throw error;
       if (data.user) {
         toast.success("Login realizado com sucesso!");
+        // Redirecionar para projetos após login
+        window.location.href = '/projects';
       }
     } catch (error: any) {
       console.error("Login error:", error);
