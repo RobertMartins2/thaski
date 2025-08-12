@@ -71,7 +71,7 @@ const ProjectDetail = () => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="!pl-0">
         {/* Project Header */}
         <div className="flex-shrink-0 border-b border-border/40">
           <ProjectHeader 
