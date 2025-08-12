@@ -70,11 +70,11 @@ const ProjectDetail = () => {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <div className="flex-1">
-        <main className="flex flex-col h-screen overflow-hidden">
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <main className="flex-1 flex flex-col overflow-hidden">
           {/* Project Header */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 border-b border-border/40">
             <ProjectHeader 
               currentProject={currentProject}
               projects={projects}

@@ -28,20 +28,13 @@ const App = () => {
         <BrowserRouter>
           <AuthWrapper>
             <ProjectProvider>
-              <SidebarProvider>
-                <div className="flex min-h-screen w-full">
-                  <AppSidebar />
-                  <main className="flex-1 bg-background">
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/projects" element={<Projects />} />
-                      <Route path="/project/:id" element={<ProjectDetail />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </main>
-                </div>
-              </SidebarProvider>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/project/:id" element={<ProjectDetail />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
             </ProjectProvider>
           </AuthWrapper>
         </BrowserRouter>
