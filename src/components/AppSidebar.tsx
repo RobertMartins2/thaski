@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   FolderOpen,
   Settings,
@@ -26,6 +27,11 @@ import {
 
 export function AppSidebar() {
   const location = useLocation();
+  const [userProfile, setUserProfile] = useState({
+    full_name: "",
+    email: "",
+    avatar_url: null as string | null
+  });
   
   const menuItems = [
     {
@@ -39,6 +45,61 @@ export function AppSidebar() {
       icon: Settings,
     },
   ];
+
+  useEffect(() => {
+    loadUserProfile();
+    
+    // Listen to auth state changes to update profile
+    const authSubscription = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session?.user) {
+          loadUserProfile();
+        }
+      }
+    );
+
+    // Listen to custom profile update events
+    const handleProfileUpdate = () => {
+      loadUserProfile();
+    };
+
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+
+    return () => {
+      authSubscription.data.subscription.unsubscribe();
+      window.removeEventListener('profileUpdated', handleProfileUpdate);
+    };
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        let avatarUrl = null;
+        
+        // Load avatar from storage
+        const { data: avatarFile } = await supabase.storage
+          .from('avatars')
+          .list(user.id, { limit: 1 });
+
+        if (avatarFile && avatarFile.length > 0) {
+          const { data } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(`${user.id}/${avatarFile[0].name}`);
+          
+          avatarUrl = data.publicUrl;
+        }
+
+        setUserProfile({
+          full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || "",
+          email: user.email || "",
+          avatar_url: avatarUrl
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao carregar perfil:", error);
+    }
+  };
 
   const isActive = (path: string) => {
     return location.pathname.startsWith(path);
@@ -111,14 +172,14 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border/40 px-3 py-4 space-y-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="" alt="User" />
+            <AvatarImage src={userProfile.avatar_url || undefined} alt="User" />
             <AvatarFallback className="bg-primary/10 text-primary font-medium">
-              U
+              {userProfile.full_name ? userProfile.full_name.charAt(0).toUpperCase() : "U"}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 text-left">
-            <p className="text-sm font-medium text-foreground">Usuario</p>
-            <p className="text-xs text-muted-foreground">usuario@email.com</p>
+            <p className="text-sm font-medium text-foreground">{userProfile.full_name || "Usuário"}</p>
+            <p className="text-xs text-muted-foreground">{userProfile.email}</p>
           </div>
         </div>
         

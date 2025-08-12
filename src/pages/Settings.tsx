@@ -113,6 +113,9 @@ export default function Settings() {
 
       if (error) throw error;
       toast.success("Perfil atualizado com sucesso!");
+      
+      // Dispatch custom event to update sidebar
+      window.dispatchEvent(new CustomEvent('profileUpdated'));
     } catch (error) {
       console.error("Erro ao salvar perfil:", error);
       toast.error("Erro ao salvar perfil");
