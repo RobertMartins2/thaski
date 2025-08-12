@@ -58,14 +58,14 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose-base max-w-none focus:outline-none min-h-[120px] px-3 py-2',
-        'data-placeholder': placeholder || 'Digite sua descrição...',
+        class: 'prose prose-sm sm:prose-base max-w-none focus:outline-none min-h-[120px] px-3 py-2 [&>*]:!text-foreground',
       },
     },
+    immediatelyRender: false,
   })
 
   if (!editor) {
-    return null
+    return <div className="border border-input rounded-md min-h-[120px] flex items-center justify-center text-muted-foreground">Carregando editor...</div>
   }
 
   const addLink = () => {
@@ -200,10 +200,11 @@ export function RichTextEditor({ content, onChange, placeholder, className }: Ri
       </div>
 
       {/* Editor Content */}
-      <div className="min-h-[120px]">
+      <div className="min-h-[120px] bg-background relative">
         <EditorContent 
           editor={editor} 
-          className="prose prose-sm max-w-none"
+          className="[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[120px] [&_.ProseMirror]:px-3 [&_.ProseMirror]:py-2 [&_.ProseMirror]:text-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0"
+          data-placeholder={placeholder || 'Digite sua descrição...'}
         />
       </div>
     </div>
