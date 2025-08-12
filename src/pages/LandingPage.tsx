@@ -154,58 +154,13 @@ export default function LandingPage() {
                 </div>
               </div>
               
-              {/* Mock Kanban Interface */}
+              {/* Real Kanban Interface */}
               <div className="bg-gray-50 p-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-gray-800">📋 A Fazer</h4>
-                      <span className="text-xs text-gray-500">3</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
-                        <p className="text-sm text-gray-800 font-medium">Redesign da homepage</p>
-                        <p className="text-xs text-gray-600 mt-1">Alta prioridade</p>
-                      </div>
-                      <div className="bg-gray-50 p-3 rounded-lg">
-                        <p className="text-sm text-gray-800">Reunião com cliente</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-gray-800">🔄 Em Progresso</h4>
-                      <span className="text-xs text-gray-500">2</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-500">
-                        <p className="text-sm text-gray-800 font-medium">Desenvolvimento API</p>
-                        <div className="flex items-center mt-2 gap-2">
-                          <div className="w-6 h-6 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center">
-                            J
-                          </div>
-                          <span className="text-xs text-gray-600">João Silva</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-gray-800">✅ Concluído</h4>
-                      <span className="text-xs text-gray-500">5</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="bg-green-50 p-3 rounded-lg border-l-4 border-green-500 opacity-75">
-                        <p className="text-sm text-gray-800 line-through">Setup do projeto</p>
-                      </div>
-                      <div className="bg-green-50 p-3 rounded-lg opacity-75">
-                        <p className="text-sm text-gray-800 line-through">Definir requisitos</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <img 
+                  src="/lovable-uploads/40986a59-60a4-4f13-8aef-eb8c2fe7a574.png"
+                  alt="Interface do Thaski mostrando projeto Horse com colunas A Fazer, Em Andamento, Em Revisão e Concluído"
+                  className="w-full h-auto rounded-lg"
+                />
               </div>
             </div>
           </div>
