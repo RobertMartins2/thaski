@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProjectHeader } from "@/components/ProjectHeader";
 import { TaskBoard } from "@/components/TaskBoard";
@@ -70,25 +70,23 @@ const ProjectDetail = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
-        <AppSidebar />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Project Header */}
-          <div className="flex-shrink-0 border-b border-border/40">
-            <ProjectHeader 
-              currentProject={currentProject}
-              projects={projects}
-              onProjectChange={handleProjectChange}
-              onNewProject={handleNewProject}
-            />
-          </div>
-          
-          {/* Task Board Content */}
-          <div className="flex-1 overflow-auto px-6 py-6">
-            <TaskBoard projectId={id} />
-          </div>
-        </main>
-      </div>
+      <AppSidebar />
+      <SidebarInset>
+        {/* Project Header */}
+        <div className="flex-shrink-0 border-b border-border/40">
+          <ProjectHeader 
+            currentProject={currentProject}
+            projects={projects}
+            onProjectChange={handleProjectChange}
+            onNewProject={handleNewProject}
+          />
+        </div>
+        
+        {/* Task Board Content */}
+        <div className="flex-1 overflow-auto px-6 py-6">
+          <TaskBoard projectId={id} />
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 };
