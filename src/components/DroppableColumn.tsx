@@ -20,7 +20,7 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns
   });
 
   const style = {
-    backgroundColor: isOver ? 'rgba(0, 0, 0, 0.05)' : undefined,
+    backgroundColor: isOver ? 'rgba(0, 0, 0, 0.1)' : undefined,
   };
 
   return (
