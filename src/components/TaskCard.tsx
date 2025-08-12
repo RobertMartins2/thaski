@@ -59,8 +59,13 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
         </h3>
         
         {/* 4° Descrição da Task */}
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-          {task.description}
+        <p className="text-sm text-muted-foreground leading-relaxed" style={{ 
+          display: '-webkit-box', 
+          WebkitLineClamp: task.description.length > 350 ? 6 : 'unset',
+          WebkitBoxOrient: 'vertical',
+          overflow: task.description.length > 350 ? 'hidden' : 'visible'
+        }}>
+          {task.description.length > 350 ? `${task.description.substring(0, 350)}...` : task.description}
         </p>
         
         {/* 5° Linha cinza dividindo */}
@@ -70,8 +75,14 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
         <div className="flex items-center justify-between">
           {/* Prioridade */}
           <Badge 
-            className="text-xs px-3 py-1.5 font-medium bg-white border border-gray-300 text-gray-700 rounded-lg"
-            variant="outline"
+            className={`text-xs px-3 py-1.5 font-medium rounded-lg ${
+              task.priority === 'high' 
+                ? 'bg-red-100 text-red-700' 
+                : task.priority === 'low' 
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-yellow-100 text-yellow-700'
+            }`}
+            variant="secondary"
           >
             {task.priority === 'high' ? 'Alta' : task.priority === 'low' ? 'Baixa' : 'Média'}
           </Badge>
