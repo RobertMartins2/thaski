@@ -6,13 +6,6 @@ const PROJECTS_STORAGE_KEY = 'kanban-projects';
 // Lista inicial vazia - projetos serão criados pelo usuário
 const defaultProjects: Project[] = [];
 
-// Função para migrar gradualmente do localStorage para Supabase
-export function getProjects(): Project[] {
-  // Por enquanto, retorna dados do Supabase se o usuário estiver autenticado
-  // Caso contrário, usar localStorage como fallback
-  return defaultProjects;
-}
-
 export async function getProjectsAsync(): Promise<Project[]> {
   return await getSupabaseProjects();
 }

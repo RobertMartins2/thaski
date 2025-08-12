@@ -62,10 +62,14 @@ export async function getSupabaseProjectById(projectId: string): Promise<Project
     .from('projects')
     .select('*')
     .eq('id', projectId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Erro ao buscar projeto:', error);
+    return null;
+  }
+
+  if (!data) {
     return null;
   }
 
@@ -95,10 +99,15 @@ export async function createSupabaseProject(project: Omit<Project, 'id' | 'taskC
       user_id: user.user.id
     }])
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Erro ao criar projeto:', error);
+    return null;
+  }
+
+  if (!data) {
+    console.error('Nenhum projeto foi criado');
     return null;
   }
 
@@ -241,10 +250,15 @@ export async function createProjectTask(projectId: string, task: Omit<Task, 'id'
       user_id: user.user.id
     })
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error('Erro ao criar task:', error);
+    return null;
+  }
+
+  if (!data) {
+    console.error('Nenhuma task foi criada');
     return null;
   }
 
