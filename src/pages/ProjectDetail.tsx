@@ -84,7 +84,12 @@ const ProjectDetail = () => {
         
         {/* Task Board Content */}
         <div className="flex-1 overflow-hidden">
-          <div className="h-full py-6 overflow-auto">
+          <div 
+            className="h-full py-6 overflow-auto"
+            style={{
+              background: 'linear-gradient(100deg, #EDF5FD 0.39%, #FFFFF8 91.56%)'
+            }}
+          >
             <TaskBoard projectId={id} />
           </div>
         </div>
