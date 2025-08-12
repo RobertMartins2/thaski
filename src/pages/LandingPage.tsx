@@ -4,8 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CheckCircle, Zap, Users, Smartphone, Star, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function LandingPage() {
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -15,18 +17,18 @@ export default function LandingPage() {
   const features = [
     {
       icon: <Zap className="w-6 h-6 text-blue-600" />,
-      title: "Setup em segundos",
-      description: "Sem configurações complexas. Crie seu primeiro projeto e comece a organizar suas tarefas imediatamente."
+      title: t('setup_seconds'),
+      description: t('setup_seconds_desc')
     },
     {
       icon: <Users className="w-6 h-6 text-green-600" />,
-      title: "Interface intuitiva",
-      description: "Design limpo e fácil de usar. Organize suas tarefas de forma visual e eficiente."
+      title: t('intuitive_interface'),
+      description: t('intuitive_interface_desc')
     },
     {
       icon: <Smartphone className="w-6 h-6 text-purple-600" />,
-      title: "Interface minimalista",
-      description: "Design limpo e intuitivo que não distrai. Foque no que realmente importa: suas tarefas."
+      title: t('minimalist_interface'),
+      description: t('minimalist_interface_desc')
     }
   ];
 
@@ -55,22 +57,22 @@ export default function LandingPage() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-              Recursos
+              {t('features')}
             </a>
             <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-              Preços
+              {t('pricing')}
             </a>
             <a href="#demo" className="text-muted-foreground hover:text-foreground transition-colors">
-              Demo
+              {t('demo')}
             </a>
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
             <NavLink to="/login">
-              <Button variant="ghost">Entrar</Button>
+              <Button variant="ghost">{t('enter')}</Button>
             </NavLink>
             <NavLink to="/signup">
-              <Button>Começar grátis</Button>
+              <Button>{t('free_start')}</Button>
             </NavLink>
           </div>
 
@@ -88,20 +90,20 @@ export default function LandingPage() {
           <div className="md:hidden border-t bg-background p-4">
             <nav className="flex flex-col space-y-4">
               <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-                Recursos
+                {t('features')}
               </a>
               <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                Preços  
+                {t('pricing')}
               </a>
               <a href="#demo" className="text-muted-foreground hover:text-foreground transition-colors">
-                Demo
+                {t('demo')}
               </a>
               <div className="flex flex-col gap-2 pt-4">
                 <NavLink to="/login">
-                  <Button variant="ghost" className="w-full">Entrar</Button>
+                  <Button variant="ghost" className="w-full">{t('enter')}</Button>
                 </NavLink>
                 <NavLink to="/signup">
-                  <Button className="w-full">Começar grátis</Button>
+                  <Button className="w-full">{t('free_start')}</Button>
                 </NavLink>
               </div>
             </nav>
@@ -116,29 +118,28 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 py-24 lg:py-32 relative">
           <div className="text-center max-w-4xl mx-auto">
             <Badge className="mb-6 bg-white/10 text-white border-white/20 hover:bg-white/20">
-              🎉 Grátis
+              {t('free_badge')}
             </Badge>
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-              Maximize Sua Produtividade, Minimize Distrações
+              {t('hero_title')}
             </h1>
             
             <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-              O Thaski é a alternativa <strong>gratuita e minimalista</strong> ao Trello. 
-              Organize suas tarefas sem perder tempo com configurações desnecessárias.
+              {t('hero_description')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <NavLink to="/signup">
                 <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 px-8 py-4 text-lg font-semibold">
-                  Começar gratuitamente
+                  {t('start_free')}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </NavLink>
             </div>
 
             <p className="text-blue-200 text-sm">
-              ✨ Sem cartão de crédito • Sem limites • Grátis
+              {t('free_features')}
             </p>
           </div>
 
@@ -171,13 +172,12 @@ export default function LandingPage() {
       <section id="features" className="py-24 bg-background">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <Badge className="mb-4">Por que escolher o Thaski?</Badge>
+            <Badge className="mb-4">{t('why_thaski')}</Badge>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
-              Simplicidade que funciona
+              {t('simplicity_works')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Cansado de ferramentas complicadas? O Thaski foi projetado para ser simples, 
-              rápido e eficiente. Comece a usar em segundos, não em horas.
+              {t('tired_complex_tools')}
             </p>
           </div>
 
@@ -202,7 +202,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-6 text-foreground">
-                  Tudo que você precisa, nada que você não precisa
+                  {t('everything_you_need')}
                 </h3>
                 <div className="space-y-3">
                   {benefits.map((benefit, index) => (
@@ -248,12 +248,12 @@ export default function LandingPage() {
       <section id="pricing" className="py-24 bg-gradient-to-br from-gray-50 to-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <Badge className="mb-4">Preços transparentes</Badge>
+            <Badge className="mb-4">{t('transparent_pricing')}</Badge>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
-              Simples como deve ser
+              {t('simple_as_should_be')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Sem pegadinhas, sem taxa escondidas. O Thaski é e sempre será gratuito.
+              {t('no_tricks')}
             </p>
           </div>
 
@@ -263,13 +263,13 @@ export default function LandingPage() {
               
               <CardContent className="p-8 text-center">
                 <div className="mb-6">
-                  <Badge className="bg-blue-100 text-blue-800 mb-4">Mais popular</Badge>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">Plano Gratuito</h3>
+                  <Badge className="bg-blue-100 text-blue-800 mb-4">{t('most_popular')}</Badge>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{t('free_plan')}</h3>
                   <div className="flex items-center justify-center gap-2">
                     <span className="text-5xl font-bold text-foreground">R$ 0</span>
                     <div className="text-left">
-                      <div className="text-muted-foreground">/mês</div>
-                      <div className="text-sm text-green-600 font-semibold">Grátis</div>
+                      <div className="text-muted-foreground">{t('per_month')}</div>
+                      <div className="text-sm text-green-600 font-semibold">{t('free')}</div>
                     </div>
                   </div>
                 </div>
@@ -277,31 +277,31 @@ export default function LandingPage() {
                 <div className="space-y-4 mb-8 text-left">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span>Projetos ilimitados</span>
+                    <span>{t('unlimited_projects')}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span>Tarefas ilimitadas</span>
+                    <span>{t('unlimited_tasks')}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span>Interface responsiva</span>
+                    <span>{t('responsive_interface')}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span>Suporte por email</span>
+                    <span>{t('email_support')}</span>
                   </div>
                 </div>
 
                 <NavLink to="/signup" className="block">
                   <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                    Começar agora - É grátis!
+                    {t('start_now_free')}
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </NavLink>
                 
                 <p className="text-sm text-muted-foreground mt-4">
-                  Sem cartão de crédito • Sem período de teste • Grátis
+                  {t('no_credit_card')}
                 </p>
                 
                 {/* Product Screenshot */}
@@ -324,23 +324,22 @@ export default function LandingPage() {
         
         <div className="container mx-auto px-6 text-center relative">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Pronto para ser mais produtivo?
+            {t('ready_productive')}
           </h2>
           <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
-            Junte-se a milhares de pessoas que escolheram a simplicidade do Thaski. 
-            Comece em segundos, não em horas.
+            {t('join_thousands')}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <NavLink to="/signup">
               <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 px-8 py-4 text-lg font-semibold">
-                Criar conta gratuita
+                {t('create_free_account')}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </NavLink>
             <NavLink to="/login">
               <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/20 hover:text-blue-700 px-8 py-4 text-lg">
-                Já tenho conta
+                {t('already_have_account')}
               </Button>
             </NavLink>
           </div>
@@ -348,15 +347,15 @@ export default function LandingPage() {
           <div className="flex items-center justify-center gap-8 mt-12 text-blue-200">
             <div className="flex items-center gap-2">
               <Star className="w-5 h-5 fill-current" />
-              <span className="text-sm">Avaliação 5.0</span>
+              <span className="text-sm">{t('rating_5')}</span>
             </div>
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5" />
-              <span className="text-sm">+1000 usuários</span>
+              <span className="text-sm">{t('users_1000')}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5" />
-              <span className="text-sm">100% grátis</span>
+              <span className="text-sm">{t('100_free')}</span>
             </div>
           </div>
         </div>
@@ -374,21 +373,21 @@ export default function LandingPage() {
               />
             </div>
             <p className="text-gray-400 mb-6">
-              A ferramenta de gestão de tarefas mais simples do mundo.
+              {t('simplest_tool')}
             </p>
             
             <div className="flex flex-wrap justify-center gap-8 mb-8">
               <NavLink to="/login" className="hover:text-white transition-colors">
-                Entrar
+                {t('enter')}
               </NavLink>
               <NavLink to="/signup" className="hover:text-white transition-colors">
-                Criar conta
+                {t('create_account')}
               </NavLink>
               <a href="#features" className="hover:text-white transition-colors">
-                Recursos
+                {t('features')}
               </a>
               <a href="#pricing" className="hover:text-white transition-colors">
-                Preços
+                {t('pricing')}
               </a>
             </div>
             
