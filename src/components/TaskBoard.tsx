@@ -275,9 +275,9 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
 
             {/* Kanban Board Grid */}
             <div 
-              className="grid gap-4 lg:gap-6 auto-rows-fr"
+              className="grid gap-2 lg:gap-3 auto-rows-fr"
               style={{ 
-                gridTemplateColumns: `repeat(${columns.length}, minmax(280px, 1fr))`,
+                gridTemplateColumns: `repeat(${columns.length}, minmax(320px, 1fr))`,
                 minHeight: '600px'
               }}
             >
