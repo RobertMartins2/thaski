@@ -40,18 +40,16 @@ const tagColorMap = {
 export function TaskCard({ task, onClick }: TaskCardProps) {
   return (
     <Card 
-      className="task-card group cursor-pointer" 
+      className="group cursor-pointer" 
       onClick={() => onClick?.(task)}
+      style={{
+        borderRadius: '8px',
+        border: '3px solid #FDFDFD',
+        background: '#FFF',
+        boxShadow: '0 1px 3px 0 rgba(96, 108, 128, 0.05)'
+      }}
     >
-      <CardContent 
-        className="p-6 space-y-5"
-        style={{
-          borderRadius: '8px',
-          border: '3px solid #FDFDFD',
-          background: '#FFF',
-          boxShadow: '0 1px 3px 0 rgba(96, 108, 128, 0.05)'
-        }}
-      >
+      <CardContent className="p-6 space-y-5">
         {/* Task code */}
         <div className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wide">
           {task.code}
