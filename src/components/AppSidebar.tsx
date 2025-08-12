@@ -59,7 +59,16 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border/40 bg-muted/20">
+    <Sidebar 
+      collapsible="icon" 
+      className="border-r border-border/40"
+      style={{
+        borderRadius: '10px',
+        border: '2px solid #E4F0FF',
+        background: 'linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.50) 100%)',
+        boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.30)'
+      }}
+    >
       <SidebarHeader className="border-b border-border/40 px-3 py-4">
         <div className="flex items-center gap-2">
           <img 
