@@ -1,7 +1,6 @@
 import {
   FolderOpen,
   Settings,
-  KanbanSquare,
   LogOut,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -63,13 +62,11 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r border-border/40 bg-muted/20">
       <SidebarHeader className="border-b border-border/40 px-3 py-4">
         <div className="flex items-center gap-2">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
-            <KanbanSquare className="size-4" />
-          </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">Kanban Board</span>
-            <span className="truncate text-xs text-muted-foreground">Gestão de Projetos</span>
-          </div>
+          <img 
+            src="/lovable-uploads/311a49a3-a023-4208-954c-dad2347c5e50.png" 
+            alt="Thaski Logo" 
+            className="h-8"
+          />
         </div>
       </SidebarHeader>
 
