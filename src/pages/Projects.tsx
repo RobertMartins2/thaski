@@ -12,11 +12,12 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { NavLink } from "react-router-dom";
 import { ProjectSetupDialog } from "@/components/ProjectSetupDialog";
-import { getProjects, addProject, deleteProject } from "@/lib/project-storage";
+import { getProjectsAsync, addProject, deleteProject } from "@/lib/project-storage";
 import { Project } from "@/types/kanban";
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [setupProjectId, setSetupProjectId] = useState<string | null>(null);
   const [setupProjectName, setSetupProjectName] = useState<string>('');
@@ -25,10 +26,23 @@ const Projects = () => {
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectColor, setNewProjectColor] = useState('bg-blue-500');
 
-  // Carregar projetos do localStorage
+  // Carregar projetos do Supabase
   useEffect(() => {
-    setProjects(getProjects());
+    loadProjects();
   }, []);
+
+  const loadProjects = async () => {
+    try {
+      setLoading(true);
+      const projectsList = await getProjectsAsync();
+      setProjects(projectsList);
+    } catch (error) {
+      console.error('Erro ao carregar projetos:', error);
+      toast.error('Erro ao carregar projetos');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const colorOptions = [
     { name: 'Azul', value: 'bg-blue-500' },
@@ -41,7 +55,7 @@ const Projects = () => {
     { name: 'Verde-azulado', value: 'bg-teal-500' },
   ];
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
     if (!newProjectName.trim()) {
       toast.error("Nome do projeto é obrigatório");
       return;
@@ -64,36 +78,51 @@ const Projects = () => {
       return;
     }
 
-    const newProject: Project = {
-      id: `project-${Date.now()}`,
+    const projectData = {
       name: newProjectName.trim(),
       code: newProjectCode.trim().toUpperCase(),
       color: newProjectColor,
-      taskCount: 0
     };
 
-    // Adicionar ao storage e atualizar estado local
-    addProject(newProject);
-    setProjects(getProjects());
-    
-    setNewProjectName('');
-    setNewProjectCode('');
-    setNewProjectDescription('');
-    setNewProjectColor('bg-blue-500');
-    setIsCreateDialogOpen(false);
-    
-    // Abrir o dialog de configuração dos estágios
-    setSetupProjectId(newProject.id);
-    setSetupProjectName(newProject.name);
-    
-    toast.success(`Projeto "${newProject.name}" criado! Configure os estágios do kanban.`);
+    try {
+      const newProject = await addProject(projectData);
+      if (newProject) {
+        await loadProjects(); // Recarregar lista de projetos
+        
+        setNewProjectName('');
+        setNewProjectCode('');
+        setNewProjectDescription('');
+        setNewProjectColor('bg-blue-500');
+        setIsCreateDialogOpen(false);
+        
+        // Abrir o dialog de configuração dos estágios
+        setSetupProjectId(newProject.id);
+        setSetupProjectName(newProject.name);
+        
+        toast.success(`Projeto "${newProject.name}" criado! Configure os estágios do kanban.`);
+      } else {
+        toast.error("Erro ao criar projeto");
+      }
+    } catch (error) {
+      console.error('Erro ao criar projeto:', error);
+      toast.error("Erro ao criar projeto");
+    }
   };
 
-  const handleDeleteProject = (projectId: string, projectName: string) => {
+  const handleDeleteProject = async (projectId: string, projectName: string) => {
     if (confirm(`Tem certeza de que deseja excluir "${projectName}"? Esta ação não pode ser desfeita.`)) {
-      deleteProject(projectId);
-      setProjects(getProjects());
-      toast.success(`Projeto "${projectName}" excluído com sucesso`);
+      try {
+        const success = await deleteProject(projectId);
+        if (success) {
+          await loadProjects(); // Recarregar lista
+          toast.success(`Projeto "${projectName}" excluído com sucesso`);
+        } else {
+          toast.error("Erro ao excluir projeto");
+        }
+      } catch (error) {
+        console.error('Erro ao deletar projeto:', error);
+        toast.error("Erro ao excluir projeto");
+      }
     }
   };
 
@@ -112,6 +141,19 @@ const Projects = () => {
       </Button>
     </div>
   );
+
+  if (loading) {
+    return (
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    );
+  }
 
   return (
     <SidebarProvider>
