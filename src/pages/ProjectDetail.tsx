@@ -83,8 +83,10 @@ const ProjectDetail = () => {
         </div>
         
         {/* Task Board Content */}
-        <div className="flex-1 overflow-auto px-6 py-6">
-          <TaskBoard projectId={id} />
+        <div className="flex-1 overflow-auto">
+          <div className="w-full px-4 lg:px-6 py-6">
+            <TaskBoard projectId={id} />
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>

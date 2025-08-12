@@ -274,21 +274,30 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
             </div>
 
             {/* Kanban Board Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 auto-rows-fr"
-                 style={{ minHeight: '600px' }}>
-              {columns
-                .sort((a, b) => a.order - b.order)
-                .map((column) => (
-                   <DroppableColumn
-                     key={column.id}
-                     column={column}
-                     tasks={getTasksForColumn(column.id)}
-                     onAddTask={handleAddTask}
-                     onTaskClick={handleTaskClick}
-                     columns={columns.map(col => ({ id: col.id, title: col.title }))}
-                     currentProject={currentProject}
-                   />
-                ))}
+            <div className="w-full">
+              <div className="flex gap-4 lg:gap-6 overflow-x-auto pb-4" style={{ minHeight: '600px' }}>
+                {columns
+                  .sort((a, b) => a.order - b.order)
+                  .map((column, index) => (
+                     <div 
+                       key={column.id} 
+                       className="flex-shrink-0"
+                       style={{ 
+                         width: `calc((100% - ${(columns.length - 1) * 1.5}rem) / ${columns.length})`,
+                         minWidth: '280px'
+                       }}
+                     >
+                       <DroppableColumn
+                         column={column}
+                         tasks={getTasksForColumn(column.id)}
+                         onAddTask={handleAddTask}
+                         onTaskClick={handleTaskClick}
+                         columns={columns.map(col => ({ id: col.id, title: col.title }))}
+                         currentProject={currentProject}
+                       />
+                     </div>
+                  ))}
+              </div>
             </div>
           </>
         ) : (
