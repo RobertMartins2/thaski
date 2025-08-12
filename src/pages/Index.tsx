@@ -4,7 +4,6 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TaskBoard } from "@/components/TaskBoard";
 import { ProjectHeader } from "@/components/ProjectHeader";
-import { AuthWrapper } from "@/components/AuthWrapper";
 import { toast } from "sonner";
 import { Project } from "@/types/kanban";
 import { useProjects } from "@/contexts/ProjectContext";
@@ -42,43 +41,41 @@ const Index = () => {
   }
 
   return (
-    <AuthWrapper>
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="flex-1">
-          <main className="flex flex-col h-screen overflow-hidden">
-            {/* Project Header */}
-            <div className="flex-shrink-0">
-              <ProjectHeader 
-                currentProject={currentProject}
-                projects={projects}
-                onProjectChange={handleProjectChange}
-                onNewProject={() => {}} // Não usado mais aqui
-              />
+    <SidebarProvider>
+      <AppSidebar />
+      <div className="flex-1">
+        <main className="flex flex-col h-screen overflow-hidden">
+          {/* Project Header */}
+          <div className="flex-shrink-0">
+            <ProjectHeader 
+              currentProject={currentProject}
+              projects={projects}
+              onProjectChange={handleProjectChange}
+              onNewProject={() => {}} // Não usado mais aqui
+            />
+          </div>
+          
+          {/* Task Board Content */}
+          {currentProject ? (
+            <div className="flex-1 overflow-auto px-6 py-6">
+              <TaskBoard projectId={currentProject.id} />
             </div>
-            
-            {/* Task Board Content */}
-            {currentProject ? (
-              <div className="flex-1 overflow-auto px-6 py-6">
-                <TaskBoard projectId={currentProject.id} />
+          ) : (
+            <div className="flex-1 flex items-center justify-center p-6">
+              <div className="text-center space-y-4">
+                <h2 className="text-2xl font-bold text-foreground mb-4">
+                  Nenhum projeto encontrado
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  Crie seu primeiro projeto para começar a organizar suas tarefas
+                </p>
+                <CreateProjectDialog onProjectCreated={handleNewProject} />
               </div>
-            ) : (
-              <div className="flex-1 flex items-center justify-center p-6">
-                <div className="text-center space-y-4">
-                  <h2 className="text-2xl font-bold text-foreground mb-4">
-                    Nenhum projeto encontrado
-                  </h2>
-                  <p className="text-muted-foreground mb-6">
-                    Crie seu primeiro projeto para começar a organizar suas tarefas
-                  </p>
-                  <CreateProjectDialog onProjectCreated={handleNewProject} />
-                </div>
-              </div>
-            )}
-          </main>
-        </div>
-      </SidebarProvider>
-    </AuthWrapper>
+            </div>
+          )}
+        </main>
+      </div>
+    </SidebarProvider>
   );
 };
 
