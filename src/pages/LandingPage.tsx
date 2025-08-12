@@ -155,11 +155,11 @@ export default function LandingPage() {
               </div>
               
               {/* Real Kanban Interface */}
-              <div className="bg-gray-50 p-6">
+              <div className="bg-gray-50">
                 <img 
                   src="/lovable-uploads/40986a59-60a4-4f13-8aef-eb8c2fe7a574.png"
                   alt="Interface do Thaski mostrando projeto Horse com colunas A Fazer, Em Andamento, Em Revisão e Concluído"
-                  className="w-full h-auto rounded-lg"
+                  className="w-full h-auto"
                 />
               </div>
             </div>
