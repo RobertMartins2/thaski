@@ -2,38 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Import Fluent UI fonts and tokens */
+@import "@fluentui/tokens/css/fonts.css";
 
-/* Modern design tokens */
+/* Fluent UI uses Segoe UI Variable font stack */
+@import url('https://res.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css');
+
+/* Fluent UI design tokens */
 @layer base {
   :root {
-    --background: 220 23% 95%;
-    --foreground: 222 84% 5%;
-    --surface: 0 0% 100%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 84% 5%;
-    --card-hover: 210 40% 94%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 5%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 221 83% 48%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 84% 5%;
-    --secondary-hover: 210 40% 91%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --muted-hover: 210 40% 91%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 84% 5%;
-    --accent-hover: 210 40% 91%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 221 83% 53%;
-    --radius: 12px;
+    /* Fluent UI Light Theme Colors */
+    --background: 255 255 255;
+    --foreground: 36 36 36;
+    --surface: 255 255 255;
+    --card: 255 255 255;
+    --card-foreground: 36 36 36;
+    --card-hover: 243 242 241;
+    --popover: 255 255 255;
+    --popover-foreground: 36 36 36;
+    --primary: 0 120 212;
+    --primary-foreground: 255 255 255;
+    --primary-hover: 16 110 190;
+    --secondary: 243 242 241;
+    --secondary-foreground: 50 49 48;
+    --secondary-hover: 237 235 233;
+    --muted: 250 249 248;
+    --muted-foreground: 96 94 92;
+    --muted-hover: 243 242 241;
+    --accent: 237 235 233;
+    --accent-foreground: 50 49 48;
+    --accent-hover: 225 223 221;
+    --destructive: 196 49 75;
+    --destructive-foreground: 255 255 255;
+    --border: 225 223 221;
+    --input: 243 242 241;
+    --ring: 0 120 212;
+    --radius: 4px;
 
     /* Status colors - more subtle */
     --status-todo: 240 5% 84%;
@@ -46,43 +50,44 @@
     --tag-dev: 213 56% 59%;
     --tag-performance: 156 72% 47%;
 
-    /* Sidebar */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 84% 5%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 222 84% 5%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 221 83% 53%;
+    /* Fluent UI Sidebar light */
+    --sidebar-background: 255 255 255;
+    --sidebar-foreground: 36 36 36;
+    --sidebar-primary: 0 120 212;
+    --sidebar-primary-foreground: 255 255 255;
+    --sidebar-accent: 237 235 233;
+    --sidebar-accent-foreground: 50 49 48;
+    --sidebar-border: 225 223 221;
+    --sidebar-ring: 0 120 212;
   }
 
   .dark {
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
-    --surface: 224 71% 4%;
-    --card: 224 71% 4%;
-    --card-foreground: 210 40% 98%;
-    --card-hover: 215 28% 17%;
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 221 83% 48%;
-    --secondary: 215 28% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --secondary-hover: 215 28% 22%;
-    --muted: 215 28% 17%;
-    --muted-foreground: 218 11% 65%;
-    --muted-hover: 215 28% 22%;
-    --accent: 215 28% 17%;
-    --accent-foreground: 210 40% 98%;
-    --accent-hover: 215 28% 22%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 221 83% 53%;
+    /* Fluent UI Dark Theme Colors */
+    --background: 32 31 30;
+    --foreground: 255 255 255;
+    --surface: 40 38 36;
+    --card: 40 38 36;
+    --card-foreground: 255 255 255;
+    --card-hover: 50 49 48;
+    --popover: 32 31 30;
+    --popover-foreground: 255 255 255;
+    --primary: 102 192 255;
+    --primary-foreground: 0 0 0;
+    --primary-hover: 54 176 247;
+    --secondary: 50 49 48;
+    --secondary-foreground: 255 255 255;
+    --secondary-hover: 59 58 57;
+    --muted: 59 58 57;
+    --muted-foreground: 200 198 196;
+    --muted-hover: 68 65 63;
+    --accent: 68 65 63;
+    --accent-foreground: 255 255 255;
+    --accent-hover: 82 78 75;
+    --destructive: 255 99 71;
+    --destructive-foreground: 255 255 255;
+    --border: 72 70 68;
+    --input: 50 49 48;
+    --ring: 102 192 255;
 
     /* Status colors dark */
     --status-todo: 240 5% 84%;
@@ -95,15 +100,15 @@
     --tag-dev: 213 56% 45%;
     --tag-performance: 156 72% 35%;
 
-    /* Sidebar dark */
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 28% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 28% 17%;
-    --sidebar-ring: 221 83% 53%;
+    /* Fluent UI Sidebar dark */
+    --sidebar-background: 40 38 36;
+    --sidebar-foreground: 255 255 255;
+    --sidebar-primary: 102 192 255;
+    --sidebar-primary-foreground: 0 0 0;
+    --sidebar-accent: 68 65 63;
+    --sidebar-accent-foreground: 255 255 255;
+    --sidebar-border: 72 70 68;
+    --sidebar-ring: 102 192 255;
   }
 }
 
@@ -112,7 +117,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-poppins antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-family-base), "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     letter-spacing: -0.005em;
   }

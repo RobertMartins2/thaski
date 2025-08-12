@@ -1,17 +1,18 @@
 import * as React from "react"
-
+import { Card as FluentCard } from "@fluentui/react-components"
 import { cn } from "@/lib/utils"
 
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div
+  <FluentCard
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      "bg-card text-card-foreground border border-border",
       className
     )}
+    appearance="filled"
     {...props}
   />
 ))
