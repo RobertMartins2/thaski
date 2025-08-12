@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { cleanupAuthState } from "@/lib/security";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -27,6 +28,7 @@ import {
 
 export function AppSidebar() {
   const location = useLocation();
+  const { t } = useLanguage();
   const [userProfile, setUserProfile] = useState({
     full_name: "",
     email: "",
@@ -35,12 +37,12 @@ export function AppSidebar() {
   
   const menuItems = [
     {
-      title: "Projetos",
+      title: t('projects'),
       url: "/projects",
       icon: FolderOpen,
     },
     {
-      title: "Configurações",
+      title: t('settings'),
       url: "/settings",
       icon: Settings,
     },
@@ -109,7 +111,7 @@ export function AppSidebar() {
     try {
       cleanupAuthState();
       await supabase.auth.signOut({ scope: 'global' });
-      toast.success("Logout realizado com sucesso!");
+      toast.success(t('logout_success'));
       // Redirecionar para página de login
       window.location.href = '/login';
     } catch (error) {
@@ -143,7 +145,7 @@ export function AppSidebar() {
       <SidebarContent className="px-3 py-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-            MENU PRINCIPAL
+            {t('main_menu')}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -178,7 +180,7 @@ export function AppSidebar() {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 text-left">
-            <p className="text-sm font-medium text-foreground">{userProfile.full_name || "Usuário"}</p>
+            <p className="text-sm font-medium text-foreground">{userProfile.full_name || t('user')}</p>
             <p className="text-xs text-muted-foreground">{userProfile.email}</p>
           </div>
         </div>
@@ -189,7 +191,7 @@ export function AppSidebar() {
           className="w-full justify-start gap-3 px-3 py-2 h-auto text-muted-foreground hover:text-foreground hover:bg-muted/50"
         >
           <LogOut className="h-4 w-4" />
-          <span className="font-medium">Sair</span>
+          <span className="font-medium">{t('logout')}</span>
         </Button>
       </SidebarFooter>
       

@@ -6,13 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Settings as SettingsIcon, User, Shield, Upload } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Settings as SettingsIcon, User, Shield, Upload, Globe } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
 
 export default function Settings() {
+  const { language, setLanguage, t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [userProfile, setUserProfile] = useState({
     full_name: "",
@@ -112,16 +115,21 @@ export default function Settings() {
       });
 
       if (error) throw error;
-      toast.success("Perfil atualizado com sucesso!");
+      toast.success(t('profile_updated_success'));
       
       // Dispatch custom event to update sidebar
       window.dispatchEvent(new CustomEvent('profileUpdated'));
     } catch (error) {
       console.error("Erro ao salvar perfil:", error);
-      toast.error("Erro ao salvar perfil");
+      toast.error(t('profile_update_error'));
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLanguageChange = (newLanguage: Language) => {
+    setLanguage(newLanguage);
+    toast.success(t('language_updated_success'));
   };
 
   return (
@@ -133,9 +141,9 @@ export default function Settings() {
           <div className="flex items-center gap-3 mb-8">
             <SettingsIcon className="w-8 h-8 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Configurações</h1>
+              <h1 className="text-3xl font-bold text-foreground">{t('settings_title')}</h1>
               <p className="text-muted-foreground mt-1">
-                Personalize sua experiência no Kanban Board
+                {t('settings_description')}
               </p>
             </div>
           </div>
@@ -146,10 +154,10 @@ export default function Settings() {
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <User className="w-5 h-5 text-primary" />
-                  <CardTitle>Perfil do Usuário</CardTitle>
+                  <CardTitle>{t('user_profile')}</CardTitle>
                 </div>
                 <CardDescription>
-                  Gerencie suas informações pessoais e preferências de conta
+                  {t('user_profile_description')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -170,22 +178,22 @@ export default function Settings() {
                     />
                   </div>
                   <Label className="text-sm text-muted-foreground cursor-pointer">
-                    Clique para alterar foto de perfil
+                    {t('change_profile_photo')}
                   </Label>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Nome completo</Label>
+                    <Label htmlFor="name">{t('full_name')}</Label>
                     <Input 
                       id="name" 
-                      placeholder="Seu nome completo" 
+                      placeholder={t('full_name')} 
                       value={userProfile.full_name}
                       onChange={(e) => handleInputChange("full_name", e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">E-mail</Label>
+                    <Label htmlFor="email">{t('email')}</Label>
                     <Input 
                       id="email" 
                       type="email" 
@@ -195,7 +203,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Telefone</Label>
+                    <Label htmlFor="phone">{t('phone')}</Label>
                     <Input 
                       id="phone" 
                       type="tel" 
@@ -210,8 +218,35 @@ export default function Settings() {
                   onClick={handleSaveProfile}
                   disabled={loading}
                 >
-                  {loading ? "Salvando..." : "Salvar Alterações"}
+                  {loading ? t('saving') : t('save_changes')}
                 </Button>
+              </CardContent>
+            </Card>
+
+            {/* Language Settings */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-primary" />
+                  <CardTitle>{t('language')}</CardTitle>
+                </div>
+                <CardDescription>
+                  {t('language_description')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="language-select">{t('language')}</Label>
+                  <Select value={language} onValueChange={handleLanguageChange}>
+                    <SelectTrigger className="w-full md:w-[300px]">
+                      <SelectValue placeholder={t('language')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pt">{t('portuguese')}</SelectItem>
+                      <SelectItem value="en">{t('english')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </CardContent>
             </Card>
 
@@ -220,31 +255,31 @@ export default function Settings() {
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-primary" />
-                  <CardTitle>Segurança</CardTitle>
+                  <CardTitle>{t('security')}</CardTitle>
                 </div>
                 <CardDescription>
-                  Gerencie suas configurações de segurança
+                  {t('security_description')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-sm font-medium">Autenticação de Dois Fatores</div>
+                    <div className="text-sm font-medium">{t('two_factor_auth')}</div>
                     <div className="text-sm text-muted-foreground">
-                      Adicione uma camada extra de segurança à sua conta
+                      {t('two_factor_description')}
                     </div>
                   </div>
-                  <Badge variant="secondary">Em Breve</Badge>
+                  <Badge variant="secondary">{t('coming_soon')}</Badge>
                 </div>
                 <Separator />
                 <div className="space-y-2">
-                  <Label>Alterar Senha</Label>
+                  <Label>{t('change_password')}</Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input type="password" placeholder="Senha atual" />
-                    <Input type="password" placeholder="Nova senha" />
+                    <Input type="password" placeholder={t('current_password')} />
+                    <Input type="password" placeholder={t('new_password')} />
                   </div>
                   <Button variant="outline" size="sm">
-                    Alterar Senha
+                    {t('change_password')}
                   </Button>
                 </div>
               </CardContent>
