@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ProjectProvider } from "@/contexts/ProjectContext";
+import { cleanupAuthState, validateEmail, validatePassword } from "@/lib/security";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -14,25 +15,28 @@ interface AuthWrapperProps {
 
 export function AuthWrapper({ children }: AuthWrapperProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
-    // Verificar usuário atual
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    // Escutar mudanças na autenticação
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
       }
     );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -41,8 +45,32 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
     e.preventDefault();
     setLoading(true);
 
+    // Input validation
+    if (!validateEmail(email)) {
+      toast.error("Por favor, insira um email válido");
+      setLoading(false);
+      return;
+    }
+
+    if (isSignUp) {
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.isValid) {
+        toast.error(passwordValidation.message);
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
       if (isSignUp) {
+        // Clean up existing state before sign up
+        cleanupAuthState();
+        try {
+          await supabase.auth.signOut({ scope: 'global' });
+        } catch (err) {
+          // Continue even if this fails
+        }
+
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -53,23 +81,43 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
         if (error) throw error;
         toast.success("Conta criada! Verifique seu email para confirmação.");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        // Clean up existing state before sign in
+        cleanupAuthState();
+        try {
+          await supabase.auth.signOut({ scope: 'global' });
+        } catch (err) {
+          // Continue even if this fails
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
-        toast.success("Login realizado com sucesso!");
+        if (data.user) {
+          toast.success("Login realizado com sucesso!");
+        }
       }
     } catch (error: any) {
-      toast.error(error.message);
+      console.error("Auth error:", error);
+      toast.error(error.message || "Erro na autenticação");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    toast.success("Logout realizado com sucesso!");
+    try {
+      cleanupAuthState();
+      await supabase.auth.signOut({ scope: 'global' });
+      toast.success("Logout realizado com sucesso!");
+      // Force page reload for clean state
+      window.location.href = '/';
+    } catch (error) {
+      console.error("Sign out error:", error);
+      // Force page reload even if sign out fails
+      window.location.href = '/';
+    }
   };
 
   if (loading) {
