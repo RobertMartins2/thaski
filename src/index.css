@@ -11,104 +11,104 @@
 /* Fluent UI design tokens */
 @layer base {
   :root {
-    /* Fluent UI Light Theme Colors */
-    --background: 255 255 255;
-    --foreground: 36 36 36;
-    --surface: 255 255 255;
-    --card: 255 255 255;
-    --card-foreground: 36 36 36;
-    --card-hover: 243 242 241;
-    --popover: 255 255 255;
-    --popover-foreground: 36 36 36;
-    --primary: 0 120 212;
-    --primary-foreground: 255 255 255;
-    --primary-hover: 16 110 190;
-    --secondary: 243 242 241;
-    --secondary-foreground: 50 49 48;
-    --secondary-hover: 237 235 233;
-    --muted: 250 249 248;
-    --muted-foreground: 96 94 92;
-    --muted-hover: 243 242 241;
-    --accent: 237 235 233;
-    --accent-foreground: 50 49 48;
-    --accent-hover: 225 223 221;
-    --destructive: 196 49 75;
-    --destructive-foreground: 255 255 255;
-    --border: 225 223 221;
-    --input: 243 242 241;
-    --ring: 0 120 212;
+    /* Fluent UI Light Theme Colors - HSL format */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 14%;
+    --surface: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 14%;
+    --card-hover: 210 17% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 14%;
+    --primary: 207 100% 42%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 207 90% 39%;
+    --secondary: 210 17% 95%;
+    --secondary-foreground: 215 25% 19%;
+    --secondary-hover: 210 17% 92%;
+    --muted: 240 5% 98%;
+    --muted-foreground: 215 14% 38%;
+    --muted-hover: 210 17% 95%;
+    --accent: 210 17% 93%;
+    --accent-foreground: 215 25% 19%;
+    --accent-hover: 210 17% 88%;
+    --destructive: 348 60% 49%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 18% 88%;
+    --input: 210 17% 95%;
+    --ring: 207 100% 42%;
     --radius: 4px;
 
-    /* Status colors - more subtle */
-    --status-todo: 240 5% 84%;
+    /* Status colors - HSL */
+    --status-todo: 210 11% 71%;
     --status-progress: 43 89% 38%;
     --status-done: 142 51% 36%;
 
-    /* Tag colors - refined palette */
+    /* Tag colors - HSL */
     --tag-design: 264 67% 51%;
     --tag-hiring: 330 81% 60%;
     --tag-dev: 213 56% 59%;
     --tag-performance: 156 72% 47%;
 
-    /* Fluent UI Sidebar light */
-    --sidebar-background: 255 255 255;
-    --sidebar-foreground: 36 36 36;
-    --sidebar-primary: 0 120 212;
-    --sidebar-primary-foreground: 255 255 255;
-    --sidebar-accent: 237 235 233;
-    --sidebar-accent-foreground: 50 49 48;
-    --sidebar-border: 225 223 221;
-    --sidebar-ring: 0 120 212;
+    /* Fluent UI Sidebar light - HSL */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 14%;
+    --sidebar-primary: 207 100% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 17% 93%;
+    --sidebar-accent-foreground: 215 25% 19%;
+    --sidebar-border: 210 18% 88%;
+    --sidebar-ring: 207 100% 42%;
   }
 
   .dark {
-    /* Fluent UI Dark Theme Colors */
-    --background: 32 31 30;
-    --foreground: 255 255 255;
-    --surface: 40 38 36;
-    --card: 40 38 36;
-    --card-foreground: 255 255 255;
-    --card-hover: 50 49 48;
-    --popover: 32 31 30;
-    --popover-foreground: 255 255 255;
-    --primary: 102 192 255;
-    --primary-foreground: 0 0 0;
-    --primary-hover: 54 176 247;
-    --secondary: 50 49 48;
-    --secondary-foreground: 255 255 255;
-    --secondary-hover: 59 58 57;
-    --muted: 59 58 57;
-    --muted-foreground: 200 198 196;
-    --muted-hover: 68 65 63;
-    --accent: 68 65 63;
-    --accent-foreground: 255 255 255;
-    --accent-hover: 82 78 75;
-    --destructive: 255 99 71;
-    --destructive-foreground: 255 255 255;
-    --border: 72 70 68;
-    --input: 50 49 48;
-    --ring: 102 192 255;
+    /* Fluent UI Dark Theme Colors - HSL format */
+    --background: 210 11% 12%;
+    --foreground: 0 0% 100%;
+    --surface: 215 25% 15%;
+    --card: 215 25% 15%;
+    --card-foreground: 0 0% 100%;
+    --card-hover: 215 25% 19%;
+    --popover: 210 11% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 207 100% 70%;
+    --primary-foreground: 0 0% 0%;
+    --primary-hover: 207 90% 65%;
+    --secondary: 215 25% 19%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 215 25% 23%;
+    --muted: 215 20% 23%;
+    --muted-foreground: 217 10% 77%;
+    --muted-hover: 215 25% 27%;
+    --accent: 215 25% 27%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 215 25% 32%;
+    --destructive: 0 73% 64%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 20% 28%;
+    --input: 215 25% 19%;
+    --ring: 207 100% 70%;
 
-    /* Status colors dark */
-    --status-todo: 240 5% 84%;
+    /* Status colors dark - HSL */
+    --status-todo: 210 11% 71%;
     --status-progress: 43 89% 38%;
     --status-done: 142 51% 36%;
 
-    /* Tag colors dark */
+    /* Tag colors dark - HSL */
     --tag-design: 264 67% 45%;
     --tag-hiring: 330 81% 35%;
     --tag-dev: 213 56% 45%;
     --tag-performance: 156 72% 35%;
 
-    /* Fluent UI Sidebar dark */
-    --sidebar-background: 40 38 36;
-    --sidebar-foreground: 255 255 255;
-    --sidebar-primary: 102 192 255;
-    --sidebar-primary-foreground: 0 0 0;
-    --sidebar-accent: 68 65 63;
-    --sidebar-accent-foreground: 255 255 255;
-    --sidebar-border: 72 70 68;
-    --sidebar-ring: 102 192 255;
+    /* Fluent UI Sidebar dark - HSL */
+    --sidebar-background: 215 25% 15%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 207 100% 70%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 215 25% 27%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 215 20% 28%;
+    --sidebar-ring: 207 100% 70%;
   }
 }
 
