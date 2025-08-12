@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TaskCard, Task } from "./TaskCard";
+import { TaskCard } from "./TaskCard";
+import { Task } from "@/types/kanban";
 import { AddTaskDialog } from "./AddTaskDialog";
 import { KanbanColumn as KanbanColumnType } from "@/types/kanban";
 

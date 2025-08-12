@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Task } from "./TaskCard";
+import { Task } from "@/types/kanban";
 import { format } from "date-fns";
 
 interface TaskDetailPanelProps {
@@ -246,24 +246,28 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns 
                 </div>
               </div>
 
-              {/* Custom Fields */}
-              {localTask.customFields && localTask.customFields.length > 0 && (
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
-                    Campos Personalizados
-                  </label>
-                  <div className="space-y-3">
-                    {localTask.customFields.map((field) => (
-                      <div key={field.id} className="flex items-center justify-between py-2">
-                        <span className="text-sm font-medium text-muted-foreground">{field.name}</span>
-                        <span className="text-sm text-foreground">
-                          {field.value ? String(field.value) : 'Não definido'}
-                        </span>
-                      </div>
-                    ))}
+              {/* Priority and Due Date Info */}
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
+                  Informações da Tarefa
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground">Prioridade:</span>
+                    <span className="text-sm text-foreground ml-2">
+                      {localTask.priority === 'high' ? 'Alta' : localTask.priority === 'low' ? 'Baixa' : 'Média'}
+                    </span>
                   </div>
+                  {localTask.dueDate && (
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground">Data de conclusão:</span>
+                      <span className="text-sm text-foreground ml-2">
+                        {new Date(localTask.dueDate).toLocaleDateString('pt-BR')}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
 
               <Separator />
 

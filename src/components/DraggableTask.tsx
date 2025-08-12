@@ -1,5 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
-import { TaskCard, Task } from "./TaskCard";
+import { TaskCard } from "./TaskCard";
+import { Task } from "@/types/kanban";
 
 interface DraggableTaskProps {
   task: Task;

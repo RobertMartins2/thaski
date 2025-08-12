@@ -29,8 +29,10 @@ export interface Task {
   code: string; // Gerado automaticamente baseado na sigla e contador do projeto
   tags: Array<{
     name: string;
-    color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing';
+    color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' | 'custom';
+    customColor?: string; // Para tags customizadas
   }>;
   status: string; // Now dynamic instead of fixed enum
-  customFields?: CustomField[];
+  dueDate?: Date; // Data de conclusão
+  priority: 'low' | 'medium' | 'high'; // Prioridade da tarefa
 }

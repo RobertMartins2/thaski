@@ -1,25 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  code: string;
-  tags: Array<{
-    name: string;
-    color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing';
-  }>;
-  status: string;
-  customFields?: Array<{
-    id: string;
-    name: string;
-    type: 'text' | 'number' | 'select';
-    value: string | number | null;
-    options?: string[];
-    visible: boolean;
-  }>;
-}
+import { Task } from "@/types/kanban";
 
 interface TaskCardProps {
   task: Task;
@@ -34,7 +15,8 @@ const tagColorMap = {
   mobile: 'bg-blue-100 text-blue-700',
   dashboard: 'bg-cyan-100 text-cyan-700',
   guideline: 'bg-green-100 text-green-700',
-  landing: 'bg-purple-100 text-purple-700'
+  landing: 'bg-purple-100 text-purple-700',
+  custom: 'text-white'
 };
 
 export function TaskCard({ task, onClick }: TaskCardProps) {
@@ -70,27 +52,37 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
           {task.tags.map((tag, index) => (
             <Badge
               key={index}
-              className={`${tagColorMap[tag.color]} text-xs px-3 py-1.5 font-medium rounded-lg`}
+              className={`text-xs px-3 py-1.5 font-medium rounded-lg ${
+                tag.color === 'custom' ? 'text-white' : tagColorMap[tag.color]
+              }`}
+              style={tag.color === 'custom' ? { backgroundColor: tag.customColor } : {}}
               variant="secondary"
             >
               {tag.name}
             </Badge>
           ))}
         </div>
-        
-        {/* Custom Fields (only visible ones) */}
-        {task.customFields && task.customFields.filter(field => field.visible && field.value !== null && field.value !== '').length > 0 && (
-          <div className="space-y-2 pt-2 border-t border-border/20">
-            {task.customFields
-              .filter(field => field.visible && field.value !== null && field.value !== '')
-              .map((field) => (
-                <div key={field.id} className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground font-medium">{field.name}:</span>
-                  <span className="text-foreground font-medium">
-                    {field.type === 'number' ? Number(field.value) : String(field.value)}
-                  </span>
-                </div>
-              ))}
+
+        {/* Priority and Due Date */}
+        {(task.priority !== 'medium' || task.dueDate) && (
+          <div className="flex items-center gap-2 pt-1 border-t border-border/20">
+            {task.priority !== 'medium' && (
+              <Badge 
+                className={`text-xs px-2 py-1 font-medium ${
+                  task.priority === 'high' 
+                    ? 'bg-red-100 text-red-700' 
+                    : 'bg-green-100 text-green-700'
+                }`}
+                variant="secondary"
+              >
+                {task.priority === 'high' ? 'Alta' : 'Baixa'}
+              </Badge>
+            )}
+            {task.dueDate && (
+              <Badge className="text-xs px-2 py-1 font-medium bg-blue-100 text-blue-700" variant="secondary">
+                {new Date(task.dueDate).toLocaleDateString('pt-BR')}
+              </Badge>
+            )}
           </div>
         )}
       </CardContent>

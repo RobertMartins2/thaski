@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Calendar, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +7,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Task } from "./TaskCard";
-import { CustomFieldsManager } from "./CustomFieldsManager";
-import { CustomField, Project } from "@/types/kanban";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Task } from "@/types/kanban";
+import { Project } from "@/types/kanban";
 import { generateTaskCode } from "@/lib/project-utils";
 
 interface AddTaskDialogProps {
@@ -42,14 +45,23 @@ const tagColorMap = {
   landing: 'bg-purple-100 text-purple-700'
 };
 
+const priorityOptions = [
+  { value: 'low', label: 'Baixa', color: 'bg-green-100 text-green-700' },
+  { value: 'medium', label: 'Média', color: 'bg-yellow-100 text-yellow-700' },
+  { value: 'high', label: 'Alta', color: 'bg-red-100 text-red-700' },
+];
+
 export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, columns = [], currentProject }: AddTaskDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [code, setCode] = useState('');
   const [status, setStatus] = useState<string>(defaultStatus);
-  const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' }>>([]);
-  const [customFields, setCustomFields] = useState<CustomField[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' | 'custom'; customColor?: string }>>([]);
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [customTagName, setCustomTagName] = useState('');
+  const [customTagColor, setCustomTagColor] = useState('#3B82F6');
 
   // Gerar código automaticamente quando o diálogo abre
   const handleOpenChange = (isOpen: boolean) => {
@@ -70,7 +82,8 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
       code: code.trim() || (currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`),
       tags: selectedTags,
       status,
-      customFields: customFields.length > 0 ? customFields : undefined,
+      dueDate,
+      priority,
     };
 
     onAddTask(newTask);
@@ -81,11 +94,14 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
     setCode('');
     setStatus(defaultStatus);
     setSelectedTags([]);
-    setCustomFields([]);
+    setDueDate(undefined);
+    setPriority('medium');
+    setCustomTagName('');
+    setCustomTagColor('#3B82F6');
     setOpen(false);
   };
 
-  const addTag = (tag: { name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' }) => {
+  const addTag = (tag: { name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' | 'custom'; customColor?: string }) => {
     if (!selectedTags.some(t => t.name === tag.name)) {
       setSelectedTags([...selectedTags, tag]);
     }
@@ -95,8 +111,20 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
     setSelectedTags(selectedTags.filter(t => t.name !== tagName));
   };
 
-  const handleUpdateCustomFields = (fields: CustomField[]) => {
-    setCustomFields(fields);
+  const createCustomTag = () => {
+    if (!customTagName.trim()) return;
+    
+    const newTag = {
+      name: customTagName.trim(),
+      color: 'custom' as const,
+      customColor: customTagColor
+    };
+    
+    if (!selectedTags.some(t => t.name === newTag.name)) {
+      setSelectedTags([...selectedTags, newTag]);
+      setCustomTagName('');
+      setCustomTagColor('#3B82F6');
+    }
   };
 
   const defaultTrigger = (
@@ -137,30 +165,19 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Digite a descrição da tarefa..."
-              className="min-h-[100px] text-base resize-none"
+              placeholder="Digite a descrição da tarefa... Você pode usar **negrito**, *itálico* ou criar listas com - item"
+              className="min-h-[120px] text-base resize-none"
               required
             />
+            <p className="text-xs text-muted-foreground">
+              Suporte básico para Markdown: **negrito**, *itálico*, listas com - ou números
+            </p>
           </div>
 
-          {/* Code and Status Row */}
+          {/* Status and Priority Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="code" className="text-sm font-semibold text-foreground">Código da Tarefa</Label>
-              <Input
-                id="code"
-                value={code}
-                readOnly
-                placeholder={currentProject ? `ex: ${currentProject.code}-123` : "ex: TASK-123"}
-                className="h-12 text-base bg-muted/50 text-muted-foreground font-mono"
-              />
-              <p className="text-xs text-muted-foreground">
-                Código gerado automaticamente baseado no projeto
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="status" className="text-sm font-semibold text-foreground">Status</Label>
+              <Label htmlFor="status" className="text-sm font-semibold text-foreground">Status da Tarefa</Label>
               <Select value={status} onValueChange={(value: string) => setStatus(value)}>
                 <SelectTrigger className="h-12">
                   <SelectValue />
@@ -182,11 +199,58 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-semibold text-foreground">Prioridade</Label>
+              <Select value={priority} onValueChange={(value: 'low' | 'medium' | 'high') => setPriority(value)}>
+                <SelectTrigger className="h-12">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-surface border-border/30 z-50">
+                  {priorityOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-3 h-3 rounded-full ${option.color.split(' ')[0]}`} />
+                        {option.label}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Due Date */}
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold text-foreground">Data de Conclusão</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="h-12 w-full justify-start text-left font-normal"
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  {dueDate ? format(dueDate, "dd/MM/yyyy", { locale: ptBR }) : "Selecionar data"}
+                  <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 bg-surface border-border/30 z-50" align="start">
+                <CalendarComponent
+                  mode="single"
+                  selected={dueDate}
+                  onSelect={setDueDate}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                  locale={ptBR}
+                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Tags */}
           <div className="space-y-3">
-            <Label className="text-sm font-semibold text-foreground">Tags</Label>
+            <Label className="text-sm font-semibold text-foreground">Tags da Tarefa</Label>
             
             {/* Selected Tags */}
             {selectedTags.length > 0 && (
@@ -194,7 +258,12 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
                 {selectedTags.map((tag, index) => (
                   <Badge
                     key={index}
-                    className={`${tagColorMap[tag.color]} text-xs px-3 py-1.5 font-medium rounded-lg cursor-pointer group`}
+                    className={`text-xs px-3 py-1.5 font-medium rounded-lg cursor-pointer group ${
+                      tag.color === 'custom' 
+                        ? 'text-white' 
+                        : tagColorMap[tag.color as keyof typeof tagColorMap]
+                    }`}
+                    style={tag.color === 'custom' ? { backgroundColor: tag.customColor } : {}}
                     variant="secondary"
                     onClick={() => removeTag(tag.name)}
                   >
@@ -206,7 +275,7 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
             )}
             
             {/* Available Tags */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mb-3">
               {tagOptions.filter(tag => !selectedTags.some(t => t.name === tag.name)).map((tag, index) => (
                 <Badge
                   key={index}
@@ -218,13 +287,40 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
                 </Badge>
               ))}
             </div>
-          </div>
 
-          {/* Custom Fields */}
-          <CustomFieldsManager
-            customFields={customFields}
-            onUpdateFields={handleUpdateCustomFields}
-          />
+            {/* Create Custom Tag */}
+            <div className="border border-border/30 rounded-lg p-4 bg-muted/20">
+              <Label className="text-sm font-medium text-foreground mb-3 block">Criar Tag Personalizada</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <Input
+                    value={customTagName}
+                    onChange={(e) => setCustomTagName(e.target.value)}
+                    placeholder="Nome da tag..."
+                    className="h-10"
+                    onKeyPress={(e) => e.key === 'Enter' && createCustomTag()}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={customTagColor}
+                    onChange={(e) => setCustomTagColor(e.target.value)}
+                    className="w-10 h-10 rounded border border-border/30 cursor-pointer"
+                  />
+                  <Button
+                    type="button"
+                    onClick={createCustomTag}
+                    disabled={!customTagName.trim()}
+                    className="flex-1 h-10"
+                    variant="outline"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">

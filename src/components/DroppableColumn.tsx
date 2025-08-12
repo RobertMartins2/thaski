@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { Plus } from "lucide-react";
 import { KanbanColumn as KanbanColumnType, Project } from "@/types/kanban";
-import { Task } from "./TaskCard";
+import { Task } from "@/types/kanban";
 import { DraggableTask } from "./DraggableTask";
 import { AddTaskDialog } from "./AddTaskDialog";
 

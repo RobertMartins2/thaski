@@ -11,7 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Task } from "./TaskCard";
+import { Task } from "@/types/kanban";
 import { CustomFieldsManager } from "./CustomFieldsManager";
 import { CustomField } from "@/types/kanban";
 
@@ -52,8 +52,8 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
   const [code, setCode] = useState(task.code);
   const [status, setStatus] = useState(task.status);
   const [selectedTags, setSelectedTags] = useState(task.tags);
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-  const [customFields, setCustomFields] = useState<CustomField[]>(task.customFields || []);
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>(task.priority);
+  const [dueDate, setDueDate] = useState<Date | undefined>(task.dueDate);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +67,8 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
       code: code.trim(),
       tags: selectedTags,
       status,
-      customFields: customFields.length > 0 ? customFields : undefined,
+      priority,
+      dueDate,
     };
 
     onEditTask(updatedTask);
@@ -89,10 +90,6 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
       onDeleteTask(task.id);
       onOpenChange(false);
     }
-  };
-
-  const handleUpdateCustomFields = (fields: CustomField[]) => {
-    setCustomFields(fields);
   };
 
   return (
@@ -234,12 +231,6 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
               ))}
             </div>
           </div>
-
-          {/* Custom Fields */}
-          <CustomFieldsManager
-            customFields={customFields}
-            onUpdateFields={handleUpdateCustomFields}
-          />
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">

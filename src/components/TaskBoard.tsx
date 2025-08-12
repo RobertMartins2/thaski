@@ -3,7 +3,7 @@ import { Plus, Calendar, Grid3X3, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { KanbanColumn } from "./KanbanColumn";
-import { Task } from "./TaskCard";
+import { Task } from "@/types/kanban";
 import { AddTaskDialog } from "./AddTaskDialog";
 import { ColumnSettingsDialog } from "./ColumnSettingsDialog";
 import { KanbanColumn as KanbanColumnType, Project } from "@/types/kanban";

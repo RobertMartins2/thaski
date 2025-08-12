@@ -216,7 +216,8 @@ export async function getProjectTasks(projectId: string): Promise<Task[]> {
     code: task.code,
     status: task.status,
     tags: Array.isArray(task.tags) ? task.tags as any[] : [],
-    customFields: Array.isArray(task.custom_fields) ? task.custom_fields as any[] : []
+    dueDate: task.due_date ? new Date(task.due_date) : undefined,
+    priority: task.priority || 'medium'
   }));
 }
 
@@ -237,7 +238,8 @@ export async function createProjectTask(projectId: string, task: Omit<Task, 'id'
       code: task.code,
       status: task.status,
       tags: task.tags as any,
-      custom_fields: task.customFields as any,
+      due_date: task.dueDate?.toISOString(),
+      priority: task.priority,
       user_id: user.user.id
     })
     .select()
@@ -255,7 +257,8 @@ export async function createProjectTask(projectId: string, task: Omit<Task, 'id'
     code: data.code,
     status: data.status,
     tags: Array.isArray(data.tags) ? data.tags as any[] : [],
-    customFields: Array.isArray(data.custom_fields) ? data.custom_fields as any[] : []
+    dueDate: data.due_date ? new Date(data.due_date) : undefined,
+    priority: data.priority || 'medium'
   };
 }
 
@@ -267,7 +270,8 @@ export async function updateProjectTask(task: Task): Promise<boolean> {
       description: task.description,
       status: task.status,
       tags: task.tags as any,
-      custom_fields: task.customFields as any
+      due_date: task.dueDate?.toISOString(),
+      priority: task.priority
     })
     .eq('id', task.id);
 
