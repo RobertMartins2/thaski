@@ -46,6 +46,9 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`
+          }
         });
         if (error) throw error;
         toast.success("Conta criada! Verifique seu email para confirmação.");

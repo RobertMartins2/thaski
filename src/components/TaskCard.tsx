@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Task } from "@/types/kanban";
+import DOMPurify from "dompurify";
 
 interface TaskCardProps {
   task: Task;
@@ -68,7 +69,10 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
             overflow: task.description.length > 350 ? 'hidden' : 'visible'
           }}
           dangerouslySetInnerHTML={{ 
-            __html: task.description.length > 350 ? `${task.description.substring(0, 350)}...` : task.description 
+            __html: DOMPurify.sanitize(
+              task.description.length > 350 ? `${task.description.substring(0, 350)}...` : task.description,
+              { ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u'], ALLOWED_ATTR: [] }
+            )
           }}
         />
         
