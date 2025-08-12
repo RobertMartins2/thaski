@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, CheckCircle, Zap, Users, Smartphone, Star, Play, Menu, X } from "lucide-react";
+import { ArrowRight, CheckCircle, Zap, Users, Smartphone, Star, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -20,8 +20,8 @@ export default function LandingPage() {
     },
     {
       icon: <Users className="w-6 h-6 text-green-600" />,
-      title: "Colaboração simples",
-      description: "Convide sua equipe e colaborem em tempo real. Simples como deve ser, sem complicações."
+      title: "Interface intuitiva",
+      description: "Design limpo e fácil de usar. Organize suas tarefas de forma visual e eficiente."
     },
     {
       icon: <Smartphone className="w-6 h-6 text-purple-600" />,
@@ -33,10 +33,10 @@ export default function LandingPage() {
   const benefits = [
     "100% gratuito, sem limites de projetos",
     "Interface minimalista e intuitiva", 
-    "Colaboração em tempo real",
-    "Sem configurações desnecessárias",
     "Drag & drop para organizar tarefas",
-    "Responsivo - funciona em qualquer dispositivo"
+    "Sem configurações desnecessárias",
+    "Responsivo - funciona em qualquer dispositivo",
+    "Código aberto e transparente"
   ];
 
   return (
@@ -116,7 +116,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 py-24 lg:py-32 relative">
           <div className="text-center max-w-4xl mx-auto">
             <Badge className="mb-6 bg-white/10 text-white border-white/20 hover:bg-white/20">
-              🎉 Gratuito para sempre
+              🎉 Grátis
             </Badge>
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
@@ -135,14 +135,10 @@ export default function LandingPage() {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </NavLink>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg">
-                <Play className="mr-2 w-5 h-5" />
-                Ver demonstração
-              </Button>
             </div>
 
             <p className="text-blue-200 text-sm">
-              ✨ Sem cartão de crédito • Sem limites • Para sempre gratuito
+              ✨ Sem cartão de crédito • Sem limites • Grátis
             </p>
           </div>
 
@@ -318,7 +314,7 @@ export default function LandingPage() {
                     <span className="text-5xl font-bold text-foreground">R$ 0</span>
                     <div className="text-left">
                       <div className="text-muted-foreground">/mês</div>
-                      <div className="text-sm text-green-600 font-semibold">Para sempre</div>
+                      <div className="text-sm text-green-600 font-semibold">Grátis</div>
                     </div>
                   </div>
                 </div>
@@ -331,14 +327,6 @@ export default function LandingPage() {
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600" />
                     <span>Tarefas ilimitadas</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span>Colaboração em equipe</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span>Sincronização em tempo real</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600" />
@@ -358,7 +346,7 @@ export default function LandingPage() {
                 </NavLink>
                 
                 <p className="text-sm text-muted-foreground mt-4">
-                  Sem cartão de crédito • Sem período de teste • Sem surpresas
+                  Sem cartão de crédito • Sem período de teste • Grátis
                 </p>
               </CardContent>
             </Card>
@@ -404,7 +392,7 @@ export default function LandingPage() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5" />
-              <span className="text-sm">100% gratuito</span>
+              <span className="text-sm">100% grátis</span>
             </div>
           </div>
         </div>
