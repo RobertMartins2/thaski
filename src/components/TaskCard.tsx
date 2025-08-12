@@ -43,10 +43,10 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       className="group cursor-pointer" 
       onClick={() => onClick?.(task)}
       style={{
-        borderRadius: '8px',
-        border: '3px solid transparent',
-        background: 'linear-gradient(#FFF, #FFF) padding-box, linear-gradient(135deg, #E5E7EB, #F3F4F6) border-box',
-        boxShadow: '0 1px 3px 0 rgba(96, 108, 128, 0.05)'
+        borderRadius: '10px',
+        border: '3px solid #F6F9FC',
+        background: '#FFF',
+        boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.50)'
       }}
     >
       <CardContent className="p-6 space-y-5">
