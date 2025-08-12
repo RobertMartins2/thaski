@@ -339,7 +339,7 @@ export default function LandingPage() {
               </Button>
             </NavLink>
             <NavLink to="/login">
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg">
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/20 hover:text-blue-700 px-8 py-4 text-lg">
                 Já tenho conta
               </Button>
             </NavLink>
