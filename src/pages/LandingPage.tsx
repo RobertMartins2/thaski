@@ -348,6 +348,15 @@ export default function LandingPage() {
                 <p className="text-sm text-muted-foreground mt-4">
                   Sem cartão de crédito • Sem período de teste • Grátis
                 </p>
+                
+                {/* Product Screenshot */}
+                <div className="mt-12">
+                  <img 
+                    src="/lovable-uploads/b7a16a39-d118-4e70-ac87-ba52f7f8ad9b.png"
+                    alt="Interface do Thaski mostrando projeto Horse com colunas A Fazer, Em Andamento, Em Revisão e Concluído"
+                    className="w-full max-w-4xl mx-auto rounded-xl shadow-2xl border border-gray-200"
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
