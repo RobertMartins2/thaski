@@ -1,97 +1,113 @@
-import { Inbox, HardDrive, Layout, RefreshCw, BarChart3, Users, ShoppingCart } from "lucide-react";
+import {
+  Home,
+  FolderOpen,
+  Settings,
+  KanbanSquare,
+} from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 
 export function AppSidebar() {
   const location = useLocation();
-
-  const dashboardItems = [
-    { title: "Inbox", url: "/", icon: Inbox, badge: 4 },
-    { title: "Drive Files", url: "/drive", icon: HardDrive, badge: 435 },
-    { title: "Boards", url: "/boards", icon: Layout, badge: 5 },
-    { title: "Updates", url: "/updates", icon: RefreshCw },
-    { title: "Analytics", url: "/analytics", icon: BarChart3, badge: 2 },
-    { title: "CRM Dashboard", url: "/crm", icon: Users, badge: 2 },
-    { title: "Ecommerce", url: "/ecommerce", icon: ShoppingCart },
+  
+  const menuItems = [
+    {
+      title: "Home",
+      url: "/",
+      icon: Home,
+    },
+    {
+      title: "Projetos",
+      url: "/projects",
+      icon: FolderOpen,
+    },
+    {
+      title: "Configurações",
+      url: "/settings",
+      icon: Settings,
+    },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
-    <Sidebar className="border-r border-border/40 bg-background">
-      <SidebarHeader className="p-6">
-        <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-        
-        {/* User Profile Section */}
-        <div className="flex items-center gap-3 mt-6">
-          <Avatar className="w-12 h-12">
-            <AvatarImage src="" alt="Nancy Martino" />
-            <AvatarFallback className="bg-blue-500 text-white">NM</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm font-medium text-foreground">Nancy Martino</p>
-            <p className="text-xs text-muted-foreground">Designer</p>
+    <Sidebar collapsible="icon" className="border-r border-border/40 bg-muted/20">
+      <SidebarHeader className="border-b border-border/40 px-3 py-4">
+        <div className="flex items-center gap-2">
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
+            <KanbanSquare className="size-4" />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">Kanban Board</span>
+            <span className="truncate text-xs text-muted-foreground">Gestão de Projetos</span>
           </div>
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="px-6">
-        {/* Dashboards Section */}
+      <SidebarContent className="px-3 py-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4">
-            DASHBOARDS
+          <SidebarGroupLabel className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+            MENU PRINCIPAL
           </SidebarGroupLabel>
-          
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-2">
-              {dashboardItems.map((item) => {
-                const isItemActive = isActive(item.url);
-                
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`
-                        flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200
-                        ${isItemActive 
-                          ? 'bg-blue-50 text-blue-600' 
-                          : 'text-gray-600 hover:bg-gray-50'
-                        }
-                      `}
-                    >
-                      <NavLink to={item.url} className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-3">
-                          <item.icon className={`w-5 h-5 ${isItemActive ? 'text-blue-500' : 'text-blue-500'}`} />
-                          <span className="text-sm font-medium">{item.title}</span>
-                        </div>
-                        {item.badge && (
-                          <span className={`text-xs px-2 py-1 rounded font-medium ${
-                            isItemActive ? 'text-blue-600' : 'text-gray-500'
-                          }`}>
-                            {item.badge}
-                          </span>
-                        )}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton 
+                    asChild 
+                    className={`w-full ${
+                      isActive(item.url) 
+                        ? 'bg-primary/10 text-primary font-medium border-r-2 border-primary' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <NavLink to={item.url} className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors">
+                      <item.icon className="h-4 w-4 shrink-0" />
+                      <span className="font-medium">{item.title}</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-border/40 px-3 py-4">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="" alt="User" />
+            <AvatarFallback className="bg-primary/10 text-primary font-medium">
+              U
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 text-left">
+            <p className="text-sm font-medium text-foreground">Usuario</p>
+            <p className="text-xs text-muted-foreground">usuario@email.com</p>
+          </div>
+        </div>
+      </SidebarFooter>
+      
+      <SidebarRail />
     </Sidebar>
   );
 }

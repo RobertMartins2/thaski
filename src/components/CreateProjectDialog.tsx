@@ -24,6 +24,9 @@ import { addProject } from "@/lib/project-storage";
 
 interface CreateProjectDialogProps {
   onProjectCreated?: (project: Project) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  trigger?: React.ReactNode;
 }
 
 const PROJECT_COLORS = [
@@ -37,8 +40,15 @@ const PROJECT_COLORS = [
   { value: 'bg-indigo-500', label: 'Índigo' }
 ];
 
-export function CreateProjectDialog({ onProjectCreated }: CreateProjectDialogProps) {
-  const [open, setOpen] = useState(false);
+export function CreateProjectDialog({ 
+  onProjectCreated, 
+  open: externalOpen, 
+  onOpenChange: externalOnOpenChange,
+  trigger 
+}: CreateProjectDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = externalOpen !== undefined ? externalOpen : internalOpen;
+  const setOpen = externalOnOpenChange || setInternalOpen;
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -111,12 +121,18 @@ export function CreateProjectDialog({ onProjectCreated }: CreateProjectDialogPro
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          Novo Projeto
-        </Button>
-      </DialogTrigger>
+      {trigger ? (
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger asChild>
+          <Button variant="outline" className="flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Novo Projeto
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Criar Novo Projeto</DialogTitle>

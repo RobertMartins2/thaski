@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
@@ -35,6 +36,7 @@ const App = () => {
                       <Route path="/" element={<Index />} />
                       <Route path="/projects" element={<Projects />} />
                       <Route path="/project/:id" element={<ProjectDetail />} />
+                      <Route path="/settings" element={<Settings />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
