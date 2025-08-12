@@ -3,10 +3,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CheckCircle, Zap, Users, Smartphone, Star, Play, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    console.log('LandingPage component loaded and rendered');
+  }, []);
 
   const features = [
     {
