@@ -73,21 +73,30 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
     }
 
     try {
+      console.log("Iniciando processo de signup...");
       cleanupAuthState();
       try {
         await supabase.auth.signOut({ scope: 'global' });
       } catch (err) {
+        console.log("Erro ao fazer signOut (ignorando):", err);
         // Continue even if this fails
       }
 
-      const { error } = await supabase.auth.signUp({
+      console.log("Tentando criar conta com:", {
+        email: formData.email,
+        emailRedirectTo: `${window.location.origin}/projects`,
+        metadata: {
+          full_name: formData.name,
+          phone: formData.phone
+        }
+      });
+
+      const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
-          // Use a URL específica da produção
-          emailRedirectTo: window.location.origin.includes('localhost') 
-            ? `${window.location.origin}/` 
-            : `https://seuapp.vercel.app/login`, // Substitua pela sua URL de produção
+          // Usar a URL atual do ambiente
+          emailRedirectTo: `${window.location.origin}/projects`,
           data: {
             full_name: formData.name,
             phone: formData.phone
@@ -95,13 +104,32 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        // Verificar se o usuário já existe
+        if (error.message?.includes('User already registered') || error.message?.includes('already been registered')) {
+          toast.error("Este email já está cadastrado. Tente fazer login ou recuperar sua senha.");
+          return;
+        }
+        throw error;
+      }
+      
+      console.log("SignUp successful:", data);
       
       // Mostrar tela de confirmação por email
       onSignUpSuccess();
     } catch (error: any) {
       console.error("SignUp error:", error);
-      toast.error(error.message || "Erro ao criar conta");
+      
+      // Tratamento específico de erros
+      if (error.message?.includes('Invalid login credentials')) {
+        toast.error("Credenciais inválidas. Verifique email e senha.");
+      } else if (error.message?.includes('already been registered')) {
+        toast.error("Este email já está cadastrado. Tente fazer login.");
+      } else if (error.message?.includes('Password should be at least')) {
+        toast.error("Senha deve ter pelo menos 6 caracteres.");
+      } else {
+        toast.error(error.message || "Erro ao criar conta. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }

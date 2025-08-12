@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { SignUpForm } from "@/components/auth/SignUpForm";
 import { EmailConfirmationScreen } from "@/components/auth/EmailConfirmationScreen";
+import { ResendConfirmationForm } from "@/components/auth/ResendConfirmationForm";
 
-type AuthView = 'signup' | 'email-confirmation';
+type AuthView = 'signup' | 'email-confirmation' | 'resend-confirmation';
 
 export default function SignUp() {
   const [currentView, setCurrentView] = useState<AuthView>('signup');
@@ -28,6 +29,13 @@ export default function SignUp() {
       case 'email-confirmation':
         return (
           <EmailConfirmationScreen
+            onBackToLogin={() => window.location.href = '/login'}
+            onResendConfirmation={() => handleSwitchView('resend-confirmation')}
+          />
+        );
+      case 'resend-confirmation':
+        return (
+          <ResendConfirmationForm
             onBackToLogin={() => window.location.href = '/login'}
           />
         );

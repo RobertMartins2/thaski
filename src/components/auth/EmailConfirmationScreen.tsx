@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 
 interface EmailConfirmationScreenProps {
   onBackToLogin: () => void;
+  onResendConfirmation: () => void;
 }
 
-export function EmailConfirmationScreen({ onBackToLogin }: EmailConfirmationScreenProps) {
+export function EmailConfirmationScreen({ onBackToLogin, onResendConfirmation }: EmailConfirmationScreenProps) {
   return (
     <div className="w-full max-w-sm mx-auto text-center">
       <div className="mb-8">
@@ -23,6 +24,13 @@ export function EmailConfirmationScreen({ onBackToLogin }: EmailConfirmationScre
             Não recebeu o email? Verifique sua caixa de spam ou lixo eletrônico.
           </p>
         </div>
+
+        <Button 
+          onClick={onResendConfirmation}
+          className="w-full h-12"
+        >
+          Reenviar email de confirmação
+        </Button>
 
         <Button 
           onClick={onBackToLogin} 

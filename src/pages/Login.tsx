@@ -2,8 +2,10 @@ import { useState } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { EmailConfirmationScreen } from "@/components/auth/EmailConfirmationScreen";
+import { ResendConfirmationForm } from "@/components/auth/ResendConfirmationForm";
+import { AuthDebugPanel } from "@/components/debug/AuthDebugPanel";
 
-type AuthView = 'login' | 'forgot-password' | 'email-confirmation';
+type AuthView = 'login' | 'forgot-password' | 'email-confirmation' | 'resend-confirmation';
 
 export default function Login() {
   const [currentView, setCurrentView] = useState<AuthView>('login');
@@ -36,6 +38,13 @@ export default function Login() {
         return (
           <EmailConfirmationScreen
             onBackToLogin={() => handleSwitchView('login')}
+            onResendConfirmation={() => handleSwitchView('resend-confirmation')}
+          />
+        );
+      case 'resend-confirmation':
+        return (
+          <ResendConfirmationForm
+            onBackToLogin={() => handleSwitchView('login')}
           />
         );
       default:
@@ -53,7 +62,7 @@ export default function Login() {
           </div>
           {renderAuthContent()}
           {isDevelopment && currentView === 'login' && (
-            <div className="mt-8 pt-6 border-t border-muted">
+            <div className="mt-8 pt-6 border-t border-muted space-y-4">
               <button
                 type="button"
                 onClick={() => window.location.href = '/projects'}
@@ -61,6 +70,14 @@ export default function Login() {
               >
                 🚀 Modo Preview (Sem Login)
               </button>
+              <details className="mt-4">
+                <summary className="text-sm text-muted-foreground cursor-pointer hover:text-foreground">
+                  🐛 Painel de Debug
+                </summary>
+                <div className="mt-2">
+                  <AuthDebugPanel />
+                </div>
+              </details>
             </div>
           )}
         </div>
