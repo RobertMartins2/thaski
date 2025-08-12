@@ -161,11 +161,6 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   return (
     <ProjectProvider>
       <div className="min-h-screen">
-        <div className="absolute top-4 right-4">
-          <Button variant="outline" onClick={handleSignOut}>
-            Sair
-          </Button>
-        </div>
         {children}
       </div>
     </ProjectProvider>

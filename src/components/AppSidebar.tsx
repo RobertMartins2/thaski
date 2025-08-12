@@ -2,8 +2,13 @@ import {
   FolderOpen,
   Settings,
   KanbanSquare,
+  LogOut,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { cleanupAuthState } from "@/lib/security";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -38,6 +43,20 @@ export function AppSidebar() {
 
   const isActive = (path: string) => {
     return location.pathname.startsWith(path);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      cleanupAuthState();
+      await supabase.auth.signOut({ scope: 'global' });
+      toast.success("Logout realizado com sucesso!");
+      // Force page reload for clean state
+      window.location.href = '/';
+    } catch (error) {
+      console.error("Sign out error:", error);
+      // Force page reload even if sign out fails
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -83,7 +102,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border/40 px-3 py-4">
+      <SidebarFooter className="border-t border-border/40 px-3 py-4 space-y-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src="" alt="User" />
@@ -96,6 +115,15 @@ export function AppSidebar() {
             <p className="text-xs text-muted-foreground">usuario@email.com</p>
           </div>
         </div>
+        
+        <Button
+          variant="ghost"
+          onClick={handleSignOut}
+          className="w-full justify-start gap-3 px-3 py-2 h-auto text-muted-foreground hover:text-foreground hover:bg-muted/50"
+        >
+          <LogOut className="h-4 w-4" />
+          <span className="font-medium">Sair</span>
+        </Button>
       </SidebarFooter>
       
       <SidebarRail />
