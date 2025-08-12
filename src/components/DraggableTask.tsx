@@ -5,10 +5,9 @@ import { Task } from "@/types/kanban";
 interface DraggableTaskProps {
   task: Task;
   onClick?: (task: Task) => void;
-  onDetailClick?: (task: Task) => void;
 }
 
-export function DraggableTask({ task, onClick, onDetailClick }: DraggableTaskProps) {
+export function DraggableTask({ task, onClick }: DraggableTaskProps) {
   const {
     attributes,
     listeners,
@@ -24,10 +23,7 @@ export function DraggableTask({ task, onClick, onDetailClick }: DraggableTaskPro
   } : undefined;
 
   const handleClick = (task: Task) => {
-    // Por padrão, clique abre o painel de detalhes
-    if (onDetailClick) {
-      onDetailClick(task);
-    } else if (onClick) {
+    if (onClick) {
       onClick(task);
     }
   };

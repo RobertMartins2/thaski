@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, X, Calendar, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,12 @@ import { Project } from "@/types/kanban";
 import { generateTaskCode } from "@/lib/project-utils";
 
 interface AddTaskDialogProps {
-  onAddTask: (task: Omit<Task, 'id'>) => void;
+  onAddTask?: (task: Omit<Task, 'id'>) => void;
+  onEditTask?: (task: Task) => void;
+  onDeleteTask?: (taskId: string) => void;
+  task?: Task; // Se fornecida, estará em modo edição
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   defaultStatus?: string;
   trigger?: React.ReactNode;
   columns?: Array<{id: string, title: string}>;
@@ -51,22 +56,50 @@ const priorityOptions = [
   { value: 'high', label: 'Alta', color: 'bg-red-100 text-red-700' },
 ];
 
-export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, columns = [], currentProject }: AddTaskDialogProps) {
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [code, setCode] = useState('');
-  const [status, setStatus] = useState<string>(defaultStatus);
-  const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' | 'custom'; customColor?: string }>>([]);
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
+export function AddTaskDialog({ 
+  onAddTask, 
+  onEditTask, 
+  onDeleteTask, 
+  task, 
+  open: controlledOpen, 
+  onOpenChange: controlledOnOpenChange, 
+  defaultStatus = 'todo', 
+  trigger, 
+  columns = [], 
+  currentProject 
+}: AddTaskDialogProps) {
+  const isEditMode = Boolean(task);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const onOpenChange = controlledOnOpenChange ?? setInternalOpen;
+
+  const [title, setTitle] = useState(task?.title || '');
+  const [description, setDescription] = useState(task?.description || '');
+  const [code, setCode] = useState(task?.code || '');
+  const [status, setStatus] = useState<string>(task?.status || defaultStatus);
+  const [selectedTags, setSelectedTags] = useState<Array<{ name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' | 'custom'; customColor?: string }>>(task?.tags || []);
+  const [dueDate, setDueDate] = useState<Date | undefined>(task?.dueDate);
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>(task?.priority || 'medium');
   const [customTagName, setCustomTagName] = useState('');
   const [customTagColor, setCustomTagColor] = useState('#3B82F6');
 
-  // Gerar código automaticamente quando o diálogo abre
+  // Atualizar campos quando task muda (para modo controlado)
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description);
+      setCode(task.code);
+      setStatus(task.status);
+      setSelectedTags(task.tags);
+      setDueDate(task.dueDate);
+      setPriority(task.priority);
+    }
+  }, [task]);
+
+  // Gerar código automaticamente quando o diálogo abre (modo criação)
   const handleOpenChange = (isOpen: boolean) => {
-    setOpen(isOpen);
-    if (isOpen && currentProject && !code) {
+    onOpenChange(isOpen);
+    if (isOpen && !isEditMode && currentProject && !code) {
       setCode(generateTaskCode(currentProject));
     }
   };
@@ -76,29 +109,52 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
     
     if (!title.trim() || !description.trim()) return;
 
-    const newTask: Omit<Task, 'id'> = {
-      title: title.trim(),
-      description: description.trim(),
-      code: code.trim() || (currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`),
-      tags: selectedTags,
-      status,
-      dueDate,
-      priority,
-    };
-
-    onAddTask(newTask);
+    if (isEditMode && task && onEditTask) {
+      const updatedTask: Task = {
+        ...task,
+        title: title.trim(),
+        description: description.trim(),
+        code: code.trim(),
+        tags: selectedTags,
+        status,
+        dueDate,
+        priority,
+      };
+      onEditTask(updatedTask);
+    } else if (onAddTask) {
+      const newTask: Omit<Task, 'id'> = {
+        title: title.trim(),
+        description: description.trim(),
+        code: code.trim() || (currentProject ? generateTaskCode(currentProject) : `TASK-${Date.now()}`),
+        tags: selectedTags,
+        status,
+        dueDate,
+        priority,
+      };
+      onAddTask(newTask);
+    }
     
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setCode('');
-    setStatus(defaultStatus);
-    setSelectedTags([]);
-    setDueDate(undefined);
-    setPriority('medium');
-    setCustomTagName('');
-    setCustomTagColor('#3B82F6');
-    setOpen(false);
+    if (!isEditMode) {
+      // Reset form apenas no modo criação
+      setTitle('');
+      setDescription('');
+      setCode('');
+      setStatus(defaultStatus);
+      setSelectedTags([]);
+      setDueDate(undefined);
+      setPriority('medium');
+      setCustomTagName('');
+      setCustomTagColor('#3B82F6');
+    }
+    
+    onOpenChange(false);
+  };
+
+  const handleDelete = () => {
+    if (task && onDeleteTask && confirm("Tem certeza de que deseja excluir esta tarefa? Esta ação não pode ser desfeita.")) {
+      onDeleteTask(task.id);
+      onOpenChange(false);
+    }
   };
 
   const addTag = (tag: { name: string; color: 'design' | 'hiring' | 'dev' | 'performance' | 'mobile' | 'dashboard' | 'guideline' | 'landing' | 'custom'; customColor?: string }) => {
@@ -136,12 +192,16 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        {trigger || defaultTrigger}
-      </DialogTrigger>
+      {trigger && !isEditMode && (
+        <DialogTrigger asChild>
+          {trigger}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-surface border-border/30">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-foreground">Criar Nova Tarefa</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold text-foreground">
+            {isEditMode ? 'Editar Tarefa' : 'Criar Nova Tarefa'}
+          </DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">
@@ -309,18 +369,28 @@ export function AddTaskDialog({ onAddTask, defaultStatus = 'todo', trigger, colu
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => onOpenChange(false)}
               className="flex-1 h-12 font-semibold"
             >
               Cancelar
             </Button>
+            {isEditMode && onDeleteTask && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDelete}
+                className="flex-1 h-12 font-semibold"
+              >
+                Excluir
+              </Button>
+            )}
             <Button
               type="submit"
               className="flex-1 h-12 gradient-button"
               disabled={!title.trim() || !description.trim()}
             >
               <Plus className="w-4 h-4 mr-2" />
-              Criar Tarefa
+              {isEditMode ? 'Salvar' : 'Criar Tarefa'}
             </Button>
           </div>
         </form>

@@ -11,8 +11,6 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCorners }
 import { useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
 import { TaskCard } from "./TaskCard";
 import { DroppableColumn } from "./DroppableColumn";
-import { EditTaskDialog } from "./EditTaskDialog";
-import { TaskDetailPanel } from "./TaskDetailPanel";
 import { getProjectById } from "@/lib/project-storage";
 import { getProjectTasks, getProjectKanbanColumns, createProjectTask, updateProjectTask, deleteProjectTask } from "@/lib/supabase-projects";
 
@@ -42,8 +40,6 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [detailTask, setDetailTask] = useState<Task | null>(null);
-  const [detailPanelOpen, setDetailPanelOpen] = useState(false);
 
   // Carregar dados do projeto
   useEffect(() => {
@@ -181,11 +177,6 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
     setEditDialogOpen(true);
   };
 
-  const handleTaskDetailClick = (task: Task) => {
-    setDetailTask(task);
-    setDetailPanelOpen(true);
-  };
-
   const handleEditTask = async (updatedTask: Task) => {
     try {
       const success = await updateProjectTask(updatedTask);
@@ -294,7 +285,6 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
                      tasks={getTasksForColumn(column.id)}
                      onAddTask={handleAddTask}
                      onTaskClick={handleTaskClick}
-                     onTaskDetailClick={handleTaskDetailClick}
                      columns={columns.map(col => ({ id: col.id, title: col.title }))}
                      currentProject={currentProject}
                    />
@@ -315,24 +305,14 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
       </DragOverlay>
 
       {editingTask && (
-        <EditTaskDialog
+        <AddTaskDialog
           task={editingTask}
           onEditTask={handleEditTask}
           onDeleteTask={handleDeleteTask}
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
           columns={columns.map(col => ({ id: col.id, title: col.title }))}
-        />
-      )}
-
-      {detailTask && (
-        <TaskDetailPanel
-          task={detailTask}
-          open={detailPanelOpen}
-          onOpenChange={setDetailPanelOpen}
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          columns={columns.map(col => ({ id: col.id, title: col.title }))}
+          currentProject={currentProject}
         />
       )}
     </DndContext>

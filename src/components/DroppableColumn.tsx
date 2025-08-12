@@ -10,12 +10,11 @@ interface DroppableColumnProps {
   tasks: Task[];
   onAddTask: (task: Omit<Task, 'id'>) => void;
   onTaskClick?: (task: Task) => void;
-  onTaskDetailClick?: (task: Task) => void;
   columns?: Array<{id: string, title: string}>;
   currentProject?: Project; // Projeto atual para gerar códigos
 }
 
-export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskDetailClick, columns, currentProject }: DroppableColumnProps) {
+export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, columns, currentProject }: DroppableColumnProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: column.id,
   });
@@ -43,8 +42,7 @@ export function DroppableColumn({ column, tasks, onAddTask, onTaskClick, onTaskD
           <DraggableTask 
             key={task.id} 
             task={task} 
-            onClick={onTaskClick} 
-            onDetailClick={onTaskDetailClick}
+            onClick={onTaskClick}
           />
         ))}
         
