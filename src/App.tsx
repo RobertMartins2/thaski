@@ -11,6 +11,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import LandingPage from "./pages/LandingPage";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,9 @@ const App = () => {
         <Toaster />
         <BrowserRouter>
           <Routes>
+            {/* Landing page - rota pública */}
+            <Route path="/lp" element={<LandingPage />} />
+            
             {/* Auth routes - não precisam de AuthWrapper */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
