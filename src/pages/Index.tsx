@@ -60,7 +60,7 @@ const Index = () => {
             <div 
               className="flex-1 overflow-auto px-6 py-6"
               style={{
-                background: 'linear-gradient(100deg, #FFF 0.39%, #FFFFF8 91.56%)'
+                background: 'linear-gradient(100deg, #F8FBFF 0.39%, #FFFFF8 91.56%)'
               }}
             >
               <TaskBoard projectId={currentProject.id} />
