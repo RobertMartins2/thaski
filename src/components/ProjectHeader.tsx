@@ -36,7 +36,15 @@ export function ProjectHeader({
   return (
     <div className="relative h-32 bg-gradient-to-r from-blue-600 to-purple-600 bg-cover bg-center">
       <div className="absolute inset-0 bg-black/30"></div>
-      <div className="relative h-full flex items-center justify-between px-8">
+      <div 
+        className="relative h-full flex items-center justify-between px-8"
+        style={{
+          backgroundImage: 'url(/lovable-uploads/792601b6-d3bf-4e9e-b571-fa098e58742c.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div>
           <p className="text-white/80 text-sm font-medium mb-1">
             PROJETO / {currentProject.name.toUpperCase()}
