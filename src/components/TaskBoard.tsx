@@ -331,6 +331,7 @@ export function TaskBoard({ projectId }: TaskBoardProps) {
           open={detailPanelOpen}
           onOpenChange={setDetailPanelOpen}
           onEditTask={handleEditTask}
+          onDeleteTask={handleDeleteTask}
           columns={columns.map(col => ({ id: col.id, title: col.title }))}
         />
       )}

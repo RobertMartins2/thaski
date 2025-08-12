@@ -1,379 +1,258 @@
-import { useState } from "react";
-import { X, Edit2, Calendar, User, Paperclip, MessageSquare, Clock, FileText, Plus, Download } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useEffect, useMemo, useState } from "react";
+import { Calendar, Clock, Flag, Tag, Columns } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Task } from "@/types/kanban";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import type { Task } from "@/types/kanban";
 
 interface TaskDetailPanelProps {
   task: Task;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEditTask?: (task: Task) => void;
-  columns?: Array<{id: string, title: string}>;
+  onDeleteTask?: (taskId: string) => void;
+  columns?: Array<{ id: string; title: string }>;
 }
 
-const tagColorMap = {
-  design: 'bg-purple-100 text-purple-700 border-purple-200',
-  hiring: 'bg-blue-100 text-blue-700 border-blue-200', 
-  dev: 'bg-green-100 text-green-700 border-green-200',
-  performance: 'bg-orange-100 text-orange-700 border-orange-200',
-  mobile: 'bg-blue-100 text-blue-700 border-blue-200',
-  dashboard: 'bg-cyan-100 text-cyan-700 border-cyan-200',
-  guideline: 'bg-green-100 text-green-700 border-green-200',
-  landing: 'bg-purple-100 text-purple-700 border-purple-200'
+const priorityLabels: Record<Task["priority"], string> = {
+  low: "Baixa",
+  medium: "Média",
+  high: "Alta",
 };
 
-const priorityColors = {
-  high: 'bg-red-100 text-red-700 border-red-200',
-  medium: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  low: 'bg-green-100 text-green-700 border-green-200'
-};
+export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, onDeleteTask, columns = [] }: TaskDetailPanelProps) {
+  const [localTask, setLocalTask] = useState<Task>(task);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [newTag, setNewTag] = useState("");
 
-const sampleNotes = [
-  {
-    id: '1',
-    author: 'João Silva',
-    avatar: '/placeholder-avatar.png',
-    content: 'Atualizei as especificações de design e compartilhei com a equipe de desenvolvimento.',
-    timestamp: '2024-01-15T10:30:00Z',
-  },
-  {
-    id: '2',
-    author: 'Sarah Wilson',
-    avatar: '/placeholder-avatar.png',
-    content: 'Revisei os mockups mais recentes. Está ótimo! Só preciso ajustar a responsividade mobile.',
-    timestamp: '2024-01-14T15:45:00Z',
-  }
-];
+  useEffect(() => {
+    setLocalTask(task);
+    setEditingTitle(false);
+    setNewTag("");
+  }, [task]);
 
-const sampleAttachments = [
-  { id: '1', name: 'requisitos.pdf', size: '2.4 MB', type: 'pdf' },
-  { id: '2', name: 'mockup_v2.figma', size: '1.8 MB', type: 'figma' },
-  { id: '3', name: 'screenshot_1.png', size: '845 KB', type: 'image' }
-];
-
-export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, columns = [] }: TaskDetailPanelProps) {
-  const [newNote, setNewNote] = useState('');
-  const [localTask, setLocalTask] = useState(task);
-  
-  const handleUpdateTask = (updates: Partial<Task>) => {
-    const updatedTask = { ...localTask, ...updates };
-    setLocalTask(updatedTask);
-    onEditTask?.(updatedTask);
-  };
-
-  const handleAddNote = () => {
-    if (!newNote.trim()) return;
-    
-    // Em um aplicativo real, isso seria enviado para o backend
-    console.log('Adicionando nota:', newNote);
-    setNewNote('');
-  };
-
-  const getFileIcon = (type: string) => {
-    switch (type) {
-      case 'pdf': return '📄';
-      case 'figma': return '🎨';
-      case 'image': return '🖼️';
-      default: return '📎';
+  const createdAtText = useMemo(() => {
+    if (!localTask.createdAt) return "—";
+    try {
+      return format(new Date(localTask.createdAt), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR });
+    } catch {
+      return "—";
     }
+  }, [localTask.createdAt]);
+
+  const saveChanges = () => {
+    onEditTask?.(localTask);
+  };
+
+  const deleteTask = () => {
+    if (!onDeleteTask) return;
+    onDeleteTask(localTask.id);
+    onOpenChange(false);
+  };
+
+  const removeTag = (name: string) => {
+    setLocalTask((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((t) => t.name !== name),
+    }));
+  };
+
+  const addTag = () => {
+    const trimmed = newTag.trim();
+    if (!trimmed) return;
+    if (localTask.tags.some((t) => t.name.toLowerCase() === trimmed.toLowerCase())) return;
+    setLocalTask((prev) => ({
+      ...prev,
+      tags: [...prev.tags, { name: trimmed, color: "custom" as const }],
+    }));
+    setNewTag("");
   };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:w-[600px] sm:max-w-[600px] bg-background border-border/30 p-0 overflow-hidden">
+      <SheetContent
+        side="right"
+        className="w-full sm:w-[600px] lg:w-1/2 lg:max-w-[50vw] bg-background border-border/30 p-0 overflow-hidden"
+      >
         <div className="flex flex-col h-full">
-          {/* Header */}
           <SheetHeader className="border-b border-border/30 p-6 pb-4">
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm text-muted-foreground font-medium">{localTask.code}</span>
-                  <Badge variant="outline" className="text-xs">
-                    {columns.find(col => col.id === localTask.status)?.title || localTask.status}
-                  </Badge>
-                </div>
-                <SheetTitle className="text-xl font-semibold text-foreground leading-tight">
-                  {localTask.title}
-                </SheetTitle>
+                <div className="text-sm text-muted-foreground font-medium mb-2">{localTask.code}</div>
+                {editingTitle ? (
+                  <Input
+                    autoFocus
+                    value={localTask.title}
+                    onChange={(e) => setLocalTask({ ...localTask, title: e.target.value })}
+                    onKeyDown={(e) => e.key === "Enter" && setEditingTitle(false)}
+                    onBlur={() => setEditingTitle(false)}
+                    className="h-10 text-lg font-semibold"
+                  />
+                ) : (
+                  <SheetTitle
+                    className="text-xl font-semibold text-foreground leading-tight cursor-text"
+                    onClick={() => setEditingTitle(true)}
+                  >
+                    {localTask.title}
+                  </SheetTitle>
+                )}
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-              >
-                <X className="w-4 h-4" />
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={saveChanges} className="h-9">Salvar</Button>
+                <Button variant="destructive" size="sm" onClick={deleteTask} className="h-9">Excluir</Button>
+              </div>
             </div>
           </SheetHeader>
 
-          {/* Content */}
           <div className="flex-1 overflow-auto">
             <div className="p-6 space-y-8">
-              
-              {/* Task Info Grid */}
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Prioridade
-                    </label>
-                    <Select value="high" onValueChange={() => {}}>
-                      <SelectTrigger className="h-9">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border-border/30">
-                        <SelectItem value="high">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-red-500 rounded-full" />
-                            Alta
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="medium">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full" />
-                            Média
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="low">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-green-500 rounded-full" />
-                            Baixa
-                          </div>
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+              {/* Campos com ícone à esquerda e conteúdo à direita */}
+              <div className="space-y-5">
+                {/* Data de Criação - somente leitura */}
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Data de Criação</div>
+                    <div className="text-sm text-foreground mt-1">{createdAtText}</div>
                   </div>
-                  
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Data de vencimento
-                    </label>
-                    <div className="flex items-center gap-2 text-sm text-foreground">
-                      <Calendar className="w-4 h-4 text-muted-foreground" />
-                      03 Jan, 2024
+                </div>
+
+                {/* Status */}
+                <div className="flex items-start gap-3">
+                  <Columns className="w-5 h-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Status</div>
+                    <div className="mt-1 max-w-xs">
+                      <Select
+                        value={localTask.status}
+                        onValueChange={(value) => setLocalTask({ ...localTask, status: value })}
+                      >
+                        <SelectTrigger className="h-10">
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-surface border-border/30">
+                          {columns.length > 0 ? (
+                            columns.map((c) => (
+                              <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>
+                            ))
+                          ) : (
+                            <>
+                              <SelectItem value="todo">A Fazer</SelectItem>
+                              <SelectItem value="progress">Em Andamento</SelectItem>
+                              <SelectItem value="review">Em Revisão</SelectItem>
+                              <SelectItem value="done">Concluído</SelectItem>
+                            </>
+                          )}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Resumo do negócio
-                    </label>
-                    <div className="text-sm font-semibold text-foreground">$ 8000</div>
-                  </div>
-                  
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">
-                      Responsável
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="w-6 h-6">
-                        <AvatarImage src="/placeholder-avatar.png" />
-                        <AvatarFallback className="text-xs bg-primary text-primary-foreground">JD</AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm text-foreground">João Silva</span>
+
+                {/* Prioridade */}
+                <div className="flex items-start gap-3">
+                  <Flag className="w-5 h-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Prioridade</div>
+                    <div className="mt-1 max-w-xs">
+                      <Select
+                        value={localTask.priority}
+                        onValueChange={(v: Task["priority"]) => setLocalTask({ ...localTask, priority: v })}
+                      >
+                        <SelectTrigger className="h-10">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-surface border-border/30">
+                          <SelectItem value="low">{priorityLabels.low}</SelectItem>
+                          <SelectItem value="medium">{priorityLabels.medium}</SelectItem>
+                          <SelectItem value="high">{priorityLabels.high}</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Description */}
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
-                  Assunto
-                </label>
-                <div className="text-sm text-foreground leading-relaxed">
-                  {localTask.description}
-                </div>
-              </div>
-
-              {/* Detalhes do Status */}
-              <div className="grid grid-cols-4 gap-4 p-4 bg-muted/20 rounded-lg">
-                <div>
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Conta
-                  </div>
-                  <div className="text-sm text-foreground">Cliente ABC</div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Negócio
-                  </div>
-                  <div className="text-sm text-foreground">Negócio do Projeto</div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Status
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full" />
-                    <span className="text-sm text-foreground">Em andamento</span>
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    Lembrete
-                  </div>
-                  <div className="text-sm text-foreground">20 Jan, Pop-up</div>
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
-                  Tags
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {localTask.tags.map((tag, index) => (
-                    <Badge 
-                      key={index} 
-                      variant="outline"
-                      className={`${tagColorMap[tag.color]} border text-xs px-3 py-1`}
-                    >
-                      {tag.name}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Priority and Due Date Info */}
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 block">
-                  Informações da Tarefa
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-sm font-medium text-muted-foreground">Prioridade:</span>
-                    <span className="text-sm text-foreground ml-2">
-                      {localTask.priority === 'high' ? 'Alta' : localTask.priority === 'low' ? 'Baixa' : 'Média'}
-                    </span>
-                  </div>
-                  {localTask.dueDate && (
-                    <div>
-                      <span className="text-sm font-medium text-muted-foreground">Data de conclusão:</span>
-                      <span className="text-sm text-foreground ml-2">
-                        {new Date(localTask.dueDate).toLocaleDateString('pt-BR')}
-                      </span>
+                {/* Data de Entrega */}
+                <div className="flex items-start gap-3">
+                  <Calendar className="w-5 h-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Data de Entrega</div>
+                    <div className="mt-1 max-w-xs">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" className="h-10 w-full justify-start">
+                            {localTask.dueDate ? (
+                              format(new Date(localTask.dueDate), "dd/MM/yyyy", { locale: ptBR })
+                            ) : (
+                              <span>Selecionar data</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-surface border-border/30" align="start">
+                          <CalendarComponent
+                            mode="single"
+                            selected={localTask.dueDate}
+                            onSelect={(d) => setLocalTask({ ...localTask, dueDate: d ?? undefined })}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                            locale={ptBR}
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
 
-              <Separator />
-
-              {/* Seção de Notas */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Notas
-                  </label>
-                  <Button variant="ghost" size="sm" className="text-xs text-primary hover:text-primary">
-                    <Plus className="w-3 h-3 mr-1" />
-                    Adicionar nova
-                  </Button>
-                </div>
-                
-                <div className="space-y-4">
-                  {sampleNotes.map((note) => (
-                    <div key={note.id} className="flex gap-3">
-                      <Avatar className="w-8 h-8 mt-1">
-                        <AvatarImage src={note.avatar} />
-                        <AvatarFallback className="text-xs bg-muted">
-                          {note.author.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-medium text-foreground">{note.author}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {format(new Date(note.timestamp), 'MMM dd, yyyy at h:mm a')}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{note.content}</p>
-                      </div>
+                {/* Tags */}
+                <div className="flex items-start gap-3">
+                  <Tag className="w-5 h-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tags</div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {localTask.tags.map((t, i) => (
+                        <Badge
+                          key={i}
+                          variant="outline"
+                          onClick={() => removeTag(t.name)}
+                          className="text-xs cursor-pointer"
+                          title="Remover"
+                        >
+                          {t.name}
+                        </Badge>
+                      ))}
                     </div>
-                  ))}
-                  
-                  {/* Adicionar Nota */}
-                  <div className="flex gap-3">
-                    <Avatar className="w-8 h-8">
-                      <AvatarFallback className="text-xs bg-primary text-primary-foreground">Você</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 space-y-2">
-                      <Textarea
-                        value={newNote}
-                        onChange={(e) => setNewNote(e.target.value)}
-                        placeholder="Adicione uma nota..."
-                        className="min-h-[60px] text-sm resize-none"
+                    <div className="mt-3 flex gap-2 max-w-xs">
+                      <Input
+                        placeholder="Adicionar tag"
+                        value={newTag}
+                        onChange={(e) => setNewTag(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
+                        className="h-9"
                       />
-                      {newNote.trim() && (
-                        <div className="flex gap-2">
-                          <Button size="sm" onClick={handleAddNote}>Adicionar Nota</Button>
-                          <Button variant="ghost" size="sm" onClick={() => setNewNote('')}>Cancelar</Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Seção de Documentos */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Central de documentos
-                  </label>
-                  <Button variant="ghost" size="sm" className="text-xs text-primary hover:text-primary">
-                    <Plus className="w-3 h-3 mr-1" />
-                    Adicionar novos anexos
-                  </Button>
-                </div>
-                
-                <div className="space-y-3">
-                  {sampleAttachments.map((file) => (
-                    <div key={file.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-lg">
-                      <div className="text-2xl">{getFileIcon(file.type)}</div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-foreground truncate">{file.name}</div>
-                        <div className="text-xs text-muted-foreground">{file.size}</div>
-                      </div>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                        <Download className="w-4 h-4" />
+                      <Button type="button" variant="outline" className="h-9" onClick={addTag}>
+                        Adicionar
                       </Button>
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Ações do Rodapé */}
-          <div className="border-t border-border/30 p-4 bg-muted/20">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Clock className="w-3 h-3" />
-                Última atividade: 27 Dez 2022 às 9:45
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Edit2 className="w-4 h-4 mr-1" />
-                  Editar
-                </Button>
-                <Button size="sm" className="bg-primary text-primary-foreground">
-                  ✓ Concluir tarefa
-                </Button>
+              {/* Descrição */}
+              <div className="pt-4">
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Descrição</div>
+                <Textarea
+                  value={localTask.description}
+                  onChange={(e) => setLocalTask({ ...localTask, description: e.target.value })}
+                  placeholder="Descreva a tarefa..."
+                  className="min-h-[140px]"
+                />
               </div>
             </div>
           </div>

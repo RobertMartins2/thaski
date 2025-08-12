@@ -35,4 +35,5 @@ export interface Task {
   status: string; // Now dynamic instead of fixed enum
   dueDate?: Date; // Data de conclusão
   priority: 'low' | 'medium' | 'high'; // Prioridade da tarefa
+  createdAt?: Date; // Data de criação (somente leitura)
 }
