@@ -50,12 +50,12 @@ export function AppSidebar() {
       cleanupAuthState();
       await supabase.auth.signOut({ scope: 'global' });
       toast.success("Logout realizado com sucesso!");
-      // Force page reload for clean state
-      window.location.href = '/';
+      // Force page reload to trigger AuthWrapper to show login
+      window.location.reload();
     } catch (error) {
       console.error("Sign out error:", error);
       // Force page reload even if sign out fails
-      window.location.href = '/';
+      window.location.reload();
     }
   };
 
