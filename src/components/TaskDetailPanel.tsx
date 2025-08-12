@@ -79,7 +79,7 @@ export function TaskDetailPanel({ task, open, onOpenChange, onEditTask, onDelete
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-full sm:w-[600px] lg:w-1/2 lg:max-w-[50vw] bg-background border-border/30 p-0 overflow-hidden"
+        className="w-full sm:w-[600px] lg:w-1/2 lg:max-w-[50vw] bg-white border-border/30 p-0 overflow-hidden"
       >
         <div className="flex flex-col h-full">
           <SheetHeader className="border-b border-border/30 p-6 pb-4">
