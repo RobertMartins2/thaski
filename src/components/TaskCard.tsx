@@ -59,14 +59,18 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
         </h3>
         
         {/* 4° Descrição da Task */}
-        <p className="text-sm text-muted-foreground leading-relaxed" style={{ 
-          display: '-webkit-box', 
-          WebkitLineClamp: task.description.length > 350 ? 6 : 'unset',
-          WebkitBoxOrient: 'vertical',
-          overflow: task.description.length > 350 ? 'hidden' : 'visible'
-        }}>
-          {task.description.length > 350 ? `${task.description.substring(0, 350)}...` : task.description}
-        </p>
+        <div 
+          className="text-sm text-muted-foreground leading-relaxed prose prose-sm max-w-none"
+          style={{ 
+            display: '-webkit-box', 
+            WebkitLineClamp: task.description.length > 350 ? 6 : 'unset',
+            WebkitBoxOrient: 'vertical',
+            overflow: task.description.length > 350 ? 'hidden' : 'visible'
+          }}
+          dangerouslySetInnerHTML={{ 
+            __html: task.description.length > 350 ? `${task.description.substring(0, 350)}...` : task.description 
+          }}
+        />
         
         {/* 5° Linha cinza dividindo */}
         <div className="border-t border-gray-200"></div>

@@ -3,7 +3,7 @@ import { Edit, X, CalendarIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -116,13 +116,11 @@ export function EditTaskDialog({ task, onEditTask, onDeleteTask, open, onOpenCha
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description" className="text-sm font-semibold text-foreground">Descrição</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+            <RichTextEditor
+              content={description}
+              onChange={setDescription}
               placeholder="Digite a descrição da tarefa..."
-              className="min-h-[100px] text-base resize-none"
-              required
+              className="min-h-[120px]"
             />
           </div>
 
