@@ -344,18 +344,31 @@ export default function LandingPage() {
             </NavLink>
           </div>
 
-          <div className="flex items-center justify-center gap-8 mt-12 text-blue-200">
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 fill-current" />
-              <span className="text-sm">{t('rating_5')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              <span className="text-sm">{t('users_1000')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5" />
-              <span className="text-sm">{t('100_free')}</span>
+          <div className="flex flex-col items-center justify-center gap-6 mt-12">
+            {/* Product Hunt Badge */}
+            <a href="https://www.producthunt.com/products/thaski?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-thaski" target="_blank" rel="noopener noreferrer">
+              <img 
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1004586&theme=neutral&t=1755029369496" 
+                alt="Thaski - Thaski – a free, minimalist alternative to Trello | Product Hunt" 
+                className="w-[250px] h-[54px]" 
+                width="250" 
+                height="54" 
+              />
+            </a>
+            
+            <div className="flex items-center justify-center gap-8 text-blue-200">
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 fill-current" />
+                <span className="text-sm">{t('rating_5')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                <span className="text-sm">{t('users_1000')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5" />
+                <span className="text-sm">{t('100_free')}</span>
+              </div>
             </div>
           </div>
         </div>
