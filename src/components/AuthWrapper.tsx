@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { ProjectProvider } from "@/contexts/ProjectContext";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -127,13 +128,15 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="absolute top-4 right-4">
-        <Button variant="outline" onClick={handleSignOut}>
-          Sair
-        </Button>
+    <ProjectProvider>
+      <div className="min-h-screen">
+        <div className="absolute top-4 right-4">
+          <Button variant="outline" onClick={handleSignOut}>
+            Sair
+          </Button>
+        </div>
+        {children}
       </div>
-      {children}
-    </div>
+    </ProjectProvider>
   );
 }

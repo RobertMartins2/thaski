@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { NavLink } from "react-router-dom";
 import { ProjectSetupDialog } from "@/components/ProjectSetupDialog";
-import { getProjectsAsync, addProject, deleteProject } from "@/lib/project-storage";
+import { getProjects, addProject, deleteProject } from "@/lib/project-storage";
 import { Project } from "@/types/kanban";
 
 const Projects = () => {
@@ -25,13 +25,9 @@ const Projects = () => {
   const [newProjectDescription, setNewProjectDescription] = useState('');
   const [newProjectColor, setNewProjectColor] = useState('bg-blue-500');
 
-  // Carregar projetos do Supabase
+  // Carregar projetos do localStorage
   useEffect(() => {
-    const loadProjects = async () => {
-      const projectsList = await getProjectsAsync();
-      setProjects(projectsList);
-    };
-    loadProjects();
+    setProjects(getProjects());
   }, []);
 
   const colorOptions = [
@@ -45,7 +41,7 @@ const Projects = () => {
     { name: 'Verde-azulado', value: 'bg-teal-500' },
   ];
 
-  const handleCreateProject = async () => {
+  const handleCreateProject = () => {
     if (!newProjectName.trim()) {
       toast.error("Nome do projeto é obrigatório");
       return;
@@ -68,57 +64,36 @@ const Projects = () => {
       return;
     }
 
-    const projectData = {
+    const newProject: Project = {
+      id: `project-${Date.now()}`,
       name: newProjectName.trim(),
       code: newProjectCode.trim().toUpperCase(),
-      color: newProjectColor
+      color: newProjectColor,
+      taskCount: 0
     };
 
-    try {
-      // Usar função assíncrona do Supabase
-      const newProject = await addProject(projectData);
-      
-      if (!newProject) {
-        toast.error("Erro ao criar projeto");
-        return;
-      }
-
-      // Atualizar lista local
-      setProjects(await getProjectsAsync());
-      
-      // Limpar campos
-      setNewProjectName('');
-      setNewProjectCode('');
-      setNewProjectDescription('');
-      setNewProjectColor('bg-blue-500');
-      setIsCreateDialogOpen(false);
-      
-      // Abrir o dialog de configuração dos estágios
-      setSetupProjectId(newProject.id);
-      setSetupProjectName(newProject.name);
-      
-      toast.success(`Projeto "${newProject.name}" criado! Configure os estágios do kanban.`);
-    } catch (error) {
-      console.error('Erro ao criar projeto:', error);
-      toast.error("Erro ao criar projeto");
-    }
+    // Adicionar ao storage e atualizar estado local
+    addProject(newProject);
+    setProjects(getProjects());
+    
+    setNewProjectName('');
+    setNewProjectCode('');
+    setNewProjectDescription('');
+    setNewProjectColor('bg-blue-500');
+    setIsCreateDialogOpen(false);
+    
+    // Abrir o dialog de configuração dos estágios
+    setSetupProjectId(newProject.id);
+    setSetupProjectName(newProject.name);
+    
+    toast.success(`Projeto "${newProject.name}" criado! Configure os estágios do kanban.`);
   };
 
-  const handleDeleteProject = async (projectId: string, projectName: string) => {
+  const handleDeleteProject = (projectId: string, projectName: string) => {
     if (confirm(`Tem certeza de que deseja excluir "${projectName}"? Esta ação não pode ser desfeita.`)) {
-      try {
-        const success = await deleteProject(projectId);
-        if (success) {
-          const updatedProjects = await getProjectsAsync();
-          setProjects(updatedProjects);
-          toast.success(`Projeto "${projectName}" excluído com sucesso`);
-        } else {
-          toast.error("Erro ao excluir projeto");
-        }
-      } catch (error) {
-        console.error('Erro ao excluir projeto:', error);
-        toast.error("Erro ao excluir projeto");
-      }
+      deleteProject(projectId);
+      setProjects(getProjects());
+      toast.success(`Projeto "${projectName}" excluído com sucesso`);
     }
   };
 

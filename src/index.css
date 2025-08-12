@@ -2,113 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import Fluent UI fonts and tokens */
-@import "@fluentui/tokens/css/fonts.css";
+/* Import Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-/* Fluent UI uses Segoe UI Variable font stack */
-@import url('https://res.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css');
-
-/* Fluent UI design tokens */
+/* Modern design tokens */
 @layer base {
   :root {
-    /* Fluent UI Light Theme Colors - HSL format */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 14%;
+    --background: 220 23% 95%;
+    --foreground: 222 84% 5%;
     --surface: 0 0% 100%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 14%;
-    --card-hover: 210 17% 95%;
+    --card-foreground: 222 84% 5%;
+    --card-hover: 210 40% 94%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 14%;
-    --primary: 207 100% 42%;
+    --popover-foreground: 222 84% 5%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 207 90% 39%;
-    --secondary: 210 17% 95%;
-    --secondary-foreground: 215 25% 19%;
-    --secondary-hover: 210 17% 92%;
-    --muted: 240 5% 98%;
-    --muted-foreground: 215 14% 38%;
-    --muted-hover: 210 17% 95%;
-    --accent: 210 17% 93%;
-    --accent-foreground: 215 25% 19%;
-    --accent-hover: 210 17% 88%;
-    --destructive: 348 60% 49%;
+    --primary-hover: 221 83% 48%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 84% 5%;
+    --secondary-hover: 210 40% 91%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --muted-hover: 210 40% 91%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 84% 5%;
+    --accent-hover: 210 40% 91%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 210 18% 88%;
-    --input: 210 17% 95%;
-    --ring: 207 100% 42%;
-    --radius: 4px;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+    --radius: 12px;
 
-    /* Status colors - HSL */
-    --status-todo: 210 11% 71%;
+    /* Status colors - more subtle */
+    --status-todo: 240 5% 84%;
     --status-progress: 43 89% 38%;
     --status-done: 142 51% 36%;
 
-    /* Tag colors - HSL */
+    /* Tag colors - refined palette */
     --tag-design: 264 67% 51%;
     --tag-hiring: 330 81% 60%;
     --tag-dev: 213 56% 59%;
     --tag-performance: 156 72% 47%;
 
-    /* Fluent UI Sidebar light - HSL */
+    /* Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 14%;
-    --sidebar-primary: 207 100% 42%;
+    --sidebar-foreground: 222 84% 5%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 17% 93%;
-    --sidebar-accent-foreground: 215 25% 19%;
-    --sidebar-border: 210 18% 88%;
-    --sidebar-ring: 207 100% 42%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 84% 5%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 221 83% 53%;
   }
 
   .dark {
-    /* Fluent UI Dark Theme Colors - HSL format */
-    --background: 210 11% 12%;
-    --foreground: 0 0% 100%;
-    --surface: 215 25% 15%;
-    --card: 215 25% 15%;
-    --card-foreground: 0 0% 100%;
-    --card-hover: 215 25% 19%;
-    --popover: 210 11% 12%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 207 100% 70%;
-    --primary-foreground: 0 0% 0%;
-    --primary-hover: 207 90% 65%;
-    --secondary: 215 25% 19%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 215 25% 23%;
-    --muted: 215 20% 23%;
-    --muted-foreground: 217 10% 77%;
-    --muted-hover: 215 25% 27%;
-    --accent: 215 25% 27%;
-    --accent-foreground: 0 0% 100%;
-    --accent-hover: 215 25% 32%;
-    --destructive: 0 73% 64%;
+    --background: 222 84% 5%;
+    --foreground: 210 40% 98%;
+    --surface: 224 71% 4%;
+    --card: 224 71% 4%;
+    --card-foreground: 210 40% 98%;
+    --card-hover: 215 28% 17%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 221 83% 48%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --secondary-hover: 215 28% 22%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 218 11% 65%;
+    --muted-hover: 215 28% 22%;
+    --accent: 215 28% 17%;
+    --accent-foreground: 210 40% 98%;
+    --accent-hover: 215 28% 22%;
+    --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 100%;
-    --border: 215 20% 28%;
-    --input: 215 25% 19%;
-    --ring: 207 100% 70%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 221 83% 53%;
 
-    /* Status colors dark - HSL */
-    --status-todo: 210 11% 71%;
+    /* Status colors dark */
+    --status-todo: 240 5% 84%;
     --status-progress: 43 89% 38%;
     --status-done: 142 51% 36%;
 
-    /* Tag colors dark - HSL */
+    /* Tag colors dark */
     --tag-design: 264 67% 45%;
     --tag-hiring: 330 81% 35%;
     --tag-dev: 213 56% 45%;
     --tag-performance: 156 72% 35%;
 
-    /* Fluent UI Sidebar dark - HSL */
-    --sidebar-background: 215 25% 15%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 207 100% 70%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 215 25% 27%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 215 20% 28%;
-    --sidebar-ring: 207 100% 70%;
+    /* Sidebar dark */
+    --sidebar-background: 224 71% 4%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 221 83% 53%;
   }
 }
 
@@ -117,8 +112,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: var(--font-family-base), "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    @apply bg-background text-foreground font-poppins antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
     letter-spacing: -0.005em;
   }

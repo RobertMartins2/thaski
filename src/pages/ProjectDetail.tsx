@@ -6,27 +6,18 @@ import { ProjectHeader } from "@/components/ProjectHeader";
 import { TaskBoard } from "@/components/TaskBoard";
 import { toast } from "sonner";
 import { Project } from "@/types/kanban";
-import { getProjectsAsync, getProjectById } from "@/lib/project-storage";
+import { getProjects, getProjectById } from "@/lib/project-storage";
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
-  const [projects, setProjects] = useState<Project[]>([]);
+
+  const projects = getProjects();
 
   useEffect(() => {
     loadProject();
-    loadProjects();
   }, [projectId]);
-
-  const loadProjects = async () => {
-    try {
-      const projectsList = await getProjectsAsync();
-      setProjects(projectsList);
-    } catch (error) {
-      console.error('Erro ao carregar projetos:', error);
-    }
-  };
 
   const loadProject = async () => {
     setLoading(true);
