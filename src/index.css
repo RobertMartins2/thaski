@@ -137,10 +137,11 @@
   }
   
   .kanban-column {
-    @apply rounded-3xl p-6 h-full relative;
+    @apply rounded-3xl h-full relative;
     min-height: 500px;
     background: transparent;
     border: none;
+    padding: 1.5rem 0;
   }
 
   .column-header {
