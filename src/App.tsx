@@ -34,12 +34,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             
-            {/* Protected routes - precisam de AuthWrapper */}
-            <Route path="/" element={
-              <AuthWrapper>
-                <Navigate to="/projects" replace />
-              </AuthWrapper>
-            } />
+             {/* Rota raiz redireciona para landing page */}
+             <Route path="/" element={<Navigate to="/lp" replace />} />
             <Route path="/projects" element={
               <AuthWrapper>
                 <Projects />
