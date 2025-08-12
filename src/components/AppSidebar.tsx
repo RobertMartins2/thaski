@@ -1,5 +1,4 @@
 import {
-  Home,
   FolderOpen,
   Settings,
   KanbanSquare,
@@ -26,11 +25,6 @@ export function AppSidebar() {
   
   const menuItems = [
     {
-      title: "Home",
-      url: "/",
-      icon: Home,
-    },
-    {
       title: "Projetos",
       url: "/projects",
       icon: FolderOpen,
@@ -43,9 +37,6 @@ export function AppSidebar() {
   ];
 
   const isActive = (path: string) => {
-    if (path === "/") {
-      return location.pathname === "/";
-    }
     return location.pathname.startsWith(path);
   };
 
