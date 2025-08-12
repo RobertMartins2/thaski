@@ -8,10 +8,6 @@ type AuthView = 'signup' | 'email-confirmation' | 'resend-confirmation';
 export default function SignUp() {
   const [currentView, setCurrentView] = useState<AuthView>('signup');
 
-  // Check if we're in development/preview mode
-  const isDevelopment = import.meta.env.DEV || 
-    window.location.hostname.includes('lovable.app') ||
-    window.location.hostname.includes('lovableproject.com');
 
   const handleSwitchView = (view: AuthView) => {
     setCurrentView(view);
@@ -53,17 +49,6 @@ export default function SignUp() {
             <h2 className="text-3xl font-bold text-primary mb-2">PIKI Projetos</h2>
           </div>
           {renderAuthContent()}
-          {isDevelopment && currentView === 'signup' && (
-            <div className="mt-8 pt-6 border-t border-muted">
-              <button
-                type="button"
-                onClick={() => window.location.href = '/projects'}
-                className="w-full h-12 px-4 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground text-sm font-medium transition-colors"
-              >
-                🚀 Modo Preview (Sem Login)
-              </button>
-            </div>
-          )}
         </div>
       </div>
       

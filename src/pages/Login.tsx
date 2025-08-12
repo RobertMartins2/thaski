@@ -3,17 +3,12 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { EmailConfirmationScreen } from "@/components/auth/EmailConfirmationScreen";
 import { ResendConfirmationForm } from "@/components/auth/ResendConfirmationForm";
-import { AuthDebugPanel } from "@/components/debug/AuthDebugPanel";
 
 type AuthView = 'login' | 'forgot-password' | 'email-confirmation' | 'resend-confirmation';
 
 export default function Login() {
   const [currentView, setCurrentView] = useState<AuthView>('login');
 
-  // Check if we're in development/preview mode
-  const isDevelopment = import.meta.env.DEV || 
-    window.location.hostname.includes('lovable.app') ||
-    window.location.hostname.includes('lovableproject.com');
 
   const handleSwitchView = (view: AuthView) => {
     setCurrentView(view);
@@ -61,25 +56,6 @@ export default function Login() {
             <h2 className="text-3xl font-bold text-primary mb-2">PIKI Projetos</h2>
           </div>
           {renderAuthContent()}
-          {isDevelopment && currentView === 'login' && (
-            <div className="mt-8 pt-6 border-t border-muted space-y-4">
-              <button
-                type="button"
-                onClick={() => window.location.href = '/projects'}
-                className="w-full h-12 px-4 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground text-sm font-medium transition-colors"
-              >
-                🚀 Modo Preview (Sem Login)
-              </button>
-              <details className="mt-4">
-                <summary className="text-sm text-muted-foreground cursor-pointer hover:text-foreground">
-                  🐛 Painel de Debug
-                </summary>
-                <div className="mt-2">
-                  <AuthDebugPanel />
-                </div>
-              </details>
-            </div>
-          )}
         </div>
       </div>
       
