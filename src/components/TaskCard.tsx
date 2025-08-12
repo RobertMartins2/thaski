@@ -44,9 +44,9 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       onClick={() => onClick?.(task)}
       style={{
         borderRadius: '10px',
-        border: '3px solid #F6F9FC',
+        border: '4px solid #F6F9FC',
         background: '#FFF',
-        boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.50)'
+        boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.30)'
       }}
     >
       <CardContent className="p-6 space-y-5">
