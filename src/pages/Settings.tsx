@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,11 +6,78 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Settings as SettingsIcon, User, Bell, Shield, Palette } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Settings as SettingsIcon, User, Bell, Shield, Palette, Upload } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export default function Settings() {
+  const [loading, setLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState({
+    full_name: "",
+    email: "",
+    phone: ""
+  });
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserProfile({
+          full_name: user.user_metadata?.full_name || "",
+          email: user.email || "",
+          phone: user.user_metadata?.phone || ""
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao carregar perfil:", error);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setUserProfile(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          full_name: userProfile.full_name,
+          phone: userProfile.phone
+        }
+      });
+
+      if (error) throw error;
+      toast.success("Perfil atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar perfil:", error);
+      toast.error("Erro ao salvar perfil");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -39,18 +107,64 @@ export default function Settings() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Upload de foto */}
+                <div className="flex flex-col items-center space-y-4 mb-6">
+                  <div className="relative">
+                    <Avatar className="w-20 h-20">
+                      <AvatarImage src={previewUrl || undefined} />
+                      <AvatarFallback className="bg-muted">
+                        <Upload className="w-8 h-8 text-muted-foreground" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                  </div>
+                  <Label className="text-sm text-muted-foreground cursor-pointer">
+                    Clique para alterar foto de perfil
+                  </Label>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Nome</Label>
-                    <Input id="name" placeholder="Seu nome" defaultValue="Usuario" />
+                    <Label htmlFor="name">Nome completo</Label>
+                    <Input 
+                      id="name" 
+                      placeholder="Seu nome completo" 
+                      value={userProfile.full_name}
+                      onChange={(e) => handleInputChange("full_name", e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">E-mail</Label>
-                    <Input id="email" type="email" placeholder="seu@email.com" defaultValue="usuario@email.com" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="seu@email.com" 
+                      value={userProfile.email}
+                      disabled
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Telefone</Label>
+                    <Input 
+                      id="phone" 
+                      type="tel" 
+                      placeholder="(00) 00000-0000"
+                      value={userProfile.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                    />
                   </div>
                 </div>
-                <Button className="bg-primary hover:bg-primary/90">
-                  Salvar Alterações
+                <Button 
+                  className="bg-primary hover:bg-primary/90"
+                  onClick={handleSaveProfile}
+                  disabled={loading}
+                >
+                  {loading ? "Salvando..." : "Salvar Alterações"}
                 </Button>
               </CardContent>
             </Card>
