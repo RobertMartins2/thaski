@@ -47,7 +47,7 @@ export default function SignUp() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <img 
-              src="/lovable-uploads/3f25e084-42ff-44b4-8726-5e2bb79309ed.png" 
+              src="/lovable-uploads/311a49a3-a023-4208-954c-dad2347c5e50.png" 
               alt="PIKI Projetos Logo" 
               className="h-12 mx-auto mb-2"
             />
