@@ -31,24 +31,14 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
         boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.30)'
       }}
     >
-      <CardContent className="p-6 space-y-5">
-        {/* Task code */}
+      <CardContent className="p-6 space-y-4">
+        {/* 1° Código da Task */}
         <div className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-wide">
           {task.code}
         </div>
         
-        {/* Task title */}
-        <h3 className="font-semibold text-foreground text-base leading-tight -mt-1">
-          {task.title}
-        </h3>
-        
-        {/* Task description */}
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-          {task.description}
-        </p>
-        
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 pt-1">
+        {/* 2° Tags */}
+        <div className="flex flex-wrap gap-2">
           {task.tags.map((tag, index) => (
             <Badge
               key={index}
@@ -62,29 +52,40 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
             </Badge>
           ))}
         </div>
+        
+        {/* 3° Título da Task */}
+        <h3 className="font-semibold text-foreground text-base leading-tight">
+          {task.title}
+        </h3>
+        
+        {/* 4° Descrição da Task */}
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+          {task.description}
+        </p>
+        
+        {/* 5° Linha cinza dividindo */}
+        <div className="border-t border-gray-200"></div>
 
-        {/* Priority and Due Date */}
-        {(task.priority !== 'medium' || task.dueDate) && (
-          <div className="flex items-center gap-2 pt-1 border-t border-border/20">
-            {task.priority !== 'medium' && (
-              <Badge 
-                className={`text-xs px-2 py-1 font-medium ${
-                  task.priority === 'high' 
-                    ? 'bg-red-100 text-red-700' 
-                    : 'bg-green-100 text-green-700'
-                }`}
-                variant="secondary"
-              >
-                {task.priority === 'high' ? 'Alta' : 'Baixa'}
-              </Badge>
-            )}
-            {task.dueDate && (
-              <Badge className="text-xs px-2 py-1 font-medium bg-blue-100 text-blue-700" variant="secondary">
-                {new Date(task.dueDate).toLocaleDateString('pt-BR')}
-              </Badge>
-            )}
-          </div>
-        )}
+        {/* 6° Prioridade e Data */}
+        <div className="flex items-center justify-between">
+          {/* Prioridade */}
+          <Badge 
+            className="text-xs px-3 py-1.5 font-medium bg-white border border-gray-300 text-gray-700 rounded-lg"
+            variant="outline"
+          >
+            {task.priority === 'high' ? 'Alta' : task.priority === 'low' ? 'Baixa' : 'Média'}
+          </Badge>
+          
+          {/* Data de conclusão */}
+          {task.dueDate && (
+            <Badge 
+              className="text-xs px-3 py-1.5 font-medium bg-white border border-gray-300 text-gray-700 rounded-lg"
+              variant="outline"
+            >
+              {new Date(task.dueDate).toLocaleDateString('pt-BR')}
+            </Badge>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
