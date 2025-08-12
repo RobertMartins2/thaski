@@ -46,7 +46,11 @@ export default function SignUp() {
       <div className="flex-1 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-primary mb-2">PIKI Projetos</h2>
+            <img 
+              src="/lovable-uploads/3f25e084-42ff-44b4-8726-5e2bb79309ed.png" 
+              alt="PIKI Projetos Logo" 
+              className="h-12 mx-auto mb-2"
+            />
           </div>
           {renderAuthContent()}
         </div>
