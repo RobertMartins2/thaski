@@ -84,7 +84,10 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          // Use a URL específica da produção
+          emailRedirectTo: window.location.origin.includes('localhost') 
+            ? `${window.location.origin}/` 
+            : `https://seuapp.vercel.app/login`, // Substitua pela sua URL de produção
           data: {
             full_name: formData.name,
             phone: formData.phone
