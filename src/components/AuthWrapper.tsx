@@ -20,6 +20,19 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
+  const [devMode, setDevMode] = useState(false);
+
+  // Check if we're in development/preview mode
+  const isDevelopment = import.meta.env.DEV || 
+    window.location.hostname.includes('lovable.app') ||
+    window.location.hostname.includes('lovableproject.com');
+
+  // Auto-enable preview mode in development
+  useEffect(() => {
+    if (isDevelopment && !user) {
+      setDevMode(true);
+    }
+  }, [isDevelopment, user]);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -128,7 +141,7 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
     );
   }
 
-  if (!user) {
+  if (!user && !devMode && !isDevelopment) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md">
@@ -171,6 +184,16 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
               >
                 {isSignUp ? "Já tem uma conta? Fazer login" : "Criar nova conta"}
               </Button>
+              {isDevelopment && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full mt-4"
+                  onClick={() => setDevMode(true)}
+                >
+                  🚀 Modo Preview (Sem Login)
+                </Button>
+              )}
             </form>
           </CardContent>
         </Card>
