@@ -2,10 +2,11 @@
 import { useEffect } from "react";
 import { TaskBoard } from "@/components/TaskBoard";
 import { ProjectHeader } from "@/components/ProjectHeader";
-import { useProject } from "@/contexts/ProjectContext";
+import { useProjects } from "@/contexts/ProjectContext";
 
 export default function Index() {
-  const { currentProject, projects } = useProject();
+  const { projects } = useProjects();
+  const currentProject = projects.length > 0 ? projects[0] : null;
 
   useEffect(() => {
     console.log('Index page rendered');
