@@ -9,7 +9,7 @@ import { Project } from "@/types/kanban";
 import { getProjects, getProjectById } from "@/lib/project-storage";
 
 const ProjectDetail = () => {
-  const { projectId } = useParams();
+  const { id } = useParams();
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,13 +17,13 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     loadProject();
-  }, [projectId]);
+  }, [id]);
 
   const loadProject = async () => {
     setLoading(true);
     try {
       const { getProjectById } = await import('@/lib/project-storage');
-      const project = await getProjectById(projectId || '');
+      const project = await getProjectById(id || '');
       if (project) {
         setCurrentProject(project);
       } else {
@@ -85,7 +85,7 @@ const ProjectDetail = () => {
           
           {/* Task Board Content */}
           <div className="flex-1 overflow-auto px-6 py-6">
-            <TaskBoard projectId={projectId} />
+            <TaskBoard projectId={id} />
           </div>
         </main>
       </div>
