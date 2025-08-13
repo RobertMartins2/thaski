@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthWrapper } from "@/components/AuthWrapper";
+import { RootRedirect } from "@/components/RootRedirect";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
 
@@ -42,8 +43,8 @@ const App = () => {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/auth/confirm" element={<EmailConfirmation />} />
                 
-                 {/* Rota raiz redireciona para landing page */}
-                 <Route path="/" element={<Navigate to="/lp" replace />} />
+                 {/* Rota raiz - verifica tokens de reset antes de redirecionar */}
+                 <Route path="/" element={<RootRedirect />} />
                 <Route path="/projects" element={
                   <AuthWrapper>
                     <Projects />
