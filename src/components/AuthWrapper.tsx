@@ -60,7 +60,12 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   return (
     <SidebarProvider>
       <ProjectProvider>
-        <div className="min-h-screen flex w-full">
+        <div 
+          className="min-h-screen flex w-full"
+          style={{
+            background: 'linear-gradient(100deg, #EDF5FD 0.39%, #F7FAFA 51.24%, #FFFFF8 91.56%)'
+          }}
+        >
           <AppSidebar />
           <SidebarInset>
             {children}
