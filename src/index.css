@@ -112,7 +112,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-poppins antialiased;
+    @apply text-foreground font-poppins antialiased;
+    background: linear-gradient(100deg, #EDF5FD 0.39%, #F7FAFA 51.24%, #FFFFF8 91.56%);
     font-feature-settings: "rlig" 1, "calt" 1;
     letter-spacing: -0.005em;
   }
