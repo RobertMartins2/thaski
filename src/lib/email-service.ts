@@ -16,6 +16,8 @@ interface SendEmailOptions {
 
 export const sendEmail = async (options: SendEmailOptions) => {
   try {
+    console.log('🚀 Enviando email:', options);
+    
     const { data, error } = await supabase.functions.invoke('send-email', {
       body: {
         to: options.to,
@@ -26,14 +28,17 @@ export const sendEmail = async (options: SendEmailOptions) => {
       },
     });
 
+    console.log('📧 Resposta da função:', { data, error });
+
     if (error) {
-      console.error('Error sending email:', error);
-      throw new Error('Erro ao enviar email');
+      console.error('❌ Erro ao enviar email:', error);
+      throw new Error(`Erro ao enviar email: ${error.message || error}`);
     }
 
+    console.log('✅ Email enviado com sucesso!', data);
     return data;
   } catch (error) {
-    console.error('Email service error:', error);
+    console.error('💥 Email service error:', error);
     throw error;
   }
 };

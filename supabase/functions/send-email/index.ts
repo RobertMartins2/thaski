@@ -33,13 +33,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log('📨 Edge Function chamada - send-email');
+    
     const { to, subject, html, type, data }: EmailRequest = await req.json();
+    console.log('📋 Dados recebidos:', { to, type, subject: subject || 'auto', hasData: !!data });
+
+    // Verificar se temos a API key
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) {
+      console.error('❌ RESEND_API_KEY não configurada');
+      throw new Error('RESEND_API_KEY não está configurada');
+    }
+    console.log('✅ RESEND_API_KEY encontrada');
 
     let emailSubject = subject;
     let emailHtml = html;
 
     // Gerar template baseado no tipo
     if (type !== 'custom') {
+      console.log('🎨 Gerando template para tipo:', type);
+      
       switch (type) {
         case 'welcome':
           emailSubject = 'Bem-vindo ao Thaski! Confirme sua conta';
@@ -74,12 +87,16 @@ const handler = async (req: Request): Promise<Response> => {
         default:
           throw new Error(`Tipo de email não suportado: ${type}`);
       }
+      
+      console.log('✅ Template gerado com sucesso');
     }
 
     if (!emailSubject || !emailHtml) {
       throw new Error('Subject e HTML são obrigatórios para emails customizados');
     }
 
+    console.log('📤 Enviando email via Resend...');
+    
     // Para usar domínio personalizado, atualize após verificar no Resend:
     // from: "Thaski <noreply@thaski.com.br>"
     const emailResponse = await resend.emails.send({
@@ -99,7 +116,7 @@ const handler = async (req: Request): Promise<Response> => {
       ],
     });
 
-    console.log(`Email ${type} sent successfully to ${to}:`, emailResponse);
+    console.log(`✅ Email ${type} enviado com sucesso para ${to}:`, emailResponse);
 
     return new Response(JSON.stringify(emailResponse), {
       status: 200,
@@ -109,11 +126,11 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
   } catch (error: any) {
-    console.error("Error in send-email function:", error);
+    console.error("💥 Erro na função send-email:", error);
     
     // Log detalhado para debugging
     if (error.message?.includes('API key')) {
-      console.error("API key issue - verify RESEND_API_KEY is set correctly");
+      console.error("🔑 Problema com API key - verifique se RESEND_API_KEY está configurada");
     }
     
     return new Response(
