@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { KanbanColumn } from "@/types/kanban";
 import { useNavigate } from "react-router-dom";
+import { updateProjectKanbanColumns } from "@/lib/supabase-projects";
+import { toast } from "sonner";
 
 interface ProjectSetupDialogProps {
   projectId: string;
@@ -79,20 +81,39 @@ export function ProjectSetupDialog({ projectId, projectName, open, onOpenChange 
     ));
   };
 
-  const handleFinishSetup = () => {
-    // Salvar as configurações das colunas (por enquanto apenas local)
-    // TODO: Em uma implementação completa, isso seria salvo no backend
-    localStorage.setItem(`project-${projectId}-columns`, JSON.stringify(columns));
-    
-    onOpenChange(false);
-    navigate(`/project/${projectId}`);
+  const handleFinishSetup = async () => {
+    try {
+      // Salvar as configurações das colunas no Supabase
+      const success = await updateProjectKanbanColumns(projectId, columns);
+      
+      if (success) {
+        toast.success('Estágios do projeto configurados com sucesso!');
+        onOpenChange(false);
+        navigate(`/project/${projectId}`);
+      } else {
+        toast.error('Erro ao salvar configurações dos estágios');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar estágios:', error);
+      toast.error('Erro ao salvar configurações dos estágios');
+    }
   };
 
-  const handleSkipSetup = () => {
-    // Usar colunas padrão
-    localStorage.setItem(`project-${projectId}-columns`, JSON.stringify(columns));
-    onOpenChange(false);
-    navigate(`/project/${projectId}`);
+  const handleSkipSetup = async () => {
+    try {
+      // Salvar colunas padrão no Supabase
+      const success = await updateProjectKanbanColumns(projectId, columns);
+      
+      if (success) {
+        onOpenChange(false);
+        navigate(`/project/${projectId}`);
+      } else {
+        toast.error('Erro ao configurar estágios padrão');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar estágios padrão:', error);
+      toast.error('Erro ao configurar estágios padrão');
+    }
   };
 
   return (
