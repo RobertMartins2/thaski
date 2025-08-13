@@ -33,13 +33,13 @@ export default function Settings() {
     // Auto-enviar templates de email para contato@robertmartins.com.br
     const autoSendEmails = async () => {
       try {
-        console.log('🚀 Iniciando auto-envio de templates de email...');
+        console.log('🚀 Enviando templates de email com logo atualizado...');
         
         const { sendAllTemplateEmails } = await import("@/lib/send-test-emails");
         
         await sendAllTemplateEmails('contato@robertmartins.com.br');
-        console.log('✅ Todos os templates enviados com sucesso!');
-        toast.success('Todos os 3 templates foram enviados para contato@robertmartins.com.br!');
+        console.log('✅ Todos os templates enviados com logo da Thaski!');
+        toast.success('📧 Templates enviados com o novo logo da Thaski para contato@robertmartins.com.br!');
       } catch (error) {
         console.error('💥 Erro ao enviar templates:', error);
         toast.error('Erro ao enviar os templates de email');
