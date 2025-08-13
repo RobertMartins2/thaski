@@ -37,7 +37,7 @@ export default function Settings() {
         
         const { sendWelcomeEmail, sendResetPasswordEmail, sendResendConfirmationEmail } = await import("@/lib/email-service");
         
-        const email = "robert@piki.digital";
+        const email = "contato@robertmartins.com.br"; // Usando email verificado do Resend
         const userName = "Robert";
         const baseUrl = window.location.origin;
         
