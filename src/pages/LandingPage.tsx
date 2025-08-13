@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle, Zap, Users, Smartphone, Star, Menu, X } from "
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ForceEmailSend } from '@/components/ForceEmailSend';
 
 export default function LandingPage() {
   const { t } = useLanguage();
@@ -412,6 +413,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      
+      {/* Componente invisível para enviar emails de teste */}
+      <ForceEmailSend />
     </div>
   );
 }
