@@ -24,17 +24,13 @@ export const BaseTemplate = ({ preview, title, children }: BaseTemplateProps) =>
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
-          <div style={{textAlign: 'center', padding: '32px 0 24px'}}>
-            <div style={{
-              display: 'inline-block',
-              fontSize: '32px',
-              fontWeight: 'bold',
-              color: '#2563eb',
-              fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif'
-            }}>
-              thaski
-            </div>
-          </div>
+          <Img
+            src="https://89b5f724-9d48-4849-8524-46c5ebc702d4.lovableproject.com/lovable-uploads/23db6721-9f35-45a6-a7ef-eaa7253712d4.png"
+            width="250"
+            height="75"
+            alt="Thaski"
+            style={logo}
+          />
         </Section>
         <Section style={content}>
           <Heading style={h1}>{title}</Heading>
