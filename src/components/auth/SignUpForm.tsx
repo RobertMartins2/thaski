@@ -82,21 +82,21 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
         // Continue even if this fails
       }
 
-      console.log("Tentando criar conta com:", {
-        email: formData.email,
-        emailRedirectTo: `${window.location.origin}/projects`,
-        metadata: {
-          full_name: formData.name,
-          phone: formData.phone
-        }
-      });
+        console.log("Tentando criar conta com:", {
+          email: formData.email,
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
+          metadata: {
+            full_name: formData.name,
+            phone: formData.phone
+          }
+        });
 
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
-          // Usar a URL atual do ambiente
-          emailRedirectTo: `${window.location.origin}/projects`,
+          // Redirecionar para página de confirmação personalizada
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
           data: {
             full_name: formData.name,
             phone: formData.phone

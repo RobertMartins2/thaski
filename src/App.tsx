@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import LandingPage from "./pages/LandingPage";
+import EmailConfirmation from "./pages/EmailConfirmation";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => {
                 {/* Auth routes - não precisam de AuthWrapper */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/auth/confirm" element={<EmailConfirmation />} />
                 
                  {/* Rota raiz redireciona para landing page */}
                  <Route path="/" element={<Navigate to="/lp" replace />} />
