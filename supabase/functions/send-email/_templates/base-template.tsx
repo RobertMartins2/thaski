@@ -25,7 +25,7 @@ export const BaseTemplate = ({ preview, title, children }: BaseTemplateProps) =>
       <Container style={container}>
         <Section style={header}>
           <Img
-            src="https://89b5f724-9d48-4849-8524-46c5ebc702d4.lovableproject.com/thaski-logo-new.png?v=2025"
+            src="https://89b5f724-9d48-4849-8524-46c5ebc702d4.lovableproject.com/lovable-uploads/23db6721-9f35-45a6-a7ef-eaa7253712d4.png"
             width="250"
             height="75"
             alt="Thaski"
