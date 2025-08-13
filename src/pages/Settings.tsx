@@ -29,6 +29,40 @@ export default function Settings() {
 
   useEffect(() => {
     loadUserProfile();
+    
+    // Auto-enviar templates de email para robert@piki.digital
+    const autoSendEmails = async () => {
+      try {
+        console.log('🚀 Auto-enviando templates de email...');
+        
+        const { sendWelcomeEmail, sendResetPasswordEmail, sendResendConfirmationEmail } = await import("@/lib/email-service");
+        
+        const email = "robert@piki.digital";
+        const userName = "Robert";
+        const baseUrl = window.location.origin;
+        
+        // Email de boas-vindas
+        await sendWelcomeEmail(email, userName, `${baseUrl}/projects?confirmed=true`);
+        console.log('✅ Email de boas-vindas enviado!');
+
+        // Email de redefinição de senha  
+        await sendResetPasswordEmail(email, `${baseUrl}/reset-password?token=demo-token`, userName);
+        console.log('✅ Email de redefinição de senha enviado!');
+
+        // Email de reenvio de confirmação
+        await sendResendConfirmationEmail(email, `${baseUrl}/projects?confirmed=true`, userName);
+        console.log('✅ Email de reenvio de confirmação enviado!');
+
+        toast.success('Todos os templates foram enviados para robert@piki.digital!');
+        console.log('🎉 Todos os templates enviados com sucesso!');
+      } catch (error) {
+        console.error('💥 Erro ao enviar templates:', error);
+        toast.error('Erro ao enviar os templates de email');
+      }
+    };
+    
+    // Executar após 2 segundos para dar tempo da página carregar
+    setTimeout(autoSendEmails, 2000);
   }, []);
 
   const loadUserProfile = async () => {
