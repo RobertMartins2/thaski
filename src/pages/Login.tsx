@@ -65,9 +65,11 @@ export default function Login() {
       
       {/* Right side - Background with image */}
       <div className="hidden lg:flex flex-1 items-center justify-center relative">
-        <img 
-          src="/lovable-uploads/f8d44504-27ff-433a-98d2-4bb3c8c0b91b.png" 
-          alt="Task Card Interface" 
+        <video 
+          src="/login-background-video.mp4" 
+          autoPlay 
+          loop 
+          muted 
           className="w-full h-full object-cover"
         />
       </div>
