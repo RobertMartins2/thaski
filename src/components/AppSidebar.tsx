@@ -126,9 +126,9 @@ export function AppSidebar() {
       collapsible="icon" 
       className="border-r border-border/40"
       style={{
-        borderRadius: '10px',
-        border: '2px solid #E4F0FF',
-        background: 'linear-gradient(180deg, #FFF 0%, rgba(255, 255, 255, 0.50) 100%)',
+        borderRadius: '0 10px 10px 0',
+        border: '4px solid #F6F9FC',
+        background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.40) 100%)',
         boxShadow: '0 4px 20px 0 rgba(229, 237, 247, 0.30)'
       }}
     >
