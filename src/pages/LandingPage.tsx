@@ -43,9 +43,9 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-2">
             <img 
@@ -88,7 +88,7 @@ export default function LandingPage() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t bg-background p-4">
+          <div className="md:hidden border-t p-4">
             <nav className="flex flex-col space-y-4">
               <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
                 {t('features')}
@@ -170,7 +170,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-background">
+      <section id="features" className="py-24">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <Badge className="mb-4">{t('why_thaski')}</Badge>
@@ -199,7 +199,7 @@ export default function LandingPage() {
           </div>
 
           {/* Benefits Grid */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-12">
+          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 md:p-12">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-6 text-foreground">
@@ -246,7 +246,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-gradient-to-br from-gray-50 to-white">
+      <section id="pricing" className="py-24">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <Badge className="mb-4">{t('transparent_pricing')}</Badge>
