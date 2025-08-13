@@ -69,6 +69,48 @@ export function EmailTestPanel() {
     }
   };
 
+  const handleSendAllTemplates = async () => {
+    const testEmail = "robert@piki.digital";
+    const testUserName = "Robert";
+    
+    if (!testEmail) {
+      toast.error("Email é obrigatório");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Enviar email de boas-vindas
+      await sendWelcomeEmail(
+        testEmail,
+        testUserName,
+        `${window.location.origin}/projects?confirmed=true`
+      );
+
+      // Enviar email de redefinição de senha
+      await sendResetPasswordEmail(
+        testEmail,
+        `${window.location.origin}/reset-password?token=demo-token`,
+        testUserName
+      );
+
+      // Enviar email de reenvio de confirmação
+      await sendResendConfirmationEmail(
+        testEmail,
+        `${window.location.origin}/projects?confirmed=true`,
+        testUserName
+      );
+
+      toast.success("Todos os templates foram enviados para robert@piki.digital!");
+    } catch (error) {
+      console.error('Error sending template emails:', error);
+      toast.error('Erro ao enviar os templates de email');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -141,13 +183,24 @@ export function EmailTestPanel() {
           </>
         )}
 
-        <Button 
-          onClick={handleSendTestEmail}
-          disabled={loading}
-          className="w-full"
-        >
-          {loading ? "Enviando..." : "Enviar Email de Teste"}
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleSendTestEmail}
+            disabled={loading}
+            className="flex-1"
+          >
+            {loading ? "Enviando..." : "Enviar Email de Teste"}
+          </Button>
+          
+          <Button 
+            onClick={handleSendAllTemplates}
+            disabled={loading}
+            variant="outline"
+            className="flex-1"
+          >
+            {loading ? "Enviando..." : "Enviar Todos os Templates"}
+          </Button>
+        </div>
 
         <div className="bg-muted/50 p-4 rounded-lg space-y-2">
           <h4 className="font-medium text-sm">📋 Status da Configuração</h4>
