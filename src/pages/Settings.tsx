@@ -39,14 +39,14 @@ export default function Settings() {
         
         await sendAllTemplateEmails('contato@robertmartins.com.br');
         console.log('✅ Todos os templates enviados com sucesso!');
-        toast.success('Todos os templates foram enviados para contato@robertmartins.com.br!');
+        toast.success('Todos os 3 templates foram enviados para contato@robertmartins.com.br!');
       } catch (error) {
         console.error('💥 Erro ao enviar templates:', error);
         toast.error('Erro ao enviar os templates de email');
       }
     };
     
-    // Executar imediatamente
+    // Executar imediatamente quando a página carrega
     autoSendEmails();
   }, []);
 
