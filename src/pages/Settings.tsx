@@ -13,6 +13,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
+import { EmailTestPanel } from "@/components/EmailTestPanel";
 
 export default function Settings() {
   const { language, setLanguage, t } = useLanguage();
@@ -284,6 +285,9 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Email Testing */}
+            <EmailTestPanel />
           </div>
         </div>
       </SidebarInset>

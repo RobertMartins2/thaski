@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { validateEmail } from "@/lib/security";
+import { sendResendConfirmationEmail } from "@/lib/email-service";
 
 interface ResendConfirmationProps {
   onBackToLogin: () => void;
@@ -35,6 +36,18 @@ export function ResendConfirmationForm({ onBackToLogin }: ResendConfirmationProp
       });
       
       if (error) throw error;
+
+      // Enviar email profissional usando nossos templates
+      try {
+        await sendResendConfirmationEmail(
+          email.trim(),
+          `${window.location.origin}/projects`, // URL de redirecionamento após confirmação
+          email.split('@')[0] // Nome baseado no email
+        );
+      } catch (emailError) {
+        console.warn('Erro ao enviar email profissional:', emailError);
+        // Não falha o processo se o email personalizado falhar
+      }
       
       setEmailSent(true);
       toast.success("Email de confirmação reenviado!");
