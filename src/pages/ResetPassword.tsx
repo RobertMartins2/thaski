@@ -24,9 +24,17 @@ export default function ResetPassword() {
       if (data.session) {
         setIsValidSession(true);
       } else {
-        // Se não há sessão, verificar se há parâmetros de reset na URL
-        const accessToken = searchParams.get('access_token');
-        const refreshToken = searchParams.get('refresh_token');
+        // Verificar tokens nos query parameters primeiro
+        let accessToken = searchParams.get('access_token');
+        let refreshToken = searchParams.get('refresh_token');
+        
+        // Se não encontrar nos query parameters, verificar nos fragmentos da URL
+        if (!accessToken || !refreshToken) {
+          const hash = window.location.hash.substring(1);
+          const hashParams = new URLSearchParams(hash);
+          accessToken = hashParams.get('access_token');
+          refreshToken = hashParams.get('refresh_token');
+        }
         
         if (accessToken && refreshToken) {
           // Tentar estabelecer a sessão com os tokens
@@ -40,6 +48,8 @@ export default function ResetPassword() {
             navigate("/login");
           } else {
             setIsValidSession(true);
+            // Limpar a URL dos tokens após estabelecer a sessão
+            window.history.replaceState({}, document.title, "/reset-password");
           }
         } else {
           toast.error("Acesso negado. Use o link do email de recuperação.");
