@@ -14,7 +14,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
-import LandingPage from "./pages/LandingPage";
+import { LandingPage } from "./pages/LandingPage";
 import EmailConfirmation from "./pages/EmailConfirmation";
 import ResetPassword from "./pages/ResetPassword";
 import { useEffect } from "react";

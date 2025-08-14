@@ -5,15 +5,25 @@ export function RootRedirect() {
   const [shouldRedirectToReset, setShouldRedirectToReset] = useState(false);
 
   useEffect(() => {
-    console.log("RootRedirect: Checking URL hash...", window.location.hash);
+    // Capturar URL completa para debug
+    const fullUrl = window.location.href;
+    const hash = window.location.hash;
+    console.log("RootRedirect: Full URL:", fullUrl);
+    console.log("RootRedirect: Hash:", hash);
     
-    // Verificar se há tokens de reset na URL
-    const hash = window.location.hash.substring(1);
-    const hashParams = new URLSearchParams(hash);
-    const accessToken = hashParams.get('access_token');
-    const tokenType = hashParams.get('type');
+    // Verificar se há tokens de reset na URL (tanto em hash quanto em search)
+    const urlParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(hash.substring(1));
     
-    console.log("RootRedirect: Found tokens:", { accessToken: !!accessToken, tokenType });
+    const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
+    const tokenType = urlParams.get('type') || hashParams.get('type');
+    
+    console.log("RootRedirect: Found tokens:", { 
+      accessToken: !!accessToken, 
+      tokenType,
+      fromSearch: !!urlParams.get('access_token'),
+      fromHash: !!hashParams.get('access_token')
+    });
     
     // Se há tokens de reset, redirecionar para a página de reset
     if (accessToken && tokenType === 'recovery') {
