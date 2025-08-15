@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { validateEmail, validatePassword } from "@/lib/security";
 import { cleanupAuthState } from "@/lib/security";
+import { EMAIL_CONFIG } from "@/lib/email-config";
 import { Upload } from "lucide-react";
 
 interface SignUpFormProps {
@@ -82,9 +83,11 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
         // Continue even if this fails
       }
 
+        const confirmationUrl = `${EMAIL_CONFIG.BASE_URL}/auth/confirm`;
+        
         console.log("Tentando criar conta com:", {
           email: formData.email,
-          emailRedirectTo: `${window.location.origin}/auth/confirm`,
+          emailRedirectTo: confirmationUrl,
           metadata: {
             full_name: formData.name,
             phone: formData.phone
@@ -96,7 +99,7 @@ export function SignUpForm({ onSwitchToLogin, onSignUpSuccess }: SignUpFormProps
         password: formData.password,
         options: {
           // Redirecionar para página de confirmação personalizada
-          emailRedirectTo: `${window.location.origin}/auth/confirm`,
+          emailRedirectTo: confirmationUrl,
           data: {
             full_name: formData.name,
             phone: formData.phone

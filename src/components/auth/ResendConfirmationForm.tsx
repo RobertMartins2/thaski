@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { validateEmail } from "@/lib/security";
 import { sendResendConfirmationEmail } from "@/lib/email-service";
+import { EMAIL_CONFIG } from "@/lib/email-config";
 
 interface ResendConfirmationProps {
   onBackToLogin: () => void;
@@ -27,11 +28,13 @@ export function ResendConfirmationForm({ onBackToLogin }: ResendConfirmationProp
     }
 
     try {
+      const confirmationUrl = `${EMAIL_CONFIG.BASE_URL}/auth/confirm`;
+      
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: email,
         options: {
-          emailRedirectTo: `${window.location.origin}/projects`
+          emailRedirectTo: confirmationUrl
         }
       });
       
@@ -41,7 +44,7 @@ export function ResendConfirmationForm({ onBackToLogin }: ResendConfirmationProp
       try {
         await sendResendConfirmationEmail(
           email.trim(),
-          `${window.location.origin}/projects`, // URL de redirecionamento após confirmação
+          confirmationUrl,
           email.split('@')[0] // Nome baseado no email
         );
       } catch (emailError) {
