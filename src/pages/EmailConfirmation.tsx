@@ -31,11 +31,11 @@ export default function EmailConfirmation() {
           }
 
           console.log('✅ Email confirmado com sucesso!', data);
-          toast.success('Email confirmado com sucesso! Bem-vindo!');
+          toast.success('Email confirmado com sucesso! Faça login para continuar.');
           
-          // Redirecionar para projetos já logado
+          // Redirecionar para login após confirmação
           setTimeout(() => {
-            navigate('/projects');
+            navigate('/login');
           }, 1000);
         } else {
           // Se não tem os parâmetros corretos, redirecionar para signup
